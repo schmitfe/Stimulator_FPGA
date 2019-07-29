@@ -94,13 +94,13 @@ type States is (Init, W1, W1T, W2, TWAIT, T1, T1T, T2, T2T, T3, T4, T5, T5T); --
 
 ---------Output waveform:---------
 -- TWAIT: synchronizing state, waits for trigger if cont. run is not set; reads naext datword form memory
--- T1: start transmission of last fetched dataword
+-- T1: start transmission of last fetched word, if coming from TWAIT, otherwise start fetching word
 -- T1T:
 -- T2:
 -- T2T:
--- T3:
+-- T3: start transmission of last fetched word
 -- T4:
--- T5:
+-- T5: prepare memory to read next word
 -- T5T: 
 signal State, FolState: States;
 signal counter: integer range 0 to 31 :=0;

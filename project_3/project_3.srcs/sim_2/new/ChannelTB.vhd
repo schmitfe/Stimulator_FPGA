@@ -5,9 +5,9 @@ use ieee.numeric_std.all;
 
 entity ChannelTB is
     Generic (   
-    Wordwidth : natural   := 4;  -- Hertz 
-    Adresswith : natural   := 3;  -- Hertz           
-    NWave: natural :=4
+    Wordwidth : natural   := 8;
+    Adresswith : natural   := 3;         
+    NWave: natural :=1
              ); 
 end ChannelTB;
 
@@ -16,11 +16,11 @@ architecture arch of ChannelTB is
 
     component  Channel
 Generic (
-           Adresswidth  : natural := 5;  -- Speicherlänge = 2^Adresswidth
-           Wordwidth  : natural := 16;
+           Adresswidth  : natural := 3;  -- Speicherlänge = 2^Adresswidth
+           Wordwidth  : natural := 8;
            Clock : natural :=50000000;
            SPI_Clock: natural :=10000000;
-           NWave: natural :=4
+           NWave: natural :=1
           -- AdressWaves: natural :=2
            );
 port(
@@ -82,97 +82,101 @@ begin
    RESET <= '1', '0' after 2*T;
    wait for 5*T;
    EnWrite<='1';
+   wait for 5*T;
    
    --Memory 0 0-7
         wait for 3*T;
-        Din <= "0000";
+        Din <= "00000000";
         Write<='0';
         wait for 3*T;
         Write<='1';
         wait for 3*T;
-        Din <= "0001";
+        Din <= "00000010";
         Write<='0';
         wait for 3*T;
         Write<='1';
         wait for 3*T;
-        Din <= "0010";
+        Din <= "00000100";
         Write<='0';
         wait for 3*T;
         Write<='1';
         wait for 3*T;
-        Din <= "0011";
+        Din <= "00001000";
         Write<='0';
         wait for 3*T;
         Write<='1';
         wait for 3*T;
-        Din <= "0100";
+        Din <= "00010000";
         Write<='0';
         wait for 3*T;
         Write<='1';
         wait for 3*T;
-        Din <= "0101";
+        Din <= "00100000";
         Write<='0';
         wait for 3*T;
         Write<='1';
         wait for 3*T;
-        Din <= "0110";
+        Din <= "01000000";
         Write<='0';
         wait for 3*T;
         Write<='1';
         wait for 3*T;
-        Din <= "0111";
+        Din <= "10000000";
         Write<='0';
         wait for 3*T;
         Write<='1';
         wait for 3*T;
-        Din <= "1000";
+        Din <= "10000001";
         Write<='0';
         wait for 3*T;
+        Write<='1';
+        wait for 3*T;      
         
-        WaveAddr<=3;
+        WaveAddr<=0;
+        EnWrite<='0';
    --Memory 3 8-15
         wait for 3*T;
-        Din <= "1000";
+        Din <= "00001000";
         Write<='0';
         wait for 3*T;
         Write<='1';
         wait for 3*T;
-        Din <= "1001";
+        Din <= "00001001";
         Write<='0';
         wait for 3*T;
         Write<='1';
         wait for 3*T;
-        Din <= "1010";
+        Din <= "00001010";
         Write<='0';
         wait for 3*T;
         Write<='1';
         wait for 3*T;
-        Din <= "1011";
+        Din <= "00001011";
         Write<='0';
         wait for 3*T;
         Write<='1';
         wait for 3*T;
-        Din <= "1100";
+        Din <= "00001100";
         Write<='0';
         wait for 3*T;
         Write<='1';
         wait for 3*T;
-        Din <= "1101";
+        Din <= "00001101";
         Write<='0';
         wait for 3*T;
         Write<='1';
         wait for 3*T;
-        Din <= "1110";
+        Din <= "00001110";
         Write<='0';
         wait for 3*T;
         Write<='1';
         wait for 3*T;
-        Din <= "1111";
+        Din <= "00001111";
         Write<='0';
         wait for 3*T;
         Write<='1';
         wait for 3*T;
-        Din <= "0000";
+        Din <= "00000000";
         Write<='0';
         wait for 3*T;        
         EnWrite<='0';
@@ -180,7 +184,7 @@ begin
         wait for 301.5*T;
         WaveAddr<=0;
         wait for 20*T;
-        WaveAddr<=3;
+        WaveAddr<=0;
         contStim<='0';
         wait for 50*T;
         trig<='1';

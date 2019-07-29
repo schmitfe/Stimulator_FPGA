@@ -110,3 +110,10 @@ project_3/project_3.sim/sim_2/behav/xsim/xsim.dir/MemoryTB_behav/webtalk/xsim_we
 project_3/project_3.sim/sim_2/behav/xsim/xsim.dir/TB_behav/Compile_Options.txt
 project_3/project_3.sim/sim_2/behav/xsim/xsim.dir/TB_behav/obj/xsim_1.c
 project_3/project_3.sim/sim_2/behav/xsim/xsim.dir/TB_behav/TempBreakPointFile.txt
+*.dcp
+project_3/project_3.runs/synth_1/.Xil/Channel_propImpl.xdc
+project_3/project_3.runs/synth_1/Channel.tcl
+project_3/project_3.runs/synth_1/Channel.vds
+project_3/project_3.runs/synth_1/Channel_utilization_synth.rpt
+project_3/project_3.runs/synth_1/htr.txt
+project_3/project_3.sim/sim_2/behav/xsim/xsim.dir/ChannelTB_behav/webtalk/xsim_webtalk.tcl
