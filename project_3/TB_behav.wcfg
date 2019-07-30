@@ -10,93 +10,103 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="1444026464fs"></ZoomEndTime>
-      <Cursor1Time time="210000000fs"></Cursor1Time>
+      <ZoomStartTime time="121953000000fs"></ZoomStartTime>
+      <ZoomEndTime time="122655000001fs"></ZoomEndTime>
+      <Cursor1Time time="122128000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="175"></NameColumnWidth>
-      <ValueColumnWidth column_width="119"></ValueColumnWidth>
+      <NameColumnWidth column_width="121"></NameColumnWidth>
+      <ValueColumnWidth column_width="152"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="20" />
+   <WVObjectSize size="22" />
+   <wvobject type="divider" fp_name="divider438">
+      <obj_property name="label">Main</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
    <wvobject fp_name="/ChannelTB/CLK" type="logic">
       <obj_property name="ElementShortName">CLK</obj_property>
       <obj_property name="ObjectShortName">CLK</obj_property>
    </wvobject>
-   <wvobject fp_name="/ChannelTB/Din" type="array">
-      <obj_property name="ElementShortName">Din[7:0]</obj_property>
-      <obj_property name="ObjectShortName">Din[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/ChannelTB/UUT/Dout" type="array">
-      <obj_property name="ElementShortName">Dout[7:0]</obj_property>
-      <obj_property name="ObjectShortName">Dout[7:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/ChannelTB/WaveAddr" type="other">
-      <obj_property name="ElementShortName">WaveAddr</obj_property>
-      <obj_property name="ObjectShortName">WaveAddr</obj_property>
+   <wvobject fp_name="/ChannelTB/RESET" type="logic">
+      <obj_property name="ElementShortName">RESET</obj_property>
+      <obj_property name="ObjectShortName">RESET</obj_property>
    </wvobject>
    <wvobject fp_name="/ChannelTB/contStim" type="logic">
       <obj_property name="ElementShortName">contStim</obj_property>
       <obj_property name="ObjectShortName">contStim</obj_property>
    </wvobject>
-   <wvobject fp_name="/ChannelTB/UUT/trigLoc" type="logic">
-      <obj_property name="ElementShortName">trigLoc</obj_property>
-      <obj_property name="ObjectShortName">trigLoc</obj_property>
+   <wvobject fp_name="/ChannelTB/UUT/Dout" type="array">
+      <obj_property name="ElementShortName">Dout[7:0]</obj_property>
+      <obj_property name="ObjectShortName">Dout[7:0]</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
    </wvobject>
-   <wvobject fp_name="/ChannelTB/trig" type="logic">
-      <obj_property name="ElementShortName">trig</obj_property>
-      <obj_property name="ObjectShortName">trig</obj_property>
+   <wvobject fp_name="/ChannelTB/EnWrite" type="logic">
+      <obj_property name="ElementShortName">EnWrite</obj_property>
+      <obj_property name="ObjectShortName">EnWrite</obj_property>
    </wvobject>
-   <wvobject fp_name="/ChannelTB/UUT/State" type="other">
-      <obj_property name="ElementShortName">State</obj_property>
-      <obj_property name="ObjectShortName">State</obj_property>
+   <wvobject fp_name="/ChannelTB/WaveAddr" type="other">
+      <obj_property name="ElementShortName">WaveAddr</obj_property>
+      <obj_property name="ObjectShortName">WaveAddr</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ChannelTB/UUT/WRCNTA" type="array">
+      <obj_property name="ElementShortName">WRCNTA[1:0]</obj_property>
+      <obj_property name="ObjectShortName">WRCNTA[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ChannelTB/UUT/Nullflag" type="logic">
+      <obj_property name="ElementShortName">Nullflag</obj_property>
+      <obj_property name="ObjectShortName">Nullflag</obj_property>
    </wvobject>
    <wvobject fp_name="/ChannelTB/UUT/NullflagA" type="array">
-      <obj_property name="ElementShortName">NullflagA[0:0]</obj_property>
-      <obj_property name="ObjectShortName">NullflagA[0:0]</obj_property>
+      <obj_property name="ElementShortName">NullflagA[1:0]</obj_property>
+      <obj_property name="ObjectShortName">NullflagA[1:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/ChannelTB/UUT/StartTx" type="logic">
-      <obj_property name="ElementShortName">StartTx</obj_property>
-      <obj_property name="ObjectShortName">StartTx</obj_property>
+   <wvobject fp_name="/ChannelTB/UUT/StimulusID" type="logic">
+      <obj_property name="ElementShortName">StimulusID</obj_property>
+      <obj_property name="ObjectShortName">StimulusID</obj_property>
    </wvobject>
-   <wvobject fp_name="/ChannelTB/UUT/Read" type="logic">
-      <obj_property name="ElementShortName">Read</obj_property>
-      <obj_property name="ObjectShortName">Read</obj_property>
-   </wvobject>
-   <wvobject fp_name="/ChannelTB/UUT/TX_Done" type="logic">
-      <obj_property name="ElementShortName">TX_Done</obj_property>
-      <obj_property name="ObjectShortName">TX_Done</obj_property>
-   </wvobject>
-   <wvobject fp_name="/ChannelTB/UUT/\MemArray(0)\/MemoryX/WRCNT" type="other">
-      <obj_property name="ElementShortName">WRCNT</obj_property>
-      <obj_property name="ObjectShortName">WRCNT</obj_property>
+   <wvobject fp_name="/ChannelTB/UUT/WaveID" type="other">
+      <obj_property name="ElementShortName">WaveID</obj_property>
+      <obj_property name="ObjectShortName">WaveID</obj_property>
    </wvobject>
    <wvobject fp_name="/ChannelTB/UUT/\MemArray(0)\/MemoryX/rdcnt" type="array">
       <obj_property name="ElementShortName">rdcnt[2:0]</obj_property>
       <obj_property name="ObjectShortName">rdcnt[2:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/ChannelTB/UUT/\MemArray(0)\/MemoryX/Write" type="logic">
-      <obj_property name="ElementShortName">Write</obj_property>
-      <obj_property name="ObjectShortName">Write</obj_property>
+   <wvobject fp_name="/ChannelTB/UUT/\MemArray(1)\/MemoryX/rdcnt" type="array">
+      <obj_property name="ElementShortName">rdcnt[2:0]</obj_property>
+      <obj_property name="ObjectShortName">rdcnt[2:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/ChannelTB/UUT/\MemArray(0)\/MemoryX/Write_Z1" type="logic">
-      <obj_property name="ElementShortName">Write_Z1</obj_property>
-      <obj_property name="ObjectShortName">Write_Z1</obj_property>
+   <wvobject fp_name="/ChannelTB/UUT/\MemArray(0)\/MemoryX/memory" type="array">
+      <obj_property name="ElementShortName">memory[0:7][7:0]</obj_property>
+      <obj_property name="ObjectShortName">memory[0:7][7:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/ChannelTB/UUT/WriteMemA" type="array">
-      <obj_property name="ElementShortName">WriteMemA[0:0]</obj_property>
-      <obj_property name="ObjectShortName">WriteMemA[0:0]</obj_property>
+   <wvobject fp_name="/ChannelTB/UUT/\MemArray(1)\/MemoryX/memory" type="array">
+      <obj_property name="ElementShortName">memory[0:7][7:0]</obj_property>
+      <obj_property name="ObjectShortName">memory[0:7][7:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/ChannelTB/UUT/WriteMem" type="logic">
-      <obj_property name="ElementShortName">WriteMem</obj_property>
-      <obj_property name="ObjectShortName">WriteMem</obj_property>
+   <wvobject fp_name="/ChannelTB/UUT/State" type="other">
+      <obj_property name="ElementShortName">State</obj_property>
+      <obj_property name="ObjectShortName">State</obj_property>
    </wvobject>
-   <wvobject fp_name="/ChannelTB/Write" type="logic">
-      <obj_property name="ElementShortName">Write</obj_property>
-      <obj_property name="ObjectShortName">Write</obj_property>
+   <wvobject fp_name="/ChannelTB/UUT/FolState" type="other">
+      <obj_property name="ElementShortName">FolState</obj_property>
+      <obj_property name="ObjectShortName">FolState</obj_property>
    </wvobject>
-   <wvobject fp_name="/ChannelTB/EnWrite" type="logic">
-      <obj_property name="ElementShortName">EnWrite</obj_property>
-      <obj_property name="ObjectShortName">EnWrite</obj_property>
+   <wvobject fp_name="/ChannelTB/UUT/Interface/TX_Start" type="logic">
+      <obj_property name="ElementShortName">TX_Start</obj_property>
+      <obj_property name="ObjectShortName">TX_Start</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ChannelTB/UUT/Addr0" type="logic">
+      <obj_property name="ElementShortName">Addr0</obj_property>
+      <obj_property name="ObjectShortName">Addr0</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ChannelTB/UUT/trig" type="logic">
+      <obj_property name="ElementShortName">trig</obj_property>
+      <obj_property name="ObjectShortName">trig</obj_property>
+   </wvobject>
+   <wvobject fp_name="/ChannelTB/UUT/WaveRST" type="logic">
+      <obj_property name="ElementShortName">WaveRST</obj_property>
+      <obj_property name="ObjectShortName">WaveRST</obj_property>
    </wvobject>
 </wave_config>
