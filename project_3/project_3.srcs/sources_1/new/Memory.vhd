@@ -59,7 +59,7 @@ architecture Behavioral of Memory is
 
 signal rdcnt : unsigned (Adresswidth-1 downto 0) := (others => '0');
 type speicher is array(0 to (2**Adresswidth)-1) of unsigned(Wordwidth-1 downto 0);   -- Datatype of Memory
-signal memory : speicher;   
+signal memory : speicher:= (others => (others => '0'));  
 signal full_loc  : std_logic;
 signal empty_loc : std_logic;
 signal WRCNT_loc:  integer range 0 to (2**Adresswidth)-1 :=0;
@@ -89,7 +89,8 @@ begin
             end if;
         end if;
       end if;
-      if rdcnt=0 then
+ --     if rdcnt=0 then
+      if rdcnt=WRCNT_loc-1 then
         Nullflag<='1';
       else
         Nullflag<='0';  
