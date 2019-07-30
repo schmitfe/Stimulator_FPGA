@@ -7,7 +7,8 @@ entity ChannelTB is
     Generic (   
     Wordwidth : natural   := 8;
     Adresswith : natural   := 3;         
-    NWave: natural :=1
+    NWave: natural :=1;
+    MaxDelay: natural :=4095
              ); 
 end ChannelTB;
 
@@ -16,16 +17,16 @@ architecture arch of ChannelTB is
 
     component  Channel
 Generic (
-           Adresswidth  : natural := 3;  -- Speicherlänge = 2^Adresswidth
-           Wordwidth  : natural := 8;
+           Adresswidth  : natural := Adresswith;  -- Speicherlänge = 2^Adresswidth
+           Wordwidth  : natural := Wordwidth;
            Clock : natural :=50000000;
            SPI_Clock: natural :=10000000;
-           NWave: natural :=1
-          -- AdressWaves: natural :=2
+           NWave: natural :=NWave;
+           MaxDelay: natural :=MaxDelay
            );
 port(
     
-    WaveAddr: in integer range 0 to NWave-1;
+    WaveAddr: in integer range 0 to 2*NWave-1;
     CLK : in std_logic; -- Systemtakt
     RESET : in std_logic; -- asynchroner Reset (alles auf Null)
     Write:  in std_logic;
@@ -36,7 +37,9 @@ port(
    MOSI     : out STD_LOGIC;                           
    SCLK     : out STD_LOGIC;
    SS       : out STD_LOGIC;
-   Din : in std_logic_vector(Wordwidth-1 downto 0) -- Eingabe
+   Din : in std_logic_vector(Wordwidth-1 downto 0); -- Eingabe
+   InterInterval: in integer range 0 to MaxDelay;
+   InterPeriods: in integer range 0 to MaxDelay
     );
     
 end component;
@@ -51,9 +54,11 @@ end component;
     signal  MOSI     :  STD_LOGIC;                           
    signal SCLK     :  STD_LOGIC;
    signal SS       :  STD_LOGIC;
-   signal WaveAddr:  integer range 0 to NWave-1;
+   signal WaveAddr:  integer range 0 to 2*NWave-1;
    signal     contStim:  STD_LOGIC;     --later optinal with generate
    signal  trig:     STD_LOGIC;
+   signal   InterInterval: integer range 0 to MaxDelay;
+   signal InterPeriods: integer range 0 to MaxDelay;
     --signal Dout :  std_logic_vector(Wordwidth-1 downto 0); -- Ausgabebit: 1 wenn Folge erkannt
     
     constant T : time := 10 ns;
@@ -61,7 +66,7 @@ end component;
 begin
 
         UUT: Channel  generic map (Adresswidth => Adresswith, Wordwidth=>Wordwidth) --no semicolon here 
-        port map (WaveAddr=>WaveAddr, CLK=>CLK, RESET=>RESET, Write=>Write, EnWrite=>EnWrite, Din=>Din, MOSI=>MOSI, SCLK=>SCLK, SS=>SS, trig=>trig, contStim=>contStim);--Dout=>Dout);
+        port map (WaveAddr=>WaveAddr, CLK=>CLK, RESET=>RESET, Write=>Write, EnWrite=>EnWrite, Din=>Din, MOSI=>MOSI, SCLK=>SCLK, SS=>SS, trig=>trig, contStim=>contStim, InterInterval=>InterInterval, InterPeriods=>InterPeriods);--Dout=>Dout);
 
     -- continuous clock
     process 
@@ -76,7 +81,7 @@ begin
    process
    begin
    trig<='0';
-   contStim<='1';
+   contStim<='0';
    WaveAddr<=0;
    Write<='0';
    RESET <= '1', '0' after 2*T;
@@ -121,79 +126,95 @@ begin
         wait for 3*T;
         Write<='1';
         wait for 3*T;
-        Din <= "10000000";
+        Din <= "11111101";
         Write<='0';
         wait for 3*T;
         Write<='1';
         wait for 3*T;
-        Din <= "10000001";
+        Din <= "00000001";
         Write<='0';
         wait for 3*T;
         Write<='1';
         wait for 3*T;      
-        
-        WaveAddr<=0;
-        EnWrite<='0';
-   --Memory 3 8-15
-        wait for 3*T;
-        Din <= "00001000";
         Write<='0';
         wait for 3*T;
-        Write<='1';
-        wait for 3*T;
-        Din <= "00001001";
-        Write<='0';
-        wait for 3*T;
-        Write<='1';
-        wait for 3*T;
-        Din <= "00001010";
-        Write<='0';
-        wait for 3*T;
-        Write<='1';
-        wait for 3*T;
-        Din <= "00001011";
-        Write<='0';
-        wait for 3*T;
-        Write<='1';
-        wait for 3*T;
-        Din <= "00001100";
-        Write<='0';
-        wait for 3*T;
-        Write<='1';
-        wait for 3*T;
-        Din <= "00001101";
-        Write<='0';
-        wait for 3*T;
-        Write<='1';
-        wait for 3*T;
-        Din <= "00001110";
-        Write<='0';
-        wait for 3*T;
-        Write<='1';
-        wait for 3*T;
-        Din <= "00001111";
-        Write<='0';
-        wait for 3*T;
-        Write<='1';
-        wait for 3*T;
-        Din <= "00000000";
-        Write<='0';
-        wait for 3*T;        
-        EnWrite<='0';
-        
-        wait for 301.5*T;
-        WaveAddr<=0;
-        wait for 20*T;
-        WaveAddr<=0;
-        contStim<='0';
-        wait for 50*T;
-        trig<='1';
-        wait for 500*T;
-        trig<='0';
+        WaveAddr<=1;
+        EnWrite<='1';
         wait for 5*T;
+   --Memory 3 8-15
+
+        Din <= "11111110";  
+        Write<='0';
+        wait for 3*T;
+        Write<='1';
+        wait for 3*T;
+        Din <= "11111000";   
+        Write<='0';
+        wait for 3*T;
+        Write<='1';
+        wait for 3*T;
+        Din <= "11011001";    
+        Write<='0';
+        wait for 3*T;
+        Write<='1';
+        wait for 3*T;
+        Din <= "10111010";
+        Write<='0';
+        wait for 3*T;
+        Write<='1';
+        wait for 3*T;
+        Din <="10011011"; 
+        Write<='0';
+        wait for 3*T;
+        Write<='1';
+        wait for 3*T;
+        Din <= "01111100";
+        Write<='0';
+        wait for 3*T;
+        Write<='1';
+        wait for 3*T;
+        Din <=  "01011101";
+        Write<='0';
+        wait for 3*T;
+        Write<='1';
+        wait for 3*T;
+        Din <=  "00001110";
+        Write<='0';
+        wait for 3*T;  
+        Write<='1';
+        wait for 3*T;      
+        EnWrite<='0';
+        wait for 5*T;
+        
+        
+        
+        WaveAddr<=0;
+        wait for 10*T;
+        contStim<='1';
+        wait for 8000*T;
+        contStim<='0';        
         trig<='1';
-        wait for 500*T;
-   
+        wait for 10*T;
+        trig<='0';
+        wait for 1000*T;
+        WaveAddr<=1;
+        wait for 10*T;
+        trig<='1';
+        wait for 10*T;
+        trig<='0';
+        wait for 1000*T;
+        WaveAddr<=0;
+        wait for 10*T;
+        trig<='1';
+        wait for 10*T;
+        trig<='0';
+        wait for 1000*T;
+        WaveAddr<=1;
+        wait for 10*T;
+        trig<='1';
+        wait for 10*T;
+        trig<='0';
+        wait for 1000*T;        
    
    end process; 
     
