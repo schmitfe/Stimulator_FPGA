@@ -8,7 +8,8 @@ entity ChannelTB is
     Wordwidth : natural   := 8;
     Adresswith : natural   := 3;         
     NWave: natural :=1;
-    MaxDelay: natural :=4095
+    MaxDelay: natural :=4095;
+    NeurtralDW:  std_logic_vector := X"80"
              ); 
 end ChannelTB;
 
@@ -22,7 +23,8 @@ Generic (
            Clock : natural :=50000000;
            SPI_Clock: natural :=10000000;
            NWave: natural :=NWave;
-           MaxDelay: natural :=MaxDelay
+           MaxDelay: natural :=MaxDelay;
+           NeurtralDW:  std_logic_vector := NeurtralDW
            );
 port(
     
@@ -38,8 +40,9 @@ port(
    SCLK     : out STD_LOGIC;
    SS       : out STD_LOGIC;
    Din : in std_logic_vector(Wordwidth-1 downto 0); -- Eingabe
-   InterInterval: in integer range 0 to MaxDelay;
-   InterPeriods: in integer range 0 to MaxDelay
+   InterInterval: in integer range 0 to MaxDelay-1;
+   InterPeriods: in integer range 0 to MaxDelay-1;
+   WFDivider: in integer range 0 to MaxDelay-1
     );
     
 end component;
@@ -57,8 +60,9 @@ end component;
    signal WaveAddr:  integer range 0 to 2*NWave-1;
    signal     contStim:  STD_LOGIC;     --later optinal with generate
    signal  trig:     STD_LOGIC;
-   signal   InterInterval: integer range 0 to MaxDelay;
-   signal InterPeriods: integer range 0 to MaxDelay;
+   signal   InterInterval: integer range 0 to MaxDelay-1;
+   signal InterPeriods: integer range 0 to MaxDelay-1;
+   signal  WFDivider: integer range 0 to MaxDelay-1;
     --signal Dout :  std_logic_vector(Wordwidth-1 downto 0); -- Ausgabebit: 1 wenn Folge erkannt
     
     constant T : time := 10 ns;
@@ -66,7 +70,7 @@ end component;
 begin
 
         UUT: Channel  generic map (Adresswidth => Adresswith, Wordwidth=>Wordwidth) --no semicolon here 
-        port map (WaveAddr=>WaveAddr, CLK=>CLK, RESET=>RESET, Write=>Write, EnWrite=>EnWrite, Din=>Din, MOSI=>MOSI, SCLK=>SCLK, SS=>SS, trig=>trig, contStim=>contStim, InterInterval=>InterInterval, InterPeriods=>InterPeriods);--Dout=>Dout);
+        port map (WaveAddr=>WaveAddr, CLK=>CLK, RESET=>RESET, Write=>Write, EnWrite=>EnWrite, Din=>Din, MOSI=>MOSI, SCLK=>SCLK, SS=>SS, trig=>trig, contStim=>contStim, InterInterval=>InterInterval, InterPeriods=>InterPeriods, WFDivider=>WFDivider);--Dout=>Dout);
 
     -- continuous clock
     process 
@@ -80,6 +84,10 @@ begin
     
    process
    begin
+   InterInterval<=0;
+   InterPeriods<=0;
+   WFDivider<=0;
+   
    trig<='0';
    contStim<='0';
    WaveAddr<=0;
@@ -106,20 +114,20 @@ begin
         wait for 3*T;
         Write<='1';
         wait for 3*T;
-        Din <= "00001000";
-        Write<='0';
-        wait for 3*T;
-        Write<='1';
-        wait for 3*T;
-        Din <= "00010000";
-        Write<='0';
-        wait for 3*T;
-        Write<='1';
-        wait for 3*T;
-        Din <= "00100000";
-        Write<='0';
-        wait for 3*T;
-        Write<='1';
+--        Din <= "00001000";
+--        Write<='0';
+--        wait for 3*T;
+--        Write<='1';
+--        wait for 3*T;
+--        Din <= "00010000";
+--        Write<='0';
+--        wait for 3*T;
+--        Write<='1';
+--        wait for 3*T;
+--        Din <= "00100000";
+--        Write<='0';
+--        wait for 3*T;
+--        Write<='1';
         wait for 3*T;
         Din <= "01000000";
         Write<='0';
@@ -191,7 +199,20 @@ begin
         WaveAddr<=0;
         wait for 10*T;
         contStim<='1';
-        wait for 8000*T;
+        wait for 1000*T;
+           InterInterval<=500;
+           InterPeriods<=1500;
+           WFDivider<=2;
+
+        wait for 16000*T;
+        
+        InterInterval<=50;
+        InterPeriods<=150;
+        WFDivider<=0;
+
+        wait for 16000*T;
+        
+        
         contStim<='0';        
         trig<='1';
         wait for 10*T;
