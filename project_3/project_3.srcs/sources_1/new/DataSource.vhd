@@ -14,7 +14,9 @@ Generic (
            Clock : natural :=50000000;
            SPI_Clock: natural :=1000000;
            NWave: natural :=2;
-           MaxDelay: natural :=4095
+           MaxDelay: natural :=4095;
+           NeurtralDW:  std_logic_vector := X"8000"
+           
            );
 port(
     
@@ -32,9 +34,9 @@ port(
    SS       : out STD_LOGIC;
    Din : in std_logic_vector(Wordwidth-1 downto 0); -- Eingabe
    
-   InterInterval: in integer range 0 to MaxDelay;
-   InterPeriods: in integer range 0 to MaxDelay
-   
+   InterInterval: in integer range 0 to MaxDelay-1;
+   InterPeriods: in integer range 0 to MaxDelay-1;
+   WFDivider: in integer range 0 to MaxDelay-1
     
        );
     
@@ -85,7 +87,7 @@ end component;
     
 
 
-type States is (Init, W1, W1T, W2, TWAIT, T1, T1T, T2, T2T, T3, T4, T5, T5T, T_WF_Change); -- Aufzählungstyp 
+type States is (Init, W1, W1T, W2, TWAIT, T1, T1T, TInterval, T2, T2T, T3, T4, T5, T5T, T_WF_Change); -- Aufzählungstyp 
 -- Init: Initialization
 --
 ---------Wirte to meory:---------
@@ -130,6 +132,7 @@ type IntegerArray is array (2*NWave-1 downto 0) of integer range 0 to (2**Adress
 
 
 
+signal EnableOutput: std_logic :='0';
 
 signal    DoutMemA :  WordArray; -- Eingabe
 signal    ReadA:   BitArray;
@@ -156,11 +159,14 @@ signal WaveDFF_D: std_logic:='0';
 signal DelayCounter: integer range 0 to MaxDelay :=0;
 signal DelayCounterReset :std_logic :='0';
 
+signal FlagInterInterval :std_logic :='0';
+signal FlagInterPeriod :std_logic :='0';
+
 begin
 
 MemArray: for I in 0 to 2*NWave-1 generate
       MemoryX : Memory  generic map (Adresswidth => Adresswidth, Wordwidth=>Wordwidth) --no semicolon here 
-     port map (CLK=>CLK, Addr0=>Addr0, RESET=>RST, Din=>DinMem, Write=>WriteMemA(I), Read=>ReadA(I), Dout=>DoutMemA(I), Empty=>open, Full=>open, WRCNT=>WRCNTA(I), Nullflag=>NullflagA(I));
+     port map (CLK=>CLK, Addr0=>Addr0, RESET=>RST, Din=>DinMem, Write=>WriteMemA(I), Read=>ReadA(I), Dout=>DoutMemA(I), Empty=>open, Full=>open, WRCNT=>WRCNTA(I), Nullflag=>NullflagA(I)); --Read=>
 end generate MemArray;
         
 Interface: SPI_Master generic map(Quarz_Taktfrequenz=>Clock, SPI_Taktfrequenz=>SPI_Clock, Laenge=>Wordwidth)
@@ -186,16 +192,22 @@ end process AdressMux;
 
       
 
-MemoryMUX: process (WaveID, DoutMemA, Read, WriteMem, WRCNTA, NullflagA)
+MemoryMUX: process (WaveID, DoutMemA, Read, WriteMem, WRCNTA, NullflagA, EnableOutput)
 begin
     WriteMemA<= (others=>'0');
     WriteMemA<= (others=>'0');
     
-    Dout<=DoutMemA(WaveID);
+    
     WriteMemA(WaveID)<=WriteMem;
-    ReadA(WaveID)<=Read;
+    ReadA<= (WaveID=>Read, others=>'0');
     WRCNT<=WRCNTA(WaveID);
     Nullflag<=NullflagA(WaveID);
+    
+    if EnableOutput='1' then
+       Dout<=DoutMemA(WaveID);
+    else
+        Dout<= NeurtralDW;
+    end if;  
 end process MemoryMUX;
 
 MemoryStartAdress: process (CLK)
@@ -246,12 +258,13 @@ begin
         if DelayCounterReset='1' then
             DelayCounter<=0 after 5 ns;
         else
-            if DelayCounter<MaxDelay then
-                DelayCounter<=DelayCounter+1 after 5 ns;
-            end if;
+            DelayCounter<=DelayCounter+1 after 5 ns;
         end if;
-       end if;
+    end if;
 end process CountDelay;
+
+
+
 
 WaveDFF: process (CLK)
 begin
@@ -283,7 +296,7 @@ end process StateTransition;
 
 
 
-StateCalculation: process (State, EnWrite, counter, TX_Done,contStim, trigLoc, trig, Nullflag,StimulusID)
+StateCalculation: process (State, EnWrite, counter, TX_Done,contStim, trigLoc, trig, Nullflag,StimulusID, DelayCounter, InterInterval,InterPeriods, WFDivider)
 begin
     FolState<=Init;
     case State is
@@ -302,17 +315,22 @@ begin
             end if;
             
         when TWAIT =>  FolState<=TWAIT after 5 ns;
-        if trig='1' and trigLoc='0' then FolState<=T1 after 5 ns;
+        if trig='1' and trigLoc='0' and DelayCounter>=InterINterval and StimulusID='0' then FolState<=T1 after 5 ns;
         end if;
-        if contStim='1' then FolState <= T1 after 5 ns;
+        if contStim='1' and DelayCounter>=InterINterval and StimulusID='0' then FolState <= T1 after 5 ns;
         end if;
-        if StimulusID='1' then FolState <= T1 after 5 ns;
+        if StimulusID='1' and DelayCounter>=InterPeriods then FolState <= T1 after 5 ns;
         end if;
         
             
         when T1 =>  FolState <= T1T after 5 ns;
             
-        when T1T => FolState <= T2 after 5 ns;
+        when T1T => FolState <=TInterval after 5 ns;
+        
+        when TInterval => FolState <=TInterval after 5 ns;
+            if DelayCounter>=WFDivider then
+                FolState <= T2 after 5ns;
+            end if;
         
         when T2 =>  FolState<=T2 after 5ns;
             if TX_Done='1' then FolState<=T2T;
@@ -324,7 +342,7 @@ begin
             elsif EnWrite='1' then FolState<=W1 after 5 ns;
             end if;
             
-        when T3 =>  FolState <= T4 after 5 ns;
+        when T3 =>  FolState <= T4 after 5ns;
         
         when T4 =>  FolState <= T5 after 5 ns;
         
@@ -344,56 +362,82 @@ Output: process (State,Write,Din)
 begin
     Read<='0' after 5 ns;
     RST<='0' after 5 ns;
-    counterReset<='0' after 5 ns;
+    counterReset<='1' after 5 ns;
     WriteMem<='0' after 5 ns;
     DinMem<= (others => '0') after 5 ns;
     StartTx<='0' after 5 ns;
     WaveRST<='0' after 4 ns;
     WaveDFF_D <= '0' after 5 ns;
+    DelayCounterReset<='1' after 5ns;
+    EnableOutput<='1';
     
     case State is
         when Init => 
                     WaveRST<='1' after 5ns;
                     RST<='1' after 5 ns;
+                    EnableOutput<='0' after 5 ns;
         
         when W1 =>  
             RST<='1' after 5 ns;
-            counterReset<='1' after 5 ns;
             WaveRST<='1' after 5ns;
+            EnableOutput<='0' after 5 ns;
         
         
         when W1T => 
             RST<='1' after 5 ns;
+            counterReset<='0' after 5 ns;
+            EnableOutput<='0' after 5 ns;
         
         when W2 => 
             WriteMem<=Write after 5 ns;
             DinMem<=Din after 5 ns;
+            EnableOutput<='0' after 5 ns;
             
         when TWAIT => Read<='1' after 5 ns;--StartTx<='1' after 5 ns;
-                      
+                       DelayCounterReset<='0' after 5ns;
+                       EnableOutput<='0' after 5 ns;
             
         when T1 =>  Read<='1' after 5 ns;
                     StartTx<='1' after 5 ns;
+                    EnableOutput<='1' after 5 ns;
+                    
             
         when T1T => Read<='1' after 5 ns;
                     StartTx<='1' after 5 ns;
+
+                    
+                    
+       when TInterval => Read<='1' after 5 ns;
+                        StartTx<='1' after 5 ns; 
+                         DelayCounterReset<='0' after 5ns; 
+      
         
-        when T2 => counterReset<='1' after 5 ns;  
-                   Read<='1' after 5 ns;  
+        when T2 => Read<='1' after 5 ns;  
                    StartTx<='1' after 5 ns;
+
         
-        when T2T => Read<='1' after 5 ns;
+        when T2T => counterReset<='0' after 5 ns;
+                    Read<='1' after 5 ns;
+
+                    
         
         when T3 =>  StartTx<='1' after 5 ns;
                     Read<='1' after 5 ns;
+                    EnableOutput<='1' after 5 ns;
         when T4 =>  StartTx<='1' after 5 ns;
+
         
-        when T5 =>  counterReset<='1' after 5 ns;
+        when T5 =>  StartTx<='1' after 5 ns;
+
+        
+        when T5T => counterReset<='0' after 5 ns;
                     StartTx<='1' after 5 ns;
-        
-        when T5T => StartTx<='1' after 5 ns;
+
         
         when T_WF_Change => WaveDFF_D <= '1' after 5ns;
+        EnableOutput<='0' after 5 ns;
+        Read<='1' after 5 ns;
+                
                 
     end case;
 
