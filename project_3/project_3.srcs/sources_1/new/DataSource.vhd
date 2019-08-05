@@ -10,17 +10,18 @@ use ieee.numeric_std.all;
 Entity Channel is
 Generic (
            Adresswidth  : natural := 7;  -- Speicherlänge = 2^Adresswidth
-           Wordwidth  : natural := 16;
+           Wordwidth  : natural := 10;
+           TransmitterWordwith: natural:=16;
+           MultiplierWordwith: natural:=5;
            Clock : natural :=50000000;
            SPI_Clock: natural :=1000000;
            NWave: natural :=2;
            MaxDelay: natural :=4095;
-           NeurtralDW:  std_logic_vector := X"8000"
-           
+           NeurtralDW: std_logic_vector(15 downto 0):= x"8000"          
            );
 port(
     
-   WaveAddr: in integer range 0 to NWave-1;
+   WaveAddr: in integer range 0 to (2*NWave)-1;
     
    CLK : in std_logic; -- Systemtakt
    RESET : in std_logic; -- asynchroner Reset (alles auf Null)
@@ -36,7 +37,8 @@ port(
    
    InterInterval: in integer range 0 to MaxDelay-1;
    InterPeriods: in integer range 0 to MaxDelay-1;
-   WFDivider: in integer range 0 to MaxDelay-1
+   WFDivider: in integer range 0 to MaxDelay-1;
+   Amplitude: in std_logic_vector(MultiplierWordwith-1 downto 0)
     
        );
     
@@ -72,7 +74,7 @@ architecture Behavioral of Channel is
     component SPI_Master  -- SPI-Modus 0: CPOL=0, CPHA=0
     Generic ( Quarz_Taktfrequenz : integer   := 100000000;  -- Hertz 
               SPI_Taktfrequenz   : integer   :=  50000000;  -- Hertz / zur Berechnung des Reload-Werts für Taktteiler
-              Laenge             : integer   :=   Wordwidth        -- Anzahl der zu übertragenden Bits
+              Laenge             : integer   :=   TransmitterWordwith        -- Anzahl der zu übertragenden Bits
              ); 
     Port ( TX_Data  : in  STD_LOGIC_VECTOR (Laenge-1 downto 0); -- Sendedaten
            MOSI     : out STD_LOGIC;                           
@@ -87,7 +89,7 @@ end component;
     
 
 
-type States is (Init, W1, W1T, W2, TWAIT, T1, T1T, TInterval, T2, T2T, T3, T4, T5, T5T, T_WF_Change); -- Aufzählungstyp 
+type States is (Init, W1, W1T, W2, TWAIT, T1, T1T, TInterval, T2, T2T, T3, T4, T5, T5T, T_WF_Change, T_WF_ChangeT); -- Aufzählungstyp 
 -- Init: Initialization
 --
 ---------Wirte to meory:---------
@@ -120,7 +122,7 @@ signal    RST:     std_logic;
 
 signal    StartTx:  std_logic;
 signal    TX_Done: std_logic;
-signal    Dout :  std_logic_vector(Wordwidth-1 downto 0); -- Ausgabebit: 1 wenn Folge erkannt
+signal    Dout :  std_logic_vector(TransmitterWordwith-1 downto 0); -- Ausgabebit: 1 wenn Folge erkannt
 
 
 signal trigLoc: std_logic;
@@ -161,6 +163,10 @@ signal DelayCounterReset :std_logic :='0';
 
 signal FlagInterInterval :std_logic :='0';
 signal FlagInterPeriod :std_logic :='0';
+signal A: signed(TransmitterWordwith downto 0):= (others=> '0');
+signal B: signed(TransmitterWordwith downto 0):= (others=> '0');
+signal C: signed(2*TransmitterWordwith+1 downto 0):= (others=> '0');
+
 
 begin
 
@@ -169,7 +175,7 @@ MemArray: for I in 0 to 2*NWave-1 generate
      port map (CLK=>CLK, Addr0=>Addr0, RESET=>RST, Din=>DinMem, Write=>WriteMemA(I), Read=>ReadA(I), Dout=>DoutMemA(I), Empty=>open, Full=>open, WRCNT=>WRCNTA(I), Nullflag=>NullflagA(I)); --Read=>
 end generate MemArray;
         
-Interface: SPI_Master generic map(Quarz_Taktfrequenz=>Clock, SPI_Taktfrequenz=>SPI_Clock, Laenge=>Wordwidth)
+Interface: SPI_Master generic map(Quarz_Taktfrequenz=>Clock, SPI_Taktfrequenz=>SPI_Clock, Laenge=>TransmitterWordwith)
     port map (TX_Data=>Dout, MOSI=>MOSI, SCLK=>SCLK, SS=>SS, TX_Start=>StartTx, TX_Done=>TX_Done, clk=>CLK); 
     
 AdressMux: process (CLK)
@@ -192,37 +198,47 @@ end process AdressMux;
 
       
 
-MemoryMUX: process (WaveID, DoutMemA, Read, WriteMem, WRCNTA, NullflagA, EnableOutput)
+MemoryMUX: process (WaveID, DoutMemA, Read, WriteMem, WRCNTA, NullflagA, EnableOutput, Amplitude)
 begin
-    WriteMemA<= (others=>'0');
-    WriteMemA<= (others=>'0');
+    WriteMemA<= (others=>'0')  after 5 ns;
     
     
-    WriteMemA(WaveID)<=WriteMem;
-    ReadA<= (WaveID=>Read, others=>'0');
-    WRCNT<=WRCNTA(WaveID);
-    Nullflag<=NullflagA(WaveID);
-    
-    if EnableOutput='1' then
-       Dout<=DoutMemA(WaveID);
-    else
-        Dout<= NeurtralDW;
-    end if;  
+    WriteMemA(WaveID)<=WriteMem after 5 ns;
+    --ReadA<= (WaveID=>Read, others=>'0')  after 5 ns;
+    ReadA(WaveID)<=Read;
+    WRCNT<=WRCNTA(WaveID) after 5 ns;
+    Nullflag<=NullflagA(WaveID) after 5 ns;
 end process MemoryMUX;
+
+
+OutputMUX: process(CLK)
+begin
+    if CLK = '1' and CLK'event then
+        if EnableOutput='1' then
+            A <= RESIZE(signed('0'& DoutMemA(WaveID)),TransmitterWordwith+1) after 5ns;
+            B <= RESIZE(signed('0'& Amplitude),TransmitterWordwith+1) after 5ns;
+            C <= (A-(2**(Wordwidth-1)-1))*B+ RESIZE(signed('0' & NeurtralDW), 2*TransmitterWordwith)   after 5 ns;
+
+            Dout<=std_logic_vector(C(TransmitterWordwith-1 downto 0)) after 5 ns;
+        else
+            Dout<= NeurtralDW after 5 ns;
+        end if;  
+    end if;
+end process OutputMUX;
 
 MemoryStartAdress: process (CLK)
 begin
     if CLK = '1' and CLK'event then
         if state=TWAIT then
-           Addr0<='1';
+           Addr0<='1' after 5 ns;
         else
             if (WaveID/=WaveAddrZ1) then
-                Addr0<='1';
+                Addr0<='1' after 5 ns;
             else
-                Addr0<='0';
+                Addr0<='0' after 5 ns;
             end if;
          end if;
-        WaveAddrZ1<=WaveID;
+        WaveAddrZ1<=WaveID after 5 ns;
 
     end if;
 end process MemoryStartAdress;
@@ -270,12 +286,12 @@ WaveDFF: process (CLK)
 begin
     if CLK='1' and CLK'event then
         if WaveRST='1' then
-            StimulusID<='0';
+            StimulusID<='0' after 5 ns;
         
         elsif WaveDFF_D='0' then
-            StimulusID<=(StimulusID);
+            StimulusID<=(StimulusID) after 5 ns;
          else
-            StimulusID<=not(StimulusID);
+            StimulusID<=not(StimulusID) after 5 ns;
         end if;
     end if;
 end process WaveDFF;
@@ -333,7 +349,7 @@ begin
             end if;
         
         when T2 =>  FolState<=T2 after 5ns;
-            if TX_Done='1' then FolState<=T2T;
+            if TX_Done='1' then FolState<=T2T after 5 ns;
             end if;
             
             
@@ -349,10 +365,14 @@ begin
         when T5 =>  FolState <= T5T after 5 ns;
         
         when T5T =>  FolState <= T5T after 5 ns;
-            if Nullflag='1' and counter>1 then FolState<=T_WF_Change;
+            if Nullflag='1' and counter>1 then FolState<=T_WF_Change after 5 ns;
             elsif counter>3 then FolState<=T1 after 5 ns;
             end if;
-       when T_WF_Change => FolState <= TWAIT after 5ns;
+       when T_WF_Change => FolState <= T_WF_Change after 5ns;
+            if TX_Done='1' then FolState<=T_WF_ChangeT after 5 ns;
+            end if; 
+  
+       when T_WF_ChangeT => FolState <= TWAIT after 5ns;
                 
     end case;
 end process StateCalculation;
@@ -369,7 +389,7 @@ begin
     WaveRST<='0' after 4 ns;
     WaveDFF_D <= '0' after 5 ns;
     DelayCounterReset<='1' after 5ns;
-    EnableOutput<='1';
+    EnableOutput<='1' after 5 ns;
     
     case State is
         when Init => 
@@ -425,18 +445,22 @@ begin
                     Read<='1' after 5 ns;
                     EnableOutput<='1' after 5 ns;
         when T4 =>  StartTx<='1' after 5 ns;
-
+                    Read<='1' after 5 ns;
         
         when T5 =>  StartTx<='1' after 5 ns;
-
+                    Read<='1' after 5 ns;
         
         when T5T => counterReset<='0' after 5 ns;
                     StartTx<='1' after 5 ns;
-
         
-        when T_WF_Change => WaveDFF_D <= '1' after 5ns;
-        EnableOutput<='0' after 5 ns;
+        when T_WF_Change => 
+        EnableOutput<='1' after 5 ns;
+        
+        
+        
+        when T_WF_ChangeT => 
         Read<='1' after 5 ns;
+        WaveDFF_D <= '1' after 5ns;
                 
                 
     end case;
