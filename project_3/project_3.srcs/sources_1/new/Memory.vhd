@@ -65,10 +65,12 @@ signal empty_loc : std_logic;
 signal WRCNT_loc:  integer range 0 to (2**Adresswidth)-1 :=0;
 signal Write_Z1 :   std_logic;
 signal Read_Z1 :   std_logic;
+signal loadReg0: std_logic:='0';
 
 begin
   process begin
   wait until rising_edge(CLK);
+     loadReg0<='0'; 
      if(RESET='1') then
         WRCNT_loc<=0   after 5 ns;
         rdcnt <=(others => '0')    after 5 ns;
@@ -76,6 +78,7 @@ begin
       else
         if(Addr0='1') then
             rdcnt <=(others => '0') after 5 ns;
+            loadReg0<='1';
         elsif (Write='1' and Write_Z1='0' and full_loc='0') then
             memory(WRCNT_loc) <= unsigned(Din) after 5 ns;
             WRCNT_loc <= WRCNT_loc+1 after 5 ns;
@@ -83,18 +86,25 @@ begin
         end if;
         if (Read='1' and Read_Z1='0' and empty_loc='0') then            -- Readable during writing?
             Dout <= std_logic_vector(memory(to_integer(rdcnt))) after 5 ns; -- Adress clocked --> BRAM
+             if rdcnt=WRCNT_loc-1 then
+                Nullflag<='1';
+            else
+                Nullflag<='0';  
+            end if;
+            
+            
             rdcnt <= rdcnt+1 after 5 ns;
             if (to_integer(rdcnt)>WRCNT_loc) then
                 rdcnt <=(others => '0') after 5 ns;  
             end if;
         end if;
+        if (loadReg0='1') then            -- Readable during writing?
+            Dout <= std_logic_vector(memory(to_integer(rdcnt))) after 5 ns; -- Adress clocked --> BRAM
+        end if;
+        
       end if;
- --     if rdcnt=0 then
-      if rdcnt=WRCNT_loc-1 then
-        Nullflag<='1';
-      else
-        Nullflag<='0';  
-      end if;
+--      if rdcnt=0 then
+     
      Write_Z1<=Write after 5 ns;
      Read_Z1<=Read after 5 ns;
   end process;
