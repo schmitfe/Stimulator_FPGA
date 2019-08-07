@@ -1,11 +1,10 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
---use IEEE.STD_LOGIC_ARITH.ALL;
 use ieee.numeric_std.all;
 
-entity ChannelTB is
+entity StimulatorTB is
     Generic (   
-           Adresswidth  : natural := 3;  -- Speicherlänge = 2^Adresswidth
+           Adresswidth  : natural := 7;  -- Speicherlänge = 2^Adresswidth
            Wordwidth  : natural := 8;
            TransmitterWordwith: natural:=16;
            MultiplierWordwith: natural:=6;
@@ -13,14 +12,15 @@ entity ChannelTB is
            SPI_Clock: natural :=50000000;
            NWave: natural :=1;
            MaxDelay: natural :=4095;
-           NeurtralDW: std_logic_vector(15 downto 0):= x"8000" 
+           NeurtralDW: std_logic_vector(15 downto 0):= x"8000";   
+           NChannels: natural:=2
              ); 
-end ChannelTB;
+end StimulatorTB;
 
 
-architecture arch of ChannelTB is
+architecture arch of StimulatorTB is
 
-component  Channel
+component  Stimulator is
 Generic (
            Adresswidth  : natural := Adresswidth;  -- Speicherlänge = 2^Adresswidth
            Wordwidth  : natural := Wordwidth;
@@ -30,54 +30,72 @@ Generic (
            SPI_Clock: natural :=SPI_Clock;
            NWave: natural :=NWave;
            MaxDelay: natural :=MaxDelay;
-           NeurtralDW: std_logic_vector(15 downto 0):= NeurtralDW 
+           NeurtralDW: std_logic_vector(15 downto 0):= NeurtralDW;   
+           NChannels: natural:=NChannels
            );
+
 port(
     
-    WaveAddr: in integer range 0 to 2*NWave-1;
-    CLK : in std_logic; -- Systemtakt
-    RESET : in std_logic; -- asynchroner Reset (alles auf Null)
-    Write:  in std_logic;
-    EnWrite: in std_logic;
-    contStim: in STD_LOGIC;     --later optinal with generate
-    trig:    in STD_LOGIC;
-  --  Dout : out std_logic_vector(Wordwidth-1 downto 0); -- Ausgabebit: 1 wenn Folge erkannt
-   MOSI     : out STD_LOGIC;                           
-   SCLK     : out STD_LOGIC;
-   SS       : out STD_LOGIC;
+   WaveAddr: in integer range 0 to (2*NWave)-1;  
+   ChanAddr: in integer range 0 to NChannels-1;  
+   CLK : in std_logic; -- Systemtakt
+   RESET : in std_logic; -- asynchroner Reset (alles auf Null)
+   RESET_CH: in std_logic;
+   Write:  in std_logic;
+   EnWrite: in std_logic;
+   
+   WriteConfig: in std_logic;
+
+   trig_all:    in STD_LOGIC;
+   trig_CH: in std_logic_vector(NChannels-1 downto 0);
+   
    Din : in std_logic_vector(Wordwidth-1 downto 0); -- Eingabe
+   
+   MOSI     : out std_logic_vector(NChannels-1 downto 0);                           
+   SCLK     : out std_logic_vector(NChannels-1 downto 0);
+   SS       : out std_logic_vector(NChannels-1 downto 0);
+   
+   
    InterInterval: in integer range 0 to MaxDelay-1;
    InterPeriods: in integer range 0 to MaxDelay-1;
-   WFDivider: in integer range 0 to MaxDelay-1;
    Amplitude: in std_logic_vector(MultiplierWordwith-1 downto 0)
-    );
+    
+       );
     
 end component;
     
     
      
-   signal CLK :  std_logic; -- Systemtakt
-   signal RESET :  std_logic; -- asynchroner Reset (alles auf Null)
-   signal Write:   std_logic;
-   signal EnWrite:  std_logic;
-   signal Din :  std_logic_vector(Wordwidth-1 downto 0); -- Eingabe
-   signal MOSI     :  STD_LOGIC;                           
-   signal SCLK     :  STD_LOGIC;
-   signal SS       :  STD_LOGIC;
-   signal WaveAddr:  integer range 0 to 2*NWave-1;
-   signal contStim:  STD_LOGIC;     --later optinal with generate
-   signal trig:     STD_LOGIC;
-   signal InterInterval: integer range 0 to MaxDelay-1;
-   signal InterPeriods: integer range 0 to MaxDelay-1;
-   signal WFDivider: integer range 0 to MaxDelay-1;
-   signal Amplitude:  std_logic_vector(MultiplierWordwith-1 downto 0);
-    
-    constant T : time := 10 ns;
+signal   WaveAddr:  integer range 0 to (2*NWave)-1:=0;  
+signal   ChanAddr:  integer range 0 to NChannels-1:=0;  
+signal   CLK :  std_logic:='0'; -- Systemtakt
+signal   RESET :  std_logic:='0'; -- asynchroner Reset (alles auf Null)
+signal   RESET_CH:  std_logic:='0';
+signal   Write:   std_logic:='0';
+signal   EnWrite:  std_logic:='0';
+   
+signal   WriteConfig: std_logic:='0';
+
+signal   trig_all:     STD_LOGIC:='0';
+signal   trig_CH:  std_logic_vector(NChannels-1 downto 0):=(others=>'0');
+   
+signal   Din :  std_logic_vector(Wordwidth-1 downto 0):=(others=>'0'); -- Eingabe
+   
+signal   MOSI     :  std_logic_vector(NChannels-1 downto 0);                           
+signal   SCLK     :  std_logic_vector(NChannels-1 downto 0);
+signal   SS       :  std_logic_vector(NChannels-1 downto 0);
+   
+   
+signal   InterInterval:  integer range 0 to MaxDelay-1:=0;
+signal   InterPeriods:  integer range 0 to MaxDelay-1:=0;
+signal   Amplitude:  std_logic_vector(MultiplierWordwith-1 downto 0):=(others=>'0');
+   
+constant T : time := 10 ns;
     
 begin
 
-        UUT: Channel  generic map (Adresswidth => Adresswidth, Wordwidth=>Wordwidth) --no semicolon here 
-        port map (WaveAddr=>WaveAddr, CLK=>CLK, RESET=>RESET, Write=>Write, EnWrite=>EnWrite, Din=>Din, MOSI=>MOSI, SCLK=>SCLK, SS=>SS, trig=>trig, contStim=>contStim, InterInterval=>InterInterval, InterPeriods=>InterPeriods, WFDivider=>WFDivider, Amplitude=>Amplitude);--Dout=>Dout);
+        UUT: Stimulator
+        port map (WaveAddr=>WaveAddr, ChanAddr=>ChanAddr, CLK=>CLK, RESET=>RESET, RESET_CH=>RESET_CH, Write=>Write, EnWrite=>EnWrite, WriteConfig=>WriteConfig,  trig_all=>trig_all, trig_CH=>trig_CH, Din=>Din, MOSI=>MOSI, SCLK=>SCLK, SS=>SS, InterInterval=>InterInterval, InterPeriods=>InterPeriods, Amplitude=>Amplitude);
 
     -- continuous clock
     process 
@@ -91,21 +109,54 @@ begin
     
    process
    begin
+   ChanAddr<=0;
    InterInterval<=20;
    InterPeriods<=40;
-   WFDivider<=0;
-   Amplitude<="001000";
+   Amplitude<="101000";
    
-   trig<='0';
-   contStim<='0';
+
    WaveAddr<=0;
    Write<='0';
    RESET <= '1', '0' after 2*T;
    wait for 5*T;
    EnWrite<='1';
    wait for 5*T;
+   WriteConfig<='1';
+     wait for 10*T;
    
    --Memory 0 0-7
+        wait for 3*T;
+        Din <= "10000000";
+        Write<='0';
+        wait for 3*T;
+        Write<='1';
+        wait for 3*T;
+        Din <= "10000010";
+        Write<='0';
+        wait for 3*T;
+        Write<='1';
+        wait for 3*T;
+        Din <= "10000100";
+        Write<='0';
+        wait for 3*T;
+        Write<='1';
+        wait for 3*T;
+        Din <= "10001000";
+        wait for 3*T;
+        WriteConfig<='0';
+        Write<='0';
+   
+   
+   
+        RESET_CH <= '1', '0' after 10*T;
+        wait for 5*T;
+        EnWrite<='1';
+        wait for 5*T;
+        WriteConfig<='1';
+        wait for 10*T;
+     
+     
+   
         wait for 3*T;
         Din <= "00000000";
         Write<='0';
@@ -123,6 +174,8 @@ begin
         Write<='1';
         wait for 3*T;
         Din <= "00001000";
+        wait for 3*T;
+        WriteConfig<='0';
         Write<='0';
         wait for 3*T;
         Write<='1';
@@ -155,8 +208,10 @@ begin
         Write<='0';
         wait for 3*T;
         WaveAddr<=1;
-        EnWrite<='1';
-        wait for 5*T;
+        wait for T;
+        WriteConfig<='1';
+        wait for T;
+
    --Memory 3 8-15
 
         Din <= "11111110";  
@@ -201,51 +256,153 @@ begin
         wait for 3*T;      
         EnWrite<='0';
         wait for 5*T;
+        wait for 3*T;
+        WriteConfig<='0';
         
+        trig_all<='1';
+        
+   ChanAddr<=1;
+   InterInterval<=1;
+   InterPeriods<=4;
+   Amplitude<="111000";
+   
+
+   WaveAddr<=0;
+   Write<='0';
+   wait for 5*T;
+   EnWrite<='1';
+   wait for 5*T;
+   WriteConfig<='1';
+   wait for 10*T;
+   
+   --Memory 0 0-7
+        wait for 3*T;
+        Din <= "00000000";
+        Write<='0';
+        wait for 3*T;
+        Write<='1';
+        wait for 3*T;
+        Din <= "00000010";
+        Write<='0';
+        wait for 3*T;
+        Write<='1';
+        wait for 3*T;
+        Din <= "01000000";
+        WriteConfig<='0';
+        Write<='0';
+        wait for 3*T;
+        Write<='1';
+        wait for 3*T;
+        Din <= "11111101";
+        Write<='0';
+        wait for 3*T;
+        Write<='1';
+        wait for 3*T;
+        Din <= "00000001";
+        Write<='0';
+        wait for 3*T;
+        Write<='1';
+        wait for 3*T;      
+        Write<='0';
+        wait for 3*T;
+        
+        WaveAddr<=1;
+        wait for T;
+        WriteConfig<='1';
+        wait for T;
+        EnWrite<='1';
+        wait for 5*T;
+   --Memory 3 8-15
+
+        Din <= "01111100";
+        Write<='0';
+        wait for 3*T;
+        Write<='1';
+        wait for 3*T;
+        Din <=  "01011101";
+        Write<='0';
+        wait for 3*T;
+        Write<='1';
+        wait for 3*T;
+        Din <=  "00001110";
+        Write<='0';
+        wait for 3*T;  
+        Write<='1';
+        wait for 3*T;      
+        EnWrite<='0';
+        wait for 5*T;
+        wait for 3*T;
+        WriteConfig<='0';
+        
+        
+        
+        
+        
+        ---------------------------------------
         
         
         WaveAddr<=0;
+        wait for 3*T;
+        WriteConfig<='1';
         wait for 10*T;
-        contStim<='1';
-        wait for 1000*T;
-           InterInterval<=20;
-           InterPeriods<=40;
-           WFDivider<=1;
+        trig_all<='1';
+        wait for 100*T;
+        trig_all<='0';
+        wait for 900*T;
+        trig_all<='1';
+        wait for 100*T;
+        trig_all<='0';
+        wait for 900*T;
+        
+
+        wait for 3*T;
+        WriteConfig<='1';
+        wait for 3*T;
+        WriteConfig<='0';
 
         wait for 16000*T;
         
-        InterInterval<=200;
-        InterPeriods<=100;
-        WFDivider<=4;
+
+
         Amplitude<="001000";
+         wait for 3*T;
+        WriteConfig<='1';
+        wait for 3*T;
+        WriteConfig<='0';
         wait for 16000*T;
         
         Amplitude<="111000";
         wait for 16000*T;
-        InterInterval<=20;
+        InterInterval<=0;
         InterPeriods<=0;
-        WFDivider<=1;
+        wait for 3*T;
+        WriteConfig<='1';
+        wait for 3*T;
+        WriteConfig<='0';
         
-        contStim<='0';       
         wait for 200*T;
 
-        trig<='0';
+        trig_all<='0';
         wait for 1000*T;
-        trig<='1';
+        trig_all<='1';
         wait for 10*T;
-        trig<='0';
+        trig_all<='0';
         wait for 1000*T;
         wait for 10*T;
-        trig<='1';
+        trig_all<='1';
         wait for 10*T;
-        trig<='0';
+        trig_all<='0';
         wait for 1000*T;
         WaveAddr<=1;
         wait for 10*T;
-        trig<='1';
-        wait for 10*T;
-        trig<='0';
-        wait for 1000*T;        
+        trig_CH(0)<='1';
+        wait for 25*T;
+        trig_CH(0)<='0';
+        wait for 150*T;     
+        trig_CH(1)<='1';
+        wait for 25*T;
+        trig_CH(1)<='0';
+        wait for 1500*T;    
    
    end process; 
     
