@@ -1,7 +1,25 @@
--- OneChannel
+----------------------------------------------------------------------------------
+-- Company: 
+-- Engineer: Felix Schmitt
+-- 
+-- Create Date: 01/05/2019 01:34:38 PM
+-- Design Name: 
+-- Module Name: Channel - Behavioral
+-- Project Name: Stimulator
+-- Target Devices: 
+-- Tool Versions: 
+-- Description: 
+-- 
+-- Dependencies: 
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Additional Comments:
+-- SPI-Interace is IP of http://www.lothar-miller.de/s9y/categories/45-SPI-Master am 04.05.2019 
+----------------------------------------------------------------------------------
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
---use IEEE.STD_LOGIC_ARITH.ALL;
 use ieee.numeric_std.all;
 entity Channel is
 	generic (
@@ -70,72 +88,62 @@ architecture Behavioral of Channel is
 			clk       : in STD_LOGIC
 		);
 	end component;
-	type States is (Init, W1, W1T, W2, TWAIT, T1, T1T, TInterval, T2, T2T, T3, T4, T5, T5T, T_WF_Change, T_WF_ChangeT); -- Aufzählungstyp
-	-- Init: Initialization
-	--
-	---------Wirte to meory:---------
-	--Resets the memory and then passes signals from Din to memory
-	----------------------------------
-	-- W1: Resets counter and memory
-	-- W1T: Holds resest of memory
-	-- W2: Write Data to Memory, passes signals from input to memory
-	---------Output waveform:---------
-	-- TWAIT: synchronizing state, waits for trigger if cont. run is not set; reads naext datword form memory
-	-- T1: start transmission of last fetched word, if coming from TWAIT, otherwise start fetching word
-	-- T1T:
-	-- T2:
-	-- T2T:
-	-- T3: start transmission of last fetched word
-	-- T4:
-	-- T5: prepare memory to read next word
-	-- T5T:
-	signal State, FolState : States;
-	signal counter : integer range 0 to 31 := 0;
+	
+	type States is (WriteInit, WriteTrans, WriteEnable,TWAIT_WF1, TStartTX_WF1, TCountR_WF1, TRead_WF1, CounterR_II, InterInt, 
+	CounterR_II2, TStartTX_WF2, TRead_WF2, TCountR_WF2); -- Aufzählungstyp
+
+	signal State, FolState : States:=WriteInit;
+	signal counter : integer range 0 to 2*MaxDelay := 0;
 	signal counterReset : std_logic := '0';
-	signal RST : std_logic;
+	signal RST : std_logic;		--Reset of Memory
 	signal StartTx : std_logic;
 	signal TX_Done : std_logic;
 	signal Dout : std_logic_vector(TransmitterWordwith - 1 downto 0); -- Ausgabebit: 1 wenn Folge erkannt
 	signal trigLoc : std_logic;
-	--------------------Declaration of Arrays for MemoryMux------------------------
-	type WordArray is array (2 * NWave - 1 downto 0) of std_logic_vector(Wordwidth - 1 downto 0);
-	type BitArray is array (2 * NWave - 1 downto 0) of std_logic;
-	type IntegerArray is array (2 * NWave - 1 downto 0) of integer range 0 to (2 ** Adresswidth) - 1;
 	signal EnableOutput : std_logic := '0';
-	signal DoutMemA : WordArray; -- Eingabe
-	signal ReadA : BitArray;
-	signal WriteMemA : BitArray;
-	signal WRCNTA : IntegerArray;
-	signal NullflagA : BitArray;
 	signal DinMem : std_logic_vector(Wordwidth - 1 downto 0);
-	signal Read : std_logic;
+	signal Read : std_logic;	--Read Memory
 	signal WriteMem : std_logic;
-	signal Addr0 : std_logic;
-	signal WRCNT : integer range 0 to (2 ** Adresswidth) - 1;
-	signal Nullflag : std_logic;
+	signal Addr0 : std_logic;	 --Reset Memory to first element
+	signal Nullflag : std_logic; --signals if Memory has reached first element
 	signal WaveAddrZ1 : integer range 0 to NWave - 1;
 	signal WaveID : integer range 0 to 2 * NWave - 1 := 0;
 	signal WaveIDZ : integer range 0 to 2 * NWave - 1 := 0;
 	signal StimulusID : std_logic := '0';
-	signal WaveRST : std_logic := '0';
-	signal WaveDFF_D : std_logic := '0';
-	signal DelayCounter : integer range 0 to MaxDelay := 0;
-	signal DelayCounterReset : std_logic := '0';
-	signal FlagInterInterval : std_logic := '0';
-	signal FlagInterPeriod : std_logic := '0';
+
 	signal A : signed(TransmitterWordwith downto 0) := (others => '0');
 	signal B : signed(TransmitterWordwith downto 0) := (others => '0');
 	signal C : signed(2 * TransmitterWordwith + 1 downto 0) := (others => '0');
+	
+	
+	------------------to remove and replace----------------------------
+	signal SamplingTime      : integer range 0 to MaxDelay - 1;
+	
+	--------------------Declaration of Arrays for MemoryMux------------------------
+	type WordArray is array (2 * NWave - 1 downto 0) of std_logic_vector(Wordwidth - 1 downto 0);
+	type BitArray is array (2 * NWave - 1 downto 0) of std_logic;
+	type IntegerArray is array (2 * NWave - 1 downto 0) of integer range 0 to (2 ** Adresswidth) - 1;
+
+	---Arays to connect to Memories-------
+	signal DoutMemA : WordArray; -- 
+	signal ReadA : BitArray;
+	signal WriteMemA : BitArray;
+	signal NullflagA : BitArray;
+	
 begin
+
+	SamplingTime<=WFDivider;
+	
 	MemArray : for I in 0 to 2 * NWave - 1 generate
 		MemoryX : Memory
-		generic map(Adresswidth => Adresswidth, Wordwidth => Wordwidth) --no semicolon here
-		port map(CLK => CLK, Addr0 => Addr0, RESET => RST, Din => DinMem, Write => WriteMemA(I), Read => ReadA(I), Dout => DoutMemA(I), Empty => open, Full => open, WRCNT => WRCNTA(I), Nullflag => NullflagA(I)); --Read=>
+		port map(CLK => CLK, Addr0 => Addr0, RESET => RST, Din => DinMem, Write => WriteMemA(I), Read => ReadA(I), Dout => DoutMemA(I), Empty => open, Full => open, WRCNT =>  open, Nullflag => NullflagA(I)); --Read=>
 	end generate MemArray;
+	
 	Interface : SPI_Master
-	generic map(Quarz_Taktfrequenz => Clock, SPI_Taktfrequenz => SPI_Clock, Laenge => TransmitterWordwith)
 	port map(TX_Data => Dout, MOSI => MOSI, SCLK => SCLK, SS => SS, TX_Start => StartTx, TX_Done => TX_Done, clk => CLK);
-	AdressMux : process (CLK)
+	
+	--------WF-selector to cut last bit of ID and hand control to FSM during Transmit---------------------
+	WFSelect : process (CLK)
 	begin
 		if CLK = '1' and CLK'EVENT then
 			WaveID <= WaveIDZ;
@@ -148,18 +156,32 @@ begin
 					WaveIDZ <= (WaveAddr/2) * 2 + 1;
 				end if;
 			end if;
+			
+			--- Reset Readcounter if WaveAddr is changed---------------
+			if state = TWAIT_WF1 or state= InterInt then
+				Addr0 <= '1' after 5 ns;
+			else
+				if (WaveID /= WaveIDZ) then
+					Addr0 <= '1' after 5 ns;
+				else
+					Addr0 <= '0' after 5 ns;
+				end if;
+			end if;	
+			
 		end if;
-	end process AdressMux;
-	MemoryMUX : process (WaveID, DoutMemA, Read, WriteMem, WRCNTA, NullflagA, EnableOutput, Amplitude)
+	end process WFSelect;
+	
+	-----------Memory Mux to connect Memories with Interface-------
+	MemoryMUX : process (WaveID, DoutMemA, Read, WriteMem, NullflagA, EnableOutput, Amplitude)
 	begin
 		WriteMemA <= (others => '0') after 5 ns;
 		WriteMemA(WaveID) <= WriteMem after 5 ns;
-		--ReadA<= (WaveID=>Read, others=>'0') after 5 ns;
 		ReadA <= (others => '0');
 		ReadA(WaveID) <= Read;
-		WRCNT <= WRCNTA(WaveID) after 5 ns;
 		Nullflag <= NullflagA(WaveID) after 5 ns;
 	end process MemoryMUX;
+	
+	----------Output-Mux with Offset and Enable--------
 	OutputMUX : process(CLK)
 	begin
 		if CLK = '1' and CLK'EVENT then
@@ -173,132 +195,102 @@ begin
 			end if;
 		end if;
 	end process OutputMUX;
-	MemoryStartAdress : process (CLK)
-	begin
-		if CLK = '1' and CLK'EVENT then
-			if state = TWAIT then
-				Addr0 <= '1' after 5 ns;
-			else
-				if (WaveID /= WaveAddrZ1) then
-					Addr0 <= '1' after 5 ns;
-				else
-					Addr0 <= '0' after 5 ns;
-				end if;
-			end if;
-			WaveAddrZ1 <= WaveID after 5 ns;
-		end if;
-	end process MemoryStartAdress;
+	
+
+	-----------Trigger-Edge-Detector-------
 	Trigger : process (CLK)
 	begin
 		if CLK = '1' and CLK'EVENT then
-			trigLoc <= trig after 5ns;
+			trigLoc <= trig after 5 ns;
 		end if;
 	end process Trigger;
 	--------------------FSM-------------------
 	-- More automat as 3-process modell with Counter to reduce states
-	TransistionCounter : process (CLK) --counter for delay in state transition
+	-- See Documentation for State Diagram
+	CounterP : process (CLK) 
 	begin
 		if CLK = '1' and CLK'EVENT then
 			if counterReset = '1' then
 				counter <= 0 after 5 ns;
 			else
-				if counter < 31 then
 					counter <= counter + 1 after 5 ns;
-				end if;
 			end if;
 		end if;
-	end process TransistionCounter;
-	CountDelay : process (CLK) --counter for interinterval delay and interperiod delay
-	begin
-		if CLK = '1' and CLK'EVENT then
-			if DelayCounterReset = '1' then
-				DelayCounter <= 0 after 5 ns;
-			else
-				DelayCounter <= DelayCounter + 1 after 5 ns;
-			end if;
-		end if;
-	end process CountDelay;
-	WaveDFF : process (CLK)
-	begin
-		if CLK = '1' and CLK'EVENT then
-			if WaveRST = '1' then
-				StimulusID <= '0' after 5 ns;
-			elsif WaveDFF_D = '0' then
-				StimulusID <= (StimulusID) after 5 ns;
-			else
-				StimulusID <= not(StimulusID) after 5 ns;
-			end if;
-		end if;
-	end process WaveDFF;
+	end process CounterP;
+	
+	
 	StateTransition : process (CLK)
 	begin
 		if CLK = '1' and CLK'EVENT then
 			if RESET = '1' then
-				State <= Init after 5 ns;
+				State <= WriteInit after 5 ns;
 			else
 				State <= FolState after 5 ns;
 			end if;
 		end if;
 	end process StateTransition;
-	StateCalculation : process (State, EnWrite, counter, TX_Done, contStim, trigLoc, trig, Nullflag, StimulusID, DelayCounter, InterInterval, InterPeriods, WFDivider)
+	
+	
+	StateCalculation : process (State, EnWrite, counter, TX_Done, trigLoc, trig, Nullflag, InterInterval, InterPeriods, SamplingTime)
 	begin
-		FolState <= Init;
+		FolState <= WriteInit;
 		case State is
-			when Init => if EnWrite = '1' then
-				FolState <= W1 after 5 ns;
-				else FolState <= Init after 5 ns;
+-------------------WriteMemory------------------------------------		
+			when WriteInit => if EnWrite = '1' then
+				FolState <= WriteTrans after 5 ns;
+				else FolState <= WriteInit after 5 ns;
 			end if;
-			when W1 => FolState <= W1T;
-			when W1T => FolState <= W1T after 5 ns;
-				if counter > 2 then
-					FolState <= W2 after 5 ns;
-				end if;
-			when W2 => FolState <= W2 after 5 ns;
+			when WriteTrans => FolState <= WriteEnable after 5 ns;
+			when WriteEnable => FolState <= WriteEnable after 5 ns;
 				if EnWrite = '0' then
-					FolState <= TWAIT after 5 ns;
+					FolState <= TWAIT_WF1 after 5 ns;
 				end if;
-			when TWAIT => FolState <= TWAIT after 5 ns;
-				if trig = '1' and trigLoc = '0' and DelayCounter >= InterINterval and StimulusID = '0' then
-					FolState <= T1 after 5 ns;
+-------------------Transmit---------------------------------------								
+			when TWAIT_WF1 => FolState <= TWAIT_WF1 after 5 ns;
+				if trig = '1' and trigLoc = '0' then
+					FolState <= TStartTX_WF1 after 5 ns;
 				end if;
-				if contStim = '1' and DelayCounter >= InterINterval and StimulusID = '0' then
-					FolState <= T1 after 5 ns;
+				if EnWrite = '1' then
+					FolState <= WriteInit after 5 ns;
 				end if;
-				if StimulusID = '1' and DelayCounter >= InterPeriods then
-					FolState <= T1 after 5 ns;
+			when TStartTX_WF1 => FolState <= TStartTX_WF1 after 5 ns;
+				if Counter >= 2 then
+					FolState <= TRead_WF1 after 5ns;
 				end if;
-			when T1 => FolState <= T1T after 5 ns;
-			when T1T => FolState <= TInterval after 5 ns;
-			when TInterval => FolState <= TInterval after 5 ns;
-				if DelayCounter >= WFDivider then
-					FolState <= T2 after 5ns;
+			when TRead_WF1 => FolState <= TRead_WF1 after 5ns;
+				if TX_Done = '1' and  Nullflag='0' and counter>=SamplingTime then
+					FolState <= TCountR_WF1 after 5 ns;
 				end if;
-			when T2 => FolState <= T2 after 5ns;
-				if TX_Done = '1' then
-					FolState <= T2T after 5 ns;
+				if TX_Done = '1' and  Nullflag='1' and counter>=SamplingTime then
+					FolState <= CounterR_II after 5 ns;
 				end if;
-			when T2T => FolState <= T2T after 5 ns;
-				if counter > 1 then
-					FolState <= T3 after 5 ns;
-				elsif EnWrite = '1' then
-					FolState <= W1 after 5 ns;
+			when TCountR_WF1 => FolState <= TStartTX_WF1 after 5ns;
+			when CounterR_II => FolState <= InterInt after 5 ns;
+			when InterInt => FolState <= InterInt after 5 ns;
+				if Counter >= InterInterval then
+					FolState <= CounterR_II2 after 5ns;
 				end if;
-			when T3 => FolState <= T4 after 5ns;
-			when T4 => FolState <= T5 after 5 ns;
-			when T5 => FolState <= T5T after 5 ns;
-			when T5T => FolState <= T5T after 5 ns;
-				if Nullflag = '1' and counter > 1 then
-					FolState <= T_WF_Change after 5 ns;
-				elsif counter > 3 then
-					FolState <= T1 after 5 ns;
+				if EnWrite = '1' then
+					FolState <= WriteInit after 5 ns;
 				end if;
-			when T_WF_Change => FolState <= T_WF_Change after 5ns;
-				if TX_Done = '1' then
-					FolState <= T_WF_ChangeT after 5 ns;
+			when CounterR_II2 => FolState <= TStartTX_WF2 after 5 ns;	
+				
+			when TStartTX_WF2 => FolState <= TStartTX_WF2 after 5 ns;
+				if Counter >= 2 then
+					FolState <= TRead_WF2 after 5ns;
 				end if;
-			when T_WF_ChangeT => FolState <= TWAIT after 5ns;
+			when TRead_WF2 => FolState <= TRead_WF2 after 5ns;
+				if TX_Done = '1' and  Nullflag='0' and counter>=SamplingTime then
+					FolState <= TCountR_WF2 after 5 ns;
+				end if;
+				if TX_Done = '1' and  Nullflag='1' and counter>=2*SamplingTime then
+					FolState <= TWAIT_WF1 after 5 ns;
+				end if;
+			when TCountR_WF2 => FolState <= TStartTX_WF2 after 5ns;	
 		end case;
 	end process StateCalculation;
+	
+	
 	Output : process (State, Write, Din)
 	begin
 		Read <= '0' after 5 ns;
@@ -307,56 +299,49 @@ begin
 		WriteMem <= '0' after 5 ns;
 		DinMem <= (others => '0') after 5 ns;
 		StartTx <= '0' after 5 ns;
-		WaveRST <= '0' after 4 ns;
-		WaveDFF_D <= '0' after 5 ns;
-		DelayCounterReset <= '1' after 5ns;
 		EnableOutput <= '1' after 5 ns;
+		StimulusID <= '0' after 5 ns;
+		
 		case State is
-			when Init =>
-				WaveRST <= '1' after 5ns;
+			when WriteInit =>
 				RST <= '1' after 5 ns;
-				EnableOutput <= '0' after 5 ns;
-			when W1 =>
-				RST <= '1' after 5 ns;
-				WaveRST <= '1' after 5ns;
-				EnableOutput <= '0' after 5 ns;
-			when W1T =>
-				RST <= '1' after 5 ns;
+				EnableOutput <= '0' after 5 ns;	
+			when WriteTrans =>
 				counterReset <= '0' after 5 ns;
 				EnableOutput <= '0' after 5 ns;
-			when W2 =>
+				StartTx <= '1' after 5 ns;
+			when WriteEnable =>
 				WriteMem <= Write after 5 ns;
 				DinMem <= Din after 5 ns;
 				EnableOutput <= '0' after 5 ns;
-			when TWAIT => Read <= '1' after 5 ns;--StartTx<='1' after 5 ns;
-				DelayCounterReset <= '0' after 5ns;
+				StartTx <= '1' after 5 ns;
+-----------------------Transmit---------WF1---------------------------				
+			when TWAIT_WF1 => Read <= '1' after 5 ns;
 				EnableOutput <= '0' after 5 ns;
-			when T1 => Read <= '1' after 5 ns;
+			when TStartTX_WF1 => Read <= '0' after 5 ns;
 				StartTx <= '1' after 5 ns;
-				EnableOutput <= '1' after 5 ns;
-			when T1T => Read <= '1' after 5 ns;
+				counterReset <= '0' after 5 ns;
+			when TRead_WF1 => Read <= '1' after 5 ns;
 				StartTx <= '1' after 5 ns;
-			when TInterval => Read <= '1' after 5 ns;
+				counterReset <= '0' after 5 ns;
+			when TCountR_WF1 => Null;
+			when CounterR_II => Null;			
+-----------------------Transmit---------WF2---------------------------			
+			when InterInt => StimulusID <= '1' after 5 ns;
+				counterReset <= '0' after 5 ns;
+				EnableOutput <= '0' after 5 ns;			 
+			when CounterR_II2 => StimulusID <= '1' after 5 ns;
+				 Read <= '1' after 5 ns;
+				 EnableOutput <= '0' after 5 ns;
+			when TStartTX_WF2 => StimulusID <= '1' after 5 ns;
 				StartTx <= '1' after 5 ns;
-				DelayCounterReset <= '0' after 5ns;
-			when T2 => Read <= '1' after 5 ns;
+				Read <= '0' after 5 ns;
+				counterReset <= '0' after 5 ns;
+			when TRead_WF2 => StimulusID <= '1' after 5 ns;
+				Read <= '1' after 5 ns;
 				StartTx <= '1' after 5 ns;
-			when T2T => counterReset <= '0' after 5 ns;
-				Read <= '1' after 5 ns;
-			when T3 => StartTx <= '1' after 5 ns;
-				Read <= '1' after 5 ns;
-				EnableOutput <= '1' after 5 ns;
-			when T4 => StartTx <= '1' after 5 ns;
-				Read <= '1' after 5 ns;
-			when T5 => StartTx <= '1' after 5 ns;
-				Read <= '1' after 5 ns;
-			when T5T => counterReset <= '0' after 5 ns;
-				StartTx <= '1' after 5 ns;
-			when T_WF_Change =>
-				EnableOutput <= '1' after 5 ns;
-			when T_WF_ChangeT =>
-				Read <= '1' after 5 ns;
-				WaveDFF_D <= '1' after 5ns;
+				counterReset <= '0' after 5 ns;
+			when TCountR_WF2 => StimulusID <= '1' after 5 ns;				
 		end case;
 	end process Output;
 end Behavioral;
