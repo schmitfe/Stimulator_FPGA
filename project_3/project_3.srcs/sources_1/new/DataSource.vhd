@@ -283,7 +283,7 @@ begin
 				if TX_Done = '1' and  Nullflag='0' and counter>=SamplingTime then
 					FolState <= TCountR_WF2 after 5 ns;
 				end if;
-				if TX_Done = '1' and  Nullflag='1' and counter>=2*SamplingTime then
+				if TX_Done = '1' and  Nullflag='1' and counter>=SamplingTime+InterPeriods then
 					FolState <= TWAIT_WF1 after 5 ns;
 				end if;
 			when TCountR_WF2 => FolState <= TStartTX_WF2 after 5ns;	
