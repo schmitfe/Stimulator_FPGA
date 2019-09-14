@@ -39,16 +39,14 @@ port(
     RESET : in std_logic; -- asynchroner Reset (alles auf Null)
     Write:  in std_logic;
     EnWrite: in std_logic;
-    contStim: in STD_LOGIC;     --later optinal with generate
     trig:    in STD_LOGIC;
-  --  Dout : out std_logic_vector(Wordwidth-1 downto 0); -- Ausgabebit: 1 wenn Folge erkannt
    MOSI     : out STD_LOGIC;                           
    SCLK     : out STD_LOGIC;
    SS       : out STD_LOGIC;
    Din : in std_logic_vector(Wordwidth-1 downto 0); -- Eingabe
    InterInterval: in integer range 0 to MaxDelay-1;
    InterPeriods: in integer range 0 to MaxDelay-1;
-   WFDivider: in integer range 0 to MaxDelay-1;
+   SamplingTime: in integer range 0 to MaxDelay-1;
    Amplitude: in std_logic_vector(MultiplierWordwith-1 downto 0)
     );
     
@@ -65,11 +63,10 @@ end component;
    signal SCLK     :  STD_LOGIC;
    signal SS       :  STD_LOGIC;
    signal WaveAddr:  integer range 0 to 2*NWave-1;
-   signal contStim:  STD_LOGIC;     --later optinal with generate
    signal trig:     STD_LOGIC;
    signal InterInterval: integer range 0 to MaxDelay-1;
    signal InterPeriods: integer range 0 to MaxDelay-1;
-   signal WFDivider: integer range 0 to MaxDelay-1;
+   signal SamplingTime: integer range 0 to MaxDelay-1;
    signal Amplitude:  std_logic_vector(MultiplierWordwith-1 downto 0);
     
     constant T : time := 10 ns;
@@ -77,7 +74,7 @@ end component;
 begin
 
         UUT: Channel  generic map (Adresswidth => Adresswidth, Wordwidth=>Wordwidth) --no semicolon here 
-        port map (WaveAddr=>WaveAddr, CLK=>CLK, RESET=>RESET, Write=>Write, EnWrite=>EnWrite, Din=>Din, MOSI=>MOSI, SCLK=>SCLK, SS=>SS, trig=>trig, contStim=>contStim, InterInterval=>InterInterval, InterPeriods=>InterPeriods, WFDivider=>WFDivider, Amplitude=>Amplitude);--Dout=>Dout);
+        port map (WaveAddr=>WaveAddr, CLK=>CLK, RESET=>RESET, Write=>Write, EnWrite=>EnWrite, Din=>Din, MOSI=>MOSI, SCLK=>SCLK, SS=>SS, trig=>trig, InterInterval=>InterInterval, InterPeriods=>InterPeriods, SamplingTime=>SamplingTime, Amplitude=>Amplitude);--Dout=>Dout);
 
     -- continuous clock
     process 
@@ -93,11 +90,10 @@ begin
    begin
    InterInterval<=20;
    InterPeriods<=40;
-   WFDivider<=0;
+   SamplingTime<=0;
    Amplitude<="001000";
    
    trig<='0';
-   contStim<='0';
    WaveAddr<=0;
    Write<='0';
    RESET <= '1', '0' after 2*T;
@@ -206,17 +202,16 @@ begin
         
         WaveAddr<=0;
         wait for 10*T;
-        contStim<='1';
         wait for 1000*T;
            InterInterval<=20;
            InterPeriods<=40;
-           WFDivider<=1;
+           SamplingTime<=1;
 
         wait for 16000*T;
         
         InterInterval<=200;
         InterPeriods<=100;
-        WFDivider<=4;
+        SamplingTime<=4;
         Amplitude<="001000";
         wait for 16000*T;
         
@@ -224,9 +219,9 @@ begin
         wait for 16000*T;
         InterInterval<=20;
         InterPeriods<=0;
-        WFDivider<=1;
+        SamplingTime<=1;
         
-        contStim<='0';       
+    
         wait for 200*T;
 
         trig<='0';

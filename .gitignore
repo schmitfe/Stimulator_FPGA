@@ -150,3 +150,15 @@ project_3/project_3.sim/sim_2/behav/xsim/xsim.dir/StimulatorTB_behav/TempBreakPo
 project_3/project_3.sim/sim_2/behav/xsim/xsim.dir/StimulatorTB_behav/webtalk/xsim_webtalk.tcl
 project_3/project_3.srcs/constrs_1/imports/Documents/Arty-A7-35-Master.xdc
 project_3/project_3.srcs/sources_1/Backup.vhd
+project_3/project_3.cache/ip/2018.3/2e44a81326636098/2e44a81326636098.xci
+*.v
+*.xci
+project_3/project_3.cache/ip/2018.3/df317650fa5f94c8/stats.txt
+*.rpt
+*.vdi
+project_3/project_3.srcs/sources_1/ip/ila_0/doc/ila_v6_2_changelog.txt
+project_3/project_3.srcs/sources_1/ip/ila_0/hdl/blk_mem_gen_v8_3_vhsyn_rfs.vhd
+project_3/project_3.srcs/sources_1/ip/ila_0/hdl/fifo_generator_v13_1_vhsyn_rfs.vhd
+project_3/project_3.srcs/sources_1/ip/ila_0/ila_0_ooc.xdc
+project_3/project_3.srcs/sources_1/ip/ila_0/ila_v6_2/constraints/ila.xdc
+project_3/project_3.srcs/sources_1/ip/ila_0/ila_v6_2/constraints/ila_impl.xdc

@@ -23,32 +23,31 @@ use IEEE.STD_LOGIC_1164.all;
 use ieee.numeric_std.all;
 entity Channel is
 	generic (
-		Adresswidth : natural := 7; -- Speicherlänge = 2^Adresswidth
-		Wordwidth : natural := 10;
-		TransmitterWordwith : natural := 16;
-		MultiplierWordwith : natural := 5;
-		Clock : natural := 50000000;
-		SPI_Clock : natural := 1000000;
-		NWave : natural := 2;
-		MaxDelay : natural := 4095;
-		NeurtralDW : std_logic_vector(15 downto 0) := x"8000"
+		Adresswidth : natural := 7; -- Adresswidth of memory
+		Wordwidth : natural := 10; -- wordwidth of memory
+		TransmitterWordwith : natural := 16; --wordwidth of interface
+		MultiplierWordwith : natural := 5; --wordwidth of multiplier which can be set external
+		Clock : natural := 100000000;   --Clock of device
+		SPI_Clock : natural := 50000000; --Transmitter rate
+		NWave : natural := 2; --number of waveforms which can be saved
+		MaxDelay : natural := 4095; --Max*delay*1/Clock:= max delay between WF1 and 2, WF2 to WF1 and between transmitted words
+		NeurtralDW : std_logic_vector(15 downto 0) := x"8000" --Word which corresponds to 0 V at output of DAC
 	);
 	port (
-		WaveAddr       : in integer range 0 to (2 * NWave) - 1;
-		CLK            : in std_logic; -- Systemtakt
-		RESET          : in std_logic; -- asynchroner Reset (alles auf Null)
-		Write          : in std_logic;
-		EnWrite        : in std_logic;
-		contStim       : in STD_LOGIC;
-		trig           : in STD_LOGIC;
-		MOSI           : out STD_LOGIC;
-		SCLK           : out STD_LOGIC;
-		SS             : out STD_LOGIC;
-		Din            : in std_logic_vector(Wordwidth - 1 downto 0); -- Eingabe
-		InterInterval  : in integer range 0 to MaxDelay - 1;
-		InterPeriods   : in integer range 0 to MaxDelay - 1;
-		WFDivider      : in integer range 0 to MaxDelay - 1;
-		Amplitude      : in std_logic_vector(MultiplierWordwith - 1 downto 0)
+		WaveAddr       : in integer range 0 to (2 * NWave) - 1;   --Adress of waveform, last bit decides if data is written to memory of first half period or second
+		CLK            : in std_logic; 
+		RESET          : in std_logic; -- synchron RESET of Channel
+		Write          : in std_logic; -- Write Signal to memory
+		EnWrite        : in std_logic; -- Writemode
+		trig           : in STD_LOGIC; -- trigger
+		MOSI           : out STD_LOGIC; 
+		SCLK           : out STD_LOGIC; 
+		SS             : out STD_LOGIC; --Slave select
+		Din            : in std_logic_vector(Wordwidth - 1 downto 0); -- Input
+		InterInterval  : in integer range 0 to MaxDelay - 1; -- Delay between WF1 and WF2
+		InterPeriods   : in integer range 0 to MaxDelay - 1; -- Delay between WF2 and WF1
+		SamplingTime   : in integer range 0 to MaxDelay - 1; -- tie resolution of DAC
+		Amplitude      : in std_logic_vector(MultiplierWordwith - 1 downto 0) -- Gain of Channel
 	);
 end Channel;
 architecture Behavioral of Channel is
@@ -72,7 +71,7 @@ architecture Behavioral of Channel is
 			Nullflag            : out STD_LOGIC
 		);
 	end component;
-	component SPI_Master -- SPI-Modus 0: CPOL=0, CPHA=0
+	component SPI_Master -- SPI-Modus 0: CPOL=0, CPHA=0    --can be replaced by other interface if it has the same behaviour of TX_STart and TX_Done
 		generic (
 			Quarz_Taktfrequenz  : integer :=Clock;
 			SPI_Taktfrequenz    : integer := SPI_Clock;
@@ -89,35 +88,34 @@ architecture Behavioral of Channel is
 		);
 	end component;
 	
-	type States is (WriteInit, WriteTrans, WriteEnable,TWAIT_WF1, TStartTX_WF1, TCountR_WF1, TRead_WF1, CounterR_II, InterInt, 
+	type States is (Init, WriteInit, WriteTrans, WriteEnable,TWAIT_WF1, TStartTX_WF1, TCountR_WF1, TRead_WF1, CounterR_II, InterInt, 
 	CounterR_II2, TStartTX_WF2, TRead_WF2, TCountR_WF2); -- Aufzählungstyp
 
-	signal State, FolState : States:=WriteInit;
-	signal counter : integer range 0 to 2*MaxDelay := 0;
+	signal State, FolState : States:=Init;
+	signal counter : integer range 0 to 2*MaxDelay := 0;   --counter of FSM
 	signal counterReset : std_logic := '0';
 	signal RST : std_logic;		--Reset of Memory
 	signal StartTx : std_logic;
 	signal TX_Done : std_logic;
-	signal Dout : std_logic_vector(TransmitterWordwith - 1 downto 0); -- Ausgabebit: 1 wenn Folge erkannt
-	signal trigLoc : std_logic;
-	signal EnableOutput : std_logic := '0';
+	signal Dout : std_logic_vector(TransmitterWordwith - 1 downto 0); --output of memory mux -> Interface
+	signal trigZ1 : std_logic;
+	signal EnableOutput : std_logic := '0';    --Internal Signal to deactivate Output during states which dosen'T provide datta to interface (deactivate means sending of neutral word)
 	signal DinMem : std_logic_vector(Wordwidth - 1 downto 0);
 	signal Read : std_logic;	--Read Memory
 	signal WriteMem : std_logic;
 	signal Addr0 : std_logic;	 --Reset Memory to first element
 	signal Nullflag : std_logic; --signals if Memory has reached first element
-	signal WaveAddrZ1 : integer range 0 to NWave - 1;
-	signal WaveID : integer range 0 to 2 * NWave - 1 := 0;
-	signal WaveIDZ : integer range 0 to 2 * NWave - 1 := 0;
-	signal StimulusID : std_logic := '0';
+	signal WaveID : integer range 0 to 2 * NWave - 1 := 0;     --adress without last bit during transmit mode
+	signal WaveIDZ : integer range 0 to 2 * NWave - 1 := 0;    --signal to recognize change of adress
+	signal StimulusID : std_logic := '0';                      --last bit of adress during tranmit (controlled by FSM)
 
+    --registers of 
 	signal A : signed(TransmitterWordwith downto 0) := (others => '0');
 	signal B : signed(TransmitterWordwith downto 0) := (others => '0');
 	signal C : signed(2 * TransmitterWordwith + 1 downto 0) := (others => '0');
 	
 	
-	------------------to remove and replace----------------------------
-	signal SamplingTime      : integer range 0 to MaxDelay - 1;
+
 	
 	--------------------Declaration of Arrays for MemoryMux------------------------
 	type WordArray is array (2 * NWave - 1 downto 0) of std_logic_vector(Wordwidth - 1 downto 0);
@@ -132,8 +130,6 @@ architecture Behavioral of Channel is
 	
 begin
 
-	SamplingTime<=WFDivider;
-	
 	MemArray : for I in 0 to 2 * NWave - 1 generate
 		MemoryX : Memory
 		port map(CLK => CLK, Addr0 => Addr0, RESET => RST, Din => DinMem, Write => WriteMemA(I), Read => ReadA(I), Dout => DoutMemA(I), Empty => open, Full => open, WRCNT =>  open, Nullflag => NullflagA(I)); --Read=>
@@ -172,7 +168,7 @@ begin
 	end process WFSelect;
 	
 	-----------Memory Mux to connect Memories with Interface-------
-	MemoryMUX : process (WaveID, DoutMemA, Read, WriteMem, NullflagA, EnableOutput, Amplitude)
+	MemoryMUX : process (WaveID, Read, WriteMem, NullflagA, Amplitude)
 	begin
 		WriteMemA <= (others => '0') after 5 ns;
 		WriteMemA(WaveID) <= WriteMem after 5 ns;
@@ -201,7 +197,7 @@ begin
 	Trigger : process (CLK)
 	begin
 		if CLK = '1' and CLK'EVENT then
-			trigLoc <= trig after 5 ns;
+			trigZ1 <= trig after 5 ns;
 		end if;
 	end process Trigger;
 	--------------------FSM-------------------
@@ -223,7 +219,7 @@ begin
 	begin
 		if CLK = '1' and CLK'EVENT then
 			if RESET = '1' then
-				State <= WriteInit after 5 ns;
+				State <= Init after 5 ns;
 			else
 				State <= FolState after 5 ns;
 			end if;
@@ -231,10 +227,11 @@ begin
 	end process StateTransition;
 	
 	
-	StateCalculation : process (State, EnWrite, counter, TX_Done, trigLoc, trig, Nullflag, InterInterval, InterPeriods, SamplingTime)
+	StateCalculation : process (State, EnWrite, counter, TX_Done, trigZ1, trig, Nullflag, InterInterval, InterPeriods, SamplingTime)
 	begin
 		FolState <= WriteInit;
 		case State is
+		  when Init => FolState<= WriteInit after 5ns;
 -------------------WriteMemory------------------------------------		
 			when WriteInit => if EnWrite = '1' then
 				FolState <= WriteTrans after 5 ns;
@@ -247,7 +244,7 @@ begin
 				end if;
 -------------------Transmit---------------------------------------								
 			when TWAIT_WF1 => FolState <= TWAIT_WF1 after 5 ns;
-				if trig = '1' and trigLoc = '0' then
+				if trig = '1' and trigZ1 = '0' then
 					FolState <= TStartTX_WF1 after 5 ns;
 				end if;
 				if EnWrite = '1' then
@@ -303,13 +300,16 @@ begin
 		StimulusID <= '0' after 5 ns;
 		
 		case State is
+		     when Init =>RST <= '1' after 5 ns;
+				EnableOutput <= '0' after 5 ns;
 			when WriteInit =>
 				RST <= '1' after 5 ns;
-				EnableOutput <= '0' after 5 ns;	
+				EnableOutput <= '0' after 5 ns;
+				StartTx <= '1' after 5 ns;	
 			when WriteTrans =>
 				counterReset <= '0' after 5 ns;
 				EnableOutput <= '0' after 5 ns;
-				StartTx <= '1' after 5 ns;
+				StartTx <= '0' after 5 ns;
 			when WriteEnable =>
 				WriteMem <= Write after 5 ns;
 				DinMem <= Din after 5 ns;
@@ -325,11 +325,12 @@ begin
 				StartTx <= '1' after 5 ns;
 				counterReset <= '0' after 5 ns;
 			when TCountR_WF1 => Null;
-			when CounterR_II => Null;			
+			when CounterR_II => EnableOutput<='0';			
 -----------------------Transmit---------WF2---------------------------			
 			when InterInt => StimulusID <= '1' after 5 ns;
 				counterReset <= '0' after 5 ns;
-				EnableOutput <= '0' after 5 ns;			 
+				EnableOutput <= '0' after 5 ns;		
+				StartTx <= '1' after 5 ns;	 
 			when CounterR_II2 => StimulusID <= '1' after 5 ns;
 				 Read <= '1' after 5 ns;
 				 EnableOutput <= '0' after 5 ns;

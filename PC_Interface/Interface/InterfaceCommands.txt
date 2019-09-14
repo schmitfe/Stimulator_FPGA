@@ -1,0 +1,239 @@
+// Inlcude Library Command Line
+#include <SimpleCLI.h>
+#include <SPI.h>
+#include "SdFat.h"
+#include "sdios.h"
+//#include "Pins.h"
+#include "Arduino.h"
+
+
+#include "JsonStreamingParser.h"
+#include "JsonListener.h"
+#include "Parser.h"
+
+#define Channels 2
+
+void storeChannel(Argument id)
+{
+  Serial.println("Save to Channel " + id.getValue());
+}
+
+void setAmplitude(Argument id, Argument value)
+{
+  ChannelSet[id.getValue().toInt()].amplitude = value.getValue().toInt();
+  Serial.print("Amplitude: ");
+  Serial.println( ChannelSet[id.getValue().toInt()].amplitude);
+
+
+  Serial.print("InterInterval: ");
+  Serial.println( ChannelSet[id.getValue().toInt()].iinterval);
+
+
+  Serial.print("InterPeriod: ");
+  Serial.println( ChannelSet[id.getValue().toInt()].iperiod);
+
+  Serial.print("WaveAdress: ");
+  Serial.println( ChannelSet[id.getValue().toInt()].waveadress);
+  storeChannel(id);
+}
+
+void setInterInterval(Argument id, Argument value)
+{
+  ChannelSet[id.getValue().toInt()].iinterval = value.getValue().toInt();
+  storeChannel(id);
+}
+
+void setWaveadress(Argument id, Argument value)
+{
+  ChannelSet[id.getValue().toInt()].waveadress = value.getValue().toInt();
+  storeChannel(id);
+}
+
+
+void setInterPeriod(Argument id, Argument value)
+{
+  ChannelSet[id.getValue().toInt()].iperiod = value.getValue().toInt();
+  storeChannel(id);
+}
+
+
+void loadWaveform(Argument pathStr, Argument id)
+{
+  bool WriteWFs = true; //Let parser write to FPGA
+  String Description = "";
+  JsonStreamingParser parser;
+  Listener listener(&WriteWFs, &Description);   //bad way of introducing additional parameters
+  parser.setListener(&listener);
+  File myFile;
+  if (!sd.chdir("/")) {
+    Serial.println("Error: opening root!");
+  }
+  sd.chdir("WF");
+  char path[12];
+  pathStr.getValue().toCharArray(path, 12);
+  myFile = sd.open(path, FILE_READ);
+  Channeladress(id.getValue().toInt());
+
+  while (myFile.available()) {
+    parser.parse(myFile.read());
+  }
+  myFile.close();
+  Channeladress(0);
+  WriteWFs = false;
+}
+
+void description(Argument pathStr)
+{
+  bool WriteWFs = false;
+  String Description = "";
+  JsonStreamingParser parser;
+  Listener listener(&WriteWFs, &Description);   //bad way of introducing additional parameters
+  parser.setListener(&listener);
+  File myFile;
+  if (!sd.chdir("/")) {
+    Serial.println("Error: opening root!");
+  }
+  sd.chdir("WF");
+  char path[12];
+  pathStr.getValue().toCharArray(path, 12);
+  myFile = sd.open(path, FILE_READ);
+  WriteWFs = false; //Let parser write to FPGA
+  while (myFile.available()) {
+    parser.parse(myFile.read());
+  }
+  myFile.close();
+
+  Serial.print("Description of " + pathStr.getValue() + " : ");
+  Serial.println(Description);
+  Description = "";
+}
+
+
+void listFolder()
+{
+  if (!sd.chdir("/")) {
+    Serial.println("Error: opening root!");
+  }
+  if (!sd.chdir("WF")) {
+    sd.mkdir("WF");
+    sd.chdir("WF");
+  }
+  sd.ls("/WF", LS_R);
+}
+
+
+
+
+void trigger(int id)
+{
+  unsigned long curTime;
+  digitalWrite(trig[id], HIGH);
+  curTime = micros();
+  while (micros() - curTime < 2);
+  digitalWrite(trig[id], LOW);
+}
+
+void reset(Argument id)
+{
+  int ii = 0;
+
+  unsigned long curTime;
+  if (id.getValue().toInt() == 0) {
+    digitalWrite(PinRESET, HIGH);
+    curTime = micros();
+    while (micros() - curTime < 2);
+    digitalWrite(PinRESET, LOW);
+
+    for ( ii = 1; ii < Channels + 1 ; ii = ii + 1 ) {
+      ChannelSet[ii].amplitude = ChannelSet[0].amplitude;
+      ChannelSet[ii].iinterval = ChannelSet[0].iinterval;
+      ChannelSet[ii].iperiod = ChannelSet[0].iperiod;
+      ChannelSet[ii].waveadress = ChannelSet[0].waveadress;
+    }
+
+  } else {
+    digitalWrite(PinRESET_CH, HIGH);
+    curTime = micros();
+    ChannelSet[id.getValue().toInt()].amplitude = ChannelSet[0].amplitude;
+    ChannelSet[id.getValue().toInt()].iinterval = ChannelSet[0].iinterval;
+    ChannelSet[id.getValue().toInt()].iperiod = ChannelSet[0].iperiod;
+    ChannelSet[id.getValue().toInt()].waveadress = ChannelSet[0].waveadress;
+
+    while (micros() - curTime < 2);
+    storeChannel(id);
+
+    digitalWrite(PinRESET_CH, LOW);
+    storeChannel(id);
+
+  }
+}
+
+void Channeladress(int id)
+{
+  int adress=0;
+  if (id == 0) {
+    digitalWrite(*PinsChanAdress, LOW);
+    //Serial.println("No Channel");
+  } else {
+    //Serial.print("Channel :");
+    //Serial.println(id);
+    adress=id-1;
+    if (adress%2==1) {
+      digitalWrite(*PinsChanAdress, HIGH);
+    }
+    else {
+      digitalWrite(*PinsChanAdress, LOW);
+    }  
+  }
+}
+
+void RemoveDir (Argument str)
+{
+  char path[12];
+  str.getValue().toCharArray(path, 12);
+
+  if (!sd.chdir("/")) {
+    Serial.println("Error: opening root!");
+  }
+  sd.chdir("WF");
+  sd.remove(path);
+}
+
+void SaveFile (Argument str)
+{
+  File myFile;
+  char path[12];
+  uint8_t incomingByte;
+  str.getValue().toCharArray(path, 12);
+
+  if (!sd.chdir("/")) {
+    Serial.println("Error: opening root!");
+  }
+  sd.chdir("WF");
+  sd.remove(path);
+  myFile = sd.open(path, FILE_WRITE);
+  Serial.println("Please send File.");
+  while (Serial.available() == 0);
+  // read the incoming byte:
+  incomingByte = Serial.read();
+  while (incomingByte != 10) {
+    myFile.write(incomingByte);
+    while (Serial.available() == 0);
+    incomingByte = Serial.read();
+  }
+  myFile.close();
+  Serial.println("File saved!");
+}
+
+void WriteDout(Argument value)
+{
+  unsigned long curTime;
+  PIOD->PIO_SODR= value.getValue().toInt();
+  PIOD->PIO_CODR=~value.getValue().toInt()&0x000F;
+  digitalWrite(PinWrite, LOW);
+  curTime=micros();
+  while(micros()-curTime <2);
+  digitalWrite(PinWrite, HIGH);
+  curTime=micros();
+  while(micros()-curTime <1); 
+}

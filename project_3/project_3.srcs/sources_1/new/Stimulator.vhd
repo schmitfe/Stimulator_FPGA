@@ -25,16 +25,16 @@ use ieee.numeric_std.all;
        
 entity Stimulator is
 Generic (
-           Adresswidth  : natural := 7;  -- Speicherlänge = 2^Adresswidth
-           Wordwidth  : natural := 8;
-           TransmitterWordwith: natural:=16;
-           MultiplierWordwith: natural:=8;
-           Clock : natural :=50000000;
-           SPI_Clock: natural :=1000000;
-           NWave: natural :=1;
-           MaxDelay: natural :=4095;
-           NeurtralDW: std_logic_vector(15 downto 0):= x"8000";   
-           NChannels: natural:=2
+           Adresswidth  : natural := 8;  -- Adresswidth of Memories in CHannels
+           Wordwidth  : natural := 8;   -- Wordwidth og Memories
+           TransmitterWordwith: natural:=16;    --Wordwidth of Interface in each channel
+           MultiplierWordwith: natural:=4;      --Wordwidth of Gain for each channel
+           Clock : natural :=100000000;         --Clock of platform
+           SPI_Clock: natural :=25000000;        --Clock of SPI signal
+           NWave: natural :=1;                   -- Number of complete waveforms in each channel. Each Waveform consists of two parts (WF1 + WF2)
+           MaxDelay: natural :=255;            --Max*delay*1/Clock:= max delay between WF1 and 2, WF2 to WF1 and between transmitted words
+           NeurtralDW: std_logic_vector(15 downto 0):= x"8000";     -- Neutral word of Interface: 0V
+           NChannels: natural:=2                -- Number of channels of stimulator
            );
 
 port(
@@ -90,16 +90,15 @@ port(
     RESET : in std_logic; -- asynchroner Reset (alles auf Null)
     Write:  in std_logic;
     EnWrite: in std_logic;
-    contStim: in STD_LOGIC;     --later optinal with generate
     trig:    in STD_LOGIC;
-   MOSI     : out STD_LOGIC;                           
-   SCLK     : out STD_LOGIC;
-   SS       : out STD_LOGIC;
-   Din : in std_logic_vector(Wordwidth-1 downto 0); -- Eingabe
-   InterInterval: in integer range 0 to MaxDelay-1;
-   InterPeriods: in integer range 0 to MaxDelay-1;
-   WFDivider: in integer range 0 to MaxDelay-1;
-   Amplitude: in std_logic_vector(MultiplierWordwith-1 downto 0)
+    MOSI     : out STD_LOGIC;                           
+    SCLK     : out STD_LOGIC;
+    SS       : out STD_LOGIC;
+    Din : in std_logic_vector(Wordwidth-1 downto 0); -- Eingabe
+    InterInterval: in integer range 0 to MaxDelay-1;
+    InterPeriods: in integer range 0 to MaxDelay-1;
+    SamplingTime: in integer range 0 to MaxDelay-1;
+    Amplitude: in std_logic_vector(MultiplierWordwith-1 downto 0)
     );   
 end component;
 
@@ -125,7 +124,14 @@ generic (
 		OUT_InterPeriods   : out integer range 0 to MaxDelay - 1;
 		OUT_Amplitude      : out std_logic_vector(MultiplierWordwith - 1 downto 0)
 	);
+end component;
 
+component ila_0 is
+PORT (
+clk : IN STD_LOGIC;
+probe0 : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+probe1 : IN STD_LOGIC_VECTOR(7 DOWNTO 0)
+);
 end component;
 
 
@@ -163,14 +169,12 @@ ChannelArray : for I in 0 to NChannels-1 generate
         OUT_WaveAddr=>WaveAdressA(I), OUT_RESET=>open, 
         OUT_InterInterval=>IIntervalA(I), OUT_InterPeriods=>IPeriodA(I),OUT_Amplitude=>AmplitudeA(I));
 
-
-
 		ChannelX : Channel
         port map (
         WaveAddr=>WaveAdressA(I), CLK=>CLK, RESET=>locRESET(I), Write=>locWrite(I), EnWrite=>locEnWrite(I), 
-        Din=>Din, MOSI=>MOSI(I), SCLK=>SCLK(I), SS=>SS(I), trig=>locTrig(I), contStim=>'0', InterInterval=>IIntervalA(I), WFDivider=>0, InterPeriods=>IPeriodA(I), Amplitude=>AmplitudeA(I));
+        Din=>Din, MOSI=>MOSI(I), SCLK=>SCLK(I), SS=>SS(I), trig=>locTrig(I), InterInterval=>IIntervalA(I), SamplingTime=>0, InterPeriods=>IPeriodA(I), Amplitude=>AmplitudeA(I));
 	end generate ChannelArray;
-	
+
 	
 AdressMux : process (CLK)
 	begin
