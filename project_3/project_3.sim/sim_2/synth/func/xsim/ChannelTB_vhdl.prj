@@ -1,0 +1,8 @@
+# compile vhdl design source files
+vhdl xil_defaultlib  \
+"ChannelTB_func_synth.vhd" \
+"../../../../../project_3.srcs/sim_2/new/MemoryTB.vhd" \
+"../../../../../project_3.srcs/sim_2/new/ChannelTB.vhd" \
+
+# Do not sort compile order
+nosort

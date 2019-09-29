@@ -1,0 +1,66 @@
+VERSION
+7
+
+COMMSETTINGS
+0
+8
+2
+115200
+2
+63
+4
+0
+0
+
+COMMDISPLAY
+0
+
+SEND
+0
+help
+68 65 6C 70 0A
+0
+5
+
+SEND
+1
+Waveform
+57 46 20 53 71 75 61 72 65 2E 6A 73 6F 20 31 0A
+0
+.1
+
+SEND
+2
+ls
+6C 73 0A
+0
+5
+
+SEND
+3
+reset
+72 65 73 65 74 20 31 0A
+0
+5
+
+SEND
+4
+amp
+61 6D 70 20 31 20 31 35 0A
+0
+5
+
+SEND
+5
+trig 1
+74 72 69 67 20 31 0A
+0
+5
+
+SEND
+6
+trig 0
+74 72 69 67 20 30 0A
+1
+.1
+

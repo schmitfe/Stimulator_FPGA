@@ -10,58 +10,163 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="12670001fs"></ZoomEndTime>
+      <ZoomEndTime time="940079fs"></ZoomEndTime>
       <Cursor1Time time="389000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="149"></NameColumnWidth>
-      <ValueColumnWidth column_width="465"></ValueColumnWidth>
+      <NameColumnWidth column_width="357"></NameColumnWidth>
+      <ValueColumnWidth column_width="461"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="6" />
+   <WVObjectSize size="19" />
    <wave_markers>
    </wave_markers>
-   <wvobject fp_name="Din_IBUF" type="array">
+   <wvobject fp_name="ChannelArray[0].ChannelREG/RESET_IBUF" type="logic">
       <obj_property name="DisplayName">FullPathName</obj_property>
-      <obj_property name="ElementShortName">Din_IBUF[7:0]</obj_property>
-      <obj_property name="ObjectShortName">Din_IBUF[7:0]</obj_property>
-      <obj_property name="Radix">HEXRADIX</obj_property>
+      <obj_property name="ElementShortName">ChannelArray[0].ChannelREG/RESET_IBUF</obj_property>
+      <obj_property name="ObjectShortName">RESET_IBUF</obj_property>
       <obj_property name="LABELRADIX">true</obj_property>
       <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
    </wvobject>
-   <wvobject fp_name="EnWrite_IBUF" type="logic">
+   <wvobject fp_name="ChannelArray[0].ChannelREG/WaveAddr_IBUF" type="array">
       <obj_property name="DisplayName">FullPathName</obj_property>
-      <obj_property name="ElementShortName">EnWrite_IBUF</obj_property>
-      <obj_property name="ObjectShortName">EnWrite_IBUF</obj_property>
-      <obj_property name="LABELRADIX">true</obj_property>
-      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
-   </wvobject>
-   <wvobject fp_name="trig_all_IBUF" type="logic">
-      <obj_property name="DisplayName">FullPathName</obj_property>
-      <obj_property name="ElementShortName">trig_all_IBUF</obj_property>
-      <obj_property name="ObjectShortName">trig_all_IBUF</obj_property>
-      <obj_property name="LABELRADIX">true</obj_property>
-      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
-   </wvobject>
-   <wvobject fp_name="WaveAddr_IBUF" type="array">
-      <obj_property name="DisplayName">FullPathName</obj_property>
-      <obj_property name="ElementShortName">WaveAddr_IBUF[0:0]</obj_property>
+      <obj_property name="ElementShortName">ChannelArray[0].ChannelREG/WaveAddr_IBUF[0:0]</obj_property>
       <obj_property name="ObjectShortName">WaveAddr_IBUF[0:0]</obj_property>
       <obj_property name="Radix">HEXRADIX</obj_property>
       <obj_property name="LABELRADIX">true</obj_property>
       <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
    </wvobject>
-   <wvobject fp_name="trig_CH_IBUF" type="array">
+   <wvobject fp_name="ChannelArray[0].ChannelX/MemArray[0].MemoryX/WRCNT_loc[7]_i_3_n_0" type="logic">
       <obj_property name="DisplayName">FullPathName</obj_property>
-      <obj_property name="ElementShortName">trig_CH_IBUF[1:0]</obj_property>
-      <obj_property name="ObjectShortName">trig_CH_IBUF[1:0]</obj_property>
+      <obj_property name="ElementShortName">ChannelArray[0].ChannelX/MemArray[0].MemoryX/WRCNT_loc[7]_i_3_n_0</obj_property>
+      <obj_property name="ObjectShortName">WRCNT_loc[7]_i_3_n_0</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="ChannelArray[0].ChannelX/MemArray[0].MemoryX/WRCNT_loc_reg_n_0_" type="array">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">ChannelArray[0].ChannelX/MemArray[0].MemoryX/WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="ObjectShortName">WRCNT_loc_reg_n_0_[0:0]</obj_property>
       <obj_property name="Radix">HEXRADIX</obj_property>
       <obj_property name="LABELRADIX">true</obj_property>
       <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
    </wvobject>
-   <wvobject fp_name="Write_IBUF" type="logic">
+   <wvobject fp_name="ChannelArray[0].ChannelX/MemArray[0].MemoryX/WRCNT_loc_reg_n_0_" type="array">
       <obj_property name="DisplayName">FullPathName</obj_property>
-      <obj_property name="ElementShortName">Write_IBUF</obj_property>
-      <obj_property name="ObjectShortName">Write_IBUF</obj_property>
+      <obj_property name="ElementShortName">ChannelArray[0].ChannelX/MemArray[0].MemoryX/WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="ObjectShortName">WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="ChannelArray[0].ChannelX/MemArray[0].MemoryX/WRCNT_loc_reg_n_0_" type="array">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">ChannelArray[0].ChannelX/MemArray[0].MemoryX/WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="ObjectShortName">WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="ChannelArray[0].ChannelX/MemArray[0].MemoryX/WRCNT_loc_reg_n_0_" type="array">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">ChannelArray[0].ChannelX/MemArray[0].MemoryX/WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="ObjectShortName">WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="ChannelArray[0].ChannelX/MemArray[0].MemoryX/WRCNT_loc_reg_n_0_" type="array">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">ChannelArray[0].ChannelX/MemArray[0].MemoryX/WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="ObjectShortName">WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="ChannelArray[0].ChannelX/MemArray[0].MemoryX/WRCNT_loc_reg_n_0_" type="array">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">ChannelArray[0].ChannelX/MemArray[0].MemoryX/WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="ObjectShortName">WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="ChannelArray[0].ChannelX/MemArray[0].MemoryX/WRCNT_loc_reg_n_0_" type="array">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">ChannelArray[0].ChannelX/MemArray[0].MemoryX/WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="ObjectShortName">WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="ChannelArray[0].ChannelX/MemArray[0].MemoryX/WRCNT_loc_reg_n_0_" type="array">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">ChannelArray[0].ChannelX/MemArray[0].MemoryX/WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="ObjectShortName">WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="ChannelArray[0].ChannelX/MemArray[1].MemoryX/WRCNT_loc_reg_n_0_" type="array">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">ChannelArray[0].ChannelX/MemArray[1].MemoryX/WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="ObjectShortName">WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="ChannelArray[0].ChannelX/MemArray[1].MemoryX/WRCNT_loc_reg_n_0_" type="array">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">ChannelArray[0].ChannelX/MemArray[1].MemoryX/WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="ObjectShortName">WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="ChannelArray[0].ChannelX/MemArray[1].MemoryX/WRCNT_loc_reg_n_0_" type="array">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">ChannelArray[0].ChannelX/MemArray[1].MemoryX/WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="ObjectShortName">WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="ChannelArray[0].ChannelX/MemArray[1].MemoryX/WRCNT_loc_reg_n_0_" type="array">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">ChannelArray[0].ChannelX/MemArray[1].MemoryX/WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="ObjectShortName">WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="ChannelArray[0].ChannelX/MemArray[1].MemoryX/WRCNT_loc_reg_n_0_" type="array">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">ChannelArray[0].ChannelX/MemArray[1].MemoryX/WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="ObjectShortName">WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="ChannelArray[0].ChannelX/MemArray[1].MemoryX/WRCNT_loc_reg_n_0_" type="array">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">ChannelArray[0].ChannelX/MemArray[1].MemoryX/WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="ObjectShortName">WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="ChannelArray[0].ChannelX/MemArray[1].MemoryX/WRCNT_loc_reg_n_0_" type="array">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">ChannelArray[0].ChannelX/MemArray[1].MemoryX/WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="ObjectShortName">WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="ChannelArray[0].ChannelX/MemArray[1].MemoryX/WRCNT_loc_reg_n_0_" type="array">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">ChannelArray[0].ChannelX/MemArray[1].MemoryX/WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="ObjectShortName">WRCNT_loc_reg_n_0_[0:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
       <obj_property name="LABELRADIX">true</obj_property>
       <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
    </wvobject>

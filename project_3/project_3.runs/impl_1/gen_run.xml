@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenRun Id="impl_1" LaunchPart="xc7a35ticsg324-1L" LaunchTime="1568539787">
+  <File Type="OPT-HWDEF" Name="Stimulator.hwdef"/>
+  <File Type="ROUTE-BUS-SKEW" Name="route_report_bus_skew_0.rpt"/>
+  <File Type="PA-DCP" Name="Stimulator.dcp"/>
+  <File Type="BITSTR-BMM" Name="Stimulator_bd.bmm"/>
+  <File Type="OPT-METHODOLOGY-DRC" Name="opt_report_methodology_0.rpt"/>
+  <File Type="INIT-TIMING" Name="Stimulator_timing_summary_init.rpt"/>
+  <File Type="ROUTE-PWR" Name="route_report_power_0.rpt"/>
+  <File Type="PA-TCL" Name="Stimulator.tcl"/>
+  <File Type="OPT-TIMING" Name="opt_report_timing_summary_0.rpt"/>
+  <File Type="OPT-DCP" Name="Stimulator_opt.dcp"/>
+  <File Type="ROUTE-PWR-SUM" Name="route_report_power_summary_0.pb"/>
+  <File Type="REPORTS-TCL" Name="Stimulator_reports.tcl"/>
+  <File Type="OPT-DRC" Name="opt_report_drc_0.rpt"/>
+  <File Type="PWROPT-DCP" Name="Stimulator_pwropt.dcp"/>
+  <File Type="PWROPT-DRC" Name="Stimulator_drc_pwropted.rpt"/>
+  <File Type="PWROPT-TIMING" Name="Stimulator_timing_summary_pwropted.rpt"/>
+  <File Type="PLACE-DCP" Name="Stimulator_placed.dcp"/>
+  <File Type="PLACE-IO" Name="place_report_io_0.rpt"/>
+  <File Type="PLACE-CLK" Name="Stimulator_clock_utilization_placed.rpt"/>
+  <File Type="PLACE-UTIL" Name="Stimulator_utilization_placed.rpt"/>
+  <File Type="PLACE-UTIL-PB" Name="Stimulator_utilization_placed.pb"/>
+  <File Type="PLACE-CTRL" Name="Stimulator_control_sets_placed.rpt"/>
+  <File Type="PLACE-SIMILARITY" Name="place_report_incremental_reuse_0.rpt"/>
+  <File Type="PLACE-PRE-SIMILARITY" Name="Stimulator_incremental_reuse_pre_placed.rpt"/>
+  <File Type="PLACE-TIMING" Name="place_report_timing_summary_0.rpt"/>
+  <File Type="POSTPLACE-PWROPT-DCP" Name="Stimulator_postplace_pwropt.dcp"/>
+  <File Type="BG-BIN" Name="Stimulator.bin"/>
+  <File Type="POSTPLACE-PWROPT-TIMING" Name="Stimulator_timing_summary_postplace_pwropted.rpt"/>
+  <File Type="PHYSOPT-DCP" Name="Stimulator_physopt.dcp"/>
+  <File Type="PHYSOPT-DRC" Name="Stimulator_drc_physopted.rpt"/>
+  <File Type="BITSTR-MSK" Name="Stimulator.msk"/>
+  <File Type="PHYSOPT-TIMING" Name="phys_opt_report_timing_summary_0.rpt"/>
+  <File Type="ROUTE-ERROR-DCP" Name="Stimulator_routed_error.dcp"/>
+  <File Type="ROUTE-DCP" Name="Stimulator_routed.dcp"/>
+  <File Type="ROUTE-BLACKBOX-DCP" Name="Stimulator_routed_bb.dcp"/>
+  <File Type="ROUTE-DRC" Name="route_report_drc_0.rpt"/>
+  <File Type="ROUTE-DRC-PB" Name="route_report_drc_0.pb"/>
+  <File Type="BITSTR-LTX" Name="debug_nets.ltx"/>
+  <File Type="BITSTR-LTX" Name="Stimulator.ltx"/>
+  <File Type="ROUTE-DRC-RPX" Name="route_report_drc_0.rpx"/>
+  <File Type="BITSTR-MMI" Name="Stimulator.mmi"/>
+  <File Type="ROUTE-METHODOLOGY-DRC" Name="Stimulator_methodology_drc_routed.rpt"/>
+  <File Type="ROUTE-METHODOLOGY-DRC-RPX" Name="Stimulator_methodology_drc_routed.rpx"/>
+  <File Type="BITSTR-SYSDEF" Name="Stimulator.sysdef"/>
+  <File Type="ROUTE-METHODOLOGY-DRC-PB" Name="Stimulator_methodology_drc_routed.pb"/>
+  <File Type="ROUTE-PWR-RPX" Name="route_report_power_0.rpx"/>
+  <File Type="ROUTE-STATUS" Name="route_report_route_status_0.rpt"/>
+  <File Type="ROUTE-STATUS-PB" Name="route_report_route_status_0.pb"/>
+  <File Type="ROUTE-TIMINGSUMMARY" Name="route_report_timing_summary_0.rpt"/>
+  <File Type="ROUTE-TIMING-PB" Name="Stimulator_timing_summary_routed.pb"/>
+  <File Type="ROUTE-TIMING-RPX" Name="route_report_timing_summary_0.rpx"/>
+  <File Type="ROUTE-SIMILARITY" Name="route_report_incremental_reuse_0.rpt"/>
+  <File Type="ROUTE-CLK" Name="route_report_clock_utilization_0.rpt"/>
+  <File Type="ROUTE-BUS-SKEW-PB" Name="route_report_bus_skew_0.pb"/>
+  <File Type="ROUTE-BUS-SKEW-RPX" Name="route_report_bus_skew_0.rpx"/>
+  <File Type="POSTROUTE-PHYSOPT-DCP" Name="Stimulator_postroute_physopt.dcp"/>
+  <File Type="POSTROUTE-PHYSOPT-BLACKBOX-DCP" Name="Stimulator_postroute_physopt_bb.dcp"/>
+  <File Type="POSTROUTE-PHYSOPT-TIMING" Name="post_route_phys_opt_report_timing_summary_0.rpt"/>
+  <File Type="POSTROUTE-PHYSOPT-TIMING-PB" Name="post_route_phys_opt_report_timing_summary_0.pb"/>
+  <File Type="POSTROUTE-PHYSOPT-TIMING-RPX" Name="post_route_phys_opt_report_timing_summary_0.rpx"/>
+  <File Type="POSTROUTE-PHYSOPT-BUS-SKEW" Name="post_route_phys_opt_report_bus_skew_0.rpt"/>
+  <File Type="POSTROUTE-PHYSOPT-BUS-SKEW-PB" Name="post_route_phys_opt_report_bus_skew_0.pb"/>
+  <File Type="BG-BIT" Name="Stimulator.bit"/>
+  <File Type="POSTROUTE-PHYSOPT-BUS-SKEW-RPX" Name="post_route_phys_opt_report_bus_skew_0.rpx"/>
+  <File Type="BITSTR-RBT" Name="Stimulator.rbt"/>
+  <File Type="BITSTR-NKY" Name="Stimulator.nky"/>
+  <File Type="BG-BGN" Name="Stimulator.bgn"/>
+  <File Type="BG-DRC" Name="Stimulator.drc"/>
+  <File Type="RDI-RDI" Name="Stimulator.vdi"/>
+  <File Type="WBT-USG" Name="usage_statistics_webtalk.html"/>
+  <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1">
+    <Filter Type="Srcs"/>
+    <File Path="$PSRCDIR/sim_2/imports/new/ChannelConfigReg.vhd">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/new/ChannelConfigReg.vhd"/>
+        <Attr Name="ImportTime" Val="1565100616"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/new/DataSource.vhd">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/new/Memory.vhd">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/new/SPI.vhd">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/new/Stimulator.vhd">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <Config>
+      <Option Name="DesignMode" Val="RTL"/>
+      <Option Name="TopModule" Val="Stimulator"/>
+    </Config>
+  </FileSet>
+  <FileSet Name="constrs_in" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1">
+    <Filter Type="Constrs"/>
+    <File Path="$PSRCDIR/constrs_1/new/Stimulator.xdc">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+      </FileInfo>
+    </File>
+    <Config>
+      <Option Name="TargetConstrsFile" Val="$PSRCDIR/constrs_1/new/Stimulator.xdc"/>
+      <Option Name="ConstrsType" Val="XDC"/>
+    </Config>
+  </FileSet>
+  <FileSet Name="utils" Type="Utils" RelSrcDir="$PSRCDIR/utils_1">
+    <Filter Type="Utils"/>
+    <Config>
+      <Option Name="TopAutoSet" Val="TRUE"/>
+    </Config>
+  </FileSet>
+  <Strategy Version="1" Minor="2">
+    <StratHandle Name="Performance_ExplorePostRoutePhysOpt" Flow="Vivado Implementation 2018"/>
+    <Step Id="init_design"/>
+    <Step Id="opt_design">
+      <Option Id="Directive">0</Option>
+    </Step>
+    <Step Id="power_opt_design"/>
+    <Step Id="place_design">
+      <Option Id="Directive">0</Option>
+    </Step>
+    <Step Id="post_place_power_opt_design"/>
+    <Step Id="phys_opt_design" EnableStepBool="1">
+      <Option Id="Directive">0</Option>
+    </Step>
+    <Step Id="route_design">
+      <Option Id="Directive">0</Option>
+      <Option Id="MoreOptsStr"><![CDATA[-tns_cleanup]]></Option>
+    </Step>
+    <Step Id="post_route_phys_opt_design" EnableStepBool="1">
+      <Option Id="Directive">0</Option>
+    </Step>
+    <Step Id="write_bitstream"/>
+  </Strategy>
+</GenRun>

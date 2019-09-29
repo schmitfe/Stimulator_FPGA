@@ -1,0 +1,1 @@
+-wto "8f664a9be42b48618145f75927f9b9ac" --incr --debug "typical" --relax --mt "2" -L "xil_defaultlib" -L "secureip" --snapshot "StimulatorTB_behav" "xil_defaultlib.StimulatorTB" -log "elaborate.log" 

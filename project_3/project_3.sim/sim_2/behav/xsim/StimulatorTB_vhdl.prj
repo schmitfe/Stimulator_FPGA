@@ -1,0 +1,11 @@
+# compile vhdl design source files
+vhdl xil_defaultlib  \
+"../../../../project_3.srcs/sim_2/imports/new/ChannelConfigReg.vhd" \
+"../../../../project_3.srcs/sources_1/new/DataSource.vhd" \
+"../../../../project_3.srcs/sources_1/new/Memory.vhd" \
+"../../../../project_3.srcs/sources_1/new/SPI.vhd" \
+"../../../../project_3.srcs/sources_1/new/Stimulator.vhd" \
+"../../../../project_3.srcs/sim_2/new/StimulatorTB.vhd" \
+
+# Do not sort compile order
+nosort

@@ -1,0 +1,43 @@
+
+#include "Arduino.h"
+
+
+void storeChannel(Argument id);
+void setAmplitude(Argument id, Argument value);
+void setInterInterval(Argument id, Argument value);
+void setWaveadress(Argument id, Argument value);
+void setInterPeriod(Argument id, Argument value);
+void loadWaveform(Argument pathStr, Argument id);
+void description(Argument pathStr);
+void listFolder();
+void trigger(int id);
+void reset(Argument id);
+void Channeladress(int id);
+ int adress=0;
+  if (id == 0) {
+    digitalWrite(*PinsChanAdress, LOW);
+    //Serial.println("No Channel");
+  } else {
+    //Serial.print("Channel :");
+    //Serial.println(id);
+    adress=id-1;
+    if (adress%2==1) {
+      digitalWrite(*PinsChanAdress, HIGH);
+    }
+    else {
+      digitalWrite(*PinsChanAdress, LOW);
+    }  
+  }
+}
+void RemoveDir (Argument str);
+ char path[12];
+  str.getValue().toCharArray(path, 12);
+
+  if (!sd.chdir("/")) {
+    Serial.println("Error: opening root!");
+  }
+  sd.chdir("WF");
+  sd.remove(path);
+}
+void SaveFile (Argument str);
+void WriteDout(Argument value);

@@ -1,0 +1,13 @@
+0.6
+2018.3
+Dec  7 2018
+00:33:28
+C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.srcs/sim_2/imports/new/ChannelConfigReg.vhd,1565102658,vhdl,,,,channelconfigreg,,,,,,,,
+C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.srcs/sim_2/new/ChannelTB.vhd,1565083626,vhdl,,,,channeltb,,,,,,,,
+C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.srcs/sim_2/new/ConfigRegTB.vhd,1565102515,vhdl,,,,configregtb,,,,,,,,
+C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.srcs/sim_2/new/MemoryTB.vhd,1554477338,vhdl,,,,memorytb,,,,,,,,
+C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.srcs/sim_2/new/StimulatorTB.vhd,1565187795,vhdl,,,,stimulatortb,,,,,,,,
+C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.srcs/sources_1/new/DataSource.vhd,1565355276,vhdl,,,,channel,,,,,,,,
+C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.srcs/sources_1/new/Memory.vhd,1565085098,vhdl,,,,memory,,,,,,,,
+C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.srcs/sources_1/new/SPI.vhd,1564738106,vhdl,,,,spi_master,,,,,,,,
+C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.srcs/sources_1/new/Stimulator.vhd,1565346737,vhdl,,,,stimulator,,,,,,,,

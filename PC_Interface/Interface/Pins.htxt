@@ -1,0 +1,43 @@
+//----------Pins---------------//
+const unsigned int trig[] = {14, 13, 12};    //trig all, ch0 -x
+
+const unsigned int PinRESET = 68;
+const unsigned int PinRESET_CH = 69;
+
+const unsigned int PinsInterPeriod[] = {2, 3, 4, 5, 6, 7, 8, 9};
+const unsigned int PinsInterInterval[] = {27, 28, 29, 30, 31, 32, 33, 34};
+
+const unsigned int PinsAmplitude[] = {11, 12, 13, 14};
+
+
+const unsigned int PinWrite = {16};
+const unsigned int PinWriteEn = {63};
+const unsigned int PinsWaveadress[] = {64};
+const unsigned int PinStoreChan = {65};
+const unsigned int PinsChanAdress[] = {66};
+
+const unsigned int PinsDout[] = {25, 25, 27, 28, 14, 15, 29, 11};  // Has to be on same port of SAM, Arduino ports are not ordered!
+
+const unsigned int chipSelect = 52;    //SD-Card
+
+//----------Pins---------------//
+extern const unsigned int trig[] ;    //trig all, ch0 -x
+
+extern const unsigned int PinRESET ;
+extern const unsigned int PinRESET_CH;
+
+extern const unsigned int PinsInterPeriod;
+extern const unsigned int PinsInterInterval;
+
+extern const unsigned int PinsAmplitude;
+
+
+extern const unsigned int PinWrite;
+extern const unsigned int PinWriteEn ;
+extern const unsigned int PinsWaveadress;
+extern const unsigned int PinStoreChan;
+extern const unsigned int PinsChanAdress;
+
+extern const unsigned int PinsDout;  // Has to be on same port of SAM, Arduino ports are not ordered!
+
+extern const unsigned int chipSelect;    //SD-Card
