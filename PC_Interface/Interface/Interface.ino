@@ -1,5 +1,3 @@
-
-
 /*
    Copyright (c) 2019 Stefan Kremser
    This software is licensed under the MIT License. See the license file for details.
@@ -47,6 +45,7 @@ Command cmdAmpli;
 Command cmdInterIv;
 Command cmdInterPer;
 Command cmdWave;
+Command cmdDoutDebug;
 
 
 // set up variables using the SD utility library functions:
@@ -67,10 +66,10 @@ const unsigned int trig[] = {49, 51, 53};    //trig all, ch0 -x
 const unsigned int PinRESET = 68;
 const unsigned int PinRESET_CH = 69;
 
-const unsigned int PinsInterPeriod[] = {54, 55, 56, 57, 58, 59, 60, 61};
-const unsigned int PinsInterInterval[] = {3, 4, 5, 6, 7,8,9,10};
+const unsigned int PinsInterPeriod[] = {61, 60, 59, 58, 57, 56, 55, 54};//{54, 55, 56, 57, 58, 59, 60, 61};
+const unsigned int PinsInterInterval[] = {10, 9, 8, 7, 6, 5, 4, 3}; //{3, 4, 5, 6, 7,8,9,10};
 
-const unsigned int PinsAmplitude[] = {18, 19, 20, 21};
+const unsigned int PinsAmplitude[] = {21, 20, 19, 18};
 
 const unsigned int PinWrite = 63;
 const unsigned int PinWriteEn = 62;
@@ -78,7 +77,7 @@ const unsigned int PinsWaveadress[] = {64};
 const unsigned int PinStoreChan = {65};
 const unsigned int PinsChanAdress[] = {66};
 
-const unsigned int PinsDout[] = {25, 25, 27, 28, 14, 15, 29, 11};  // Has to be on same port of SAM, Arduino ports are not ordered!
+const unsigned int PinsDout[] = {25, 26, 27, 28, 14, 15, 29, 11};  // Has to be on same port of SAM, Arduino ports are not ordered!
 
 const unsigned int chipSelect = 52;    //SD-Card
 
@@ -228,6 +227,9 @@ void setup() {
 
   cmdHelp = cli.addCommand("help");
 
+  cmdDoutDebug=cli.addCmd("ddeb");
+  cmdDoutDebug.addPosArg("value");
+
   Serial.println("CLI: type help for commandlist");
 
 }
@@ -291,7 +293,11 @@ void loop() {
     } else if (c == cmdHelp) {
       Serial.println("Help:");
       Serial.println(cli.toString());
-    }
+    } else if(c == cmdDoutDebug){
+      Serial.println(c.getArgument(0).getValue());
+      WriteDoutDebug(c.getArgument(0));
+      }
+    
   }
 
   if (cli.errored()) {
@@ -364,7 +370,7 @@ void loadWaveform(Argument pathStr, Argument id)
 {
   bool WriteWFs = true; //Let parser write to FPGA
   String Description = "";
-  reset(id);
+  //reset(id);
   JsonStreamingParser parser;
   Listener listener(&WriteWFs, &Description);   //bad way of introducing additional parameters
   parser.setListener(&listener);
@@ -372,12 +378,17 @@ void loadWaveform(Argument pathStr, Argument id)
   if (!sd.chdir("/")) {
     Serial.println("Error: opening root!");
   }
-  digitalWrite(PinWriteEn, HIGH);
+  
   sd.chdir("WF");
   char path[12];
   pathStr.getValue().toCharArray(path, 12);
   myFile = sd.open(path, FILE_READ);
   Channeladress(id.getValue().toInt());
+  digitalWrite(PinWriteEn, HIGH);
+
+  unsigned long curTime;
+  curTime = micros();
+  while (micros() - curTime < 30);
 
   while (myFile.available()) {
     parser.parse(myFile.read());
@@ -435,7 +446,7 @@ void trigger(int id)
   unsigned long curTime;
   digitalWrite(trig[id], HIGH);
   curTime = micros();
-  while (micros() - curTime < 10);
+  while (micros() - curTime < 20);
   digitalWrite(trig[id], LOW);
 }
 
@@ -481,7 +492,7 @@ void Channeladress(int id)
   if (id == 0) {
     digitalWrite(*PinsChanAdress, LOW);
   } else {
-//   writePinArray(id-1, PinsChanAdress, sizeof(PinsChanAdress) / sizeof(PinsChanAdress[0]));
+   writePinArray(id-1, PinsChanAdress, sizeof(PinsChanAdress) / sizeof(PinsChanAdress[0]));
   }
 }
 
@@ -537,3 +548,16 @@ void SaveFile (Argument str)
   while(micros()-curTime <1); 
 }
 */
+
+void WriteDoutDebug(Argument value)
+{
+  unsigned long curTime;
+  PIOD->PIO_SODR= value.getValue().toInt();
+  PIOD->PIO_CODR=~value.getValue().toInt()&0x00FF;
+  digitalWrite(PinWrite, LOW);
+  curTime=micros();
+  while(micros()-curTime <20);
+  digitalWrite(PinWrite, HIGH);
+  curTime=micros();
+  while(micros()-curTime <20); 
+}

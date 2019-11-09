@@ -114,7 +114,11 @@ architecture Behavioral of Channel is
 	signal B : signed(TransmitterWordwith downto 0) := (others => '0');
 	signal C : signed(2 * TransmitterWordwith + 1 downto 0) := (others => '0');
 	
-	
+	--attribute MARK_DEBUG : string;
+    --attribute MARK_DEBUG of A : signal is "TRUE";
+	--attribute MARK_DEBUG of B : signal is "TRUE";
+	--attribute MARK_DEBUG of C : signal is "TRUE";
+	--attribute MARK_DEBUG of Dout : signal is "TRUE";
 
 	
 	--------------------Declaration of Arrays for MemoryMux------------------------
@@ -183,7 +187,7 @@ begin
 		if CLK = '1' and CLK'EVENT then
 			if EnableOutput = '1' then
 				A <= RESIZE(signed('0' & DoutMemA(WaveID)), TransmitterWordwith + 1) after 5ns;
-				B <= RESIZE(signed('0' & Amplitude), TransmitterWordwith + 1) after 5ns;
+				B <= RESIZE(signed('0' & Amplitude)* (2** (TransmitterWordwith-MultiplierWordwith-Wordwidth)), TransmitterWordwith + 1) after 5ns;
 				C <= (A - (2 ** (Wordwidth - 1) - 1)) * B + RESIZE(signed('0' & NeurtralDW), 2 * TransmitterWordwith) after 5 ns;
 				Dout <= std_logic_vector(C(TransmitterWordwith - 1 downto 0)) after 5 ns;
 			else
@@ -244,9 +248,9 @@ begin
 				end if;
 -------------------Transmit---------------------------------------								
 			when TWAIT_WF1 => FolState <= TWAIT_WF1 after 5 ns;
-				if trig = '1' and trigZ1 = '0' then
+			--	if trig = '1' and trigZ1 = '0' then
 					FolState <= TStartTX_WF1 after 5 ns;
-				end if;
+			--	end if;
 				if EnWrite = '1' then
 					FolState <= WriteInit after 5 ns;
 				end if;

@@ -7,7 +7,7 @@ entity StimulatorTB is
            Adresswidth  : natural := 7;  -- Speicherlänge = 2^Adresswidth
            Wordwidth  : natural := 8;
            TransmitterWordwith: natural:=16;
-           MultiplierWordwith: natural:=6;
+           MultiplierWordwith: natural:=4;
            Clock : natural :=100000000;
            SPI_Clock: natural :=50000000;
            NWave: natural :=1;
@@ -112,7 +112,7 @@ begin
    ChanAddr<=0;
    InterInterval<=20;
    InterPeriods<=40;
-   Amplitude<="101000";
+   Amplitude<="1111";
    
 
    WaveAddr<=0;
@@ -264,7 +264,7 @@ begin
    ChanAddr<=1;
    InterInterval<=1;
    InterPeriods<=4;
-   Amplitude<="111000";
+   Amplitude<="1000";
    
 
    WaveAddr<=0;
@@ -364,14 +364,14 @@ begin
         
 
 
-        Amplitude<="001000";
+        Amplitude<="0100";
          wait for 3*T;
         WriteConfig<='1';
         wait for 3*T;
         WriteConfig<='0';
         wait for 16000*T;
         
-        Amplitude<="111000";
+        Amplitude<="0001";
         wait for 16000*T;
         InterInterval<=0;
         InterPeriods<=0;

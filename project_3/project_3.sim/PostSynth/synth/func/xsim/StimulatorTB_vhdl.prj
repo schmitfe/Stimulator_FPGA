@@ -1,0 +1,8 @@
+# compile vhdl design source files
+vhdl xil_defaultlib  \
+"StimulatorTB_func_synth.vhd" \
+"../../../../../project_3.srcs/PostSynth/imports/Data/bft_top.vhd" \
+"../../../../../project_3.srcs/PostSynth/new/PostSimulation.vhd" \
+
+# Do not sort compile order
+nosort

@@ -65,12 +65,23 @@ start_step init_design
 set ACTIVE_STEP init_design
 set rc [catch {
   create_msg_db init_design.pb
-  reset_param project.defaultXPMLibraries 
-  open_checkpoint C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.runs/impl_1/Stimulator.dcp
+  set_param tcl.collectionResultDisplayLimit 0
+  set_param xicom.use_bs_reader 1
+  create_project -in_memory -part xc7a35ticsg324-1L
+  set_property board_part digilentinc.com:arty-a7-35:part0:1.0 [current_project]
+  set_property design_mode GateLvl [current_fileset]
+  set_param project.singleFileAddWarning.threshold 0
   set_property webtalk.parent_dir C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.cache/wt [current_project]
   set_property parent.project_path C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.xpr [current_project]
   set_property ip_output_repo C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.cache/ip [current_project]
   set_property ip_cache_permissions {read write} [current_project]
+  add_files -quiet C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.runs/synth_1/Stimulator.dcp
+  read_xdc C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.srcs/constrs_1/new/Stimulator.xdc
+  link_design -top Stimulator -part xc7a35ticsg324-1L
+  create_report "impl_1_init_report_timing_summary_0" "report_timing_summary -max_paths 10 -file init_report_timing_summary_0.rpt -pb init_report_timing_summary_0.pb -rpx init_report_timing_summary_0.rpx"
+  create_report "impl_1_init_report_utilization_0" "report_utilization -file init_report_utilization_0.rpt -pb init_report_utilization_0.pb"
+  create_report "impl_1_init_report_high_fanout_nets_0" "report_high_fanout_nets -file init_report_high_fanout_nets_0.rpt"
+  create_report "impl_1_init_report_control_sets_0" "report_control_sets -file init_report_control_sets_0.rpt"
   close_msg_db -file init_design.pb
 } RESULT]
 if {$rc} {
@@ -81,26 +92,6 @@ if {$rc} {
   unset ACTIVE_STEP 
 }
 
-start_step opt_design
-set ACTIVE_STEP opt_design
-set rc [catch {
-  create_msg_db opt_design.pb
-  opt_design -directive Explore
-  write_checkpoint -force Stimulator_opt.dcp
-  create_report "impl_1_opt_report_drc_0" "report_drc -file opt_report_drc_0.rpt -pb opt_report_drc_0.pb -rpx opt_report_drc_0.rpx"
-  create_report "impl_1_opt_report_utilization_0" "report_utilization -file opt_report_utilization_0.rpt -pb opt_report_utilization_0.pb"
-  create_report "impl_1_opt_report_methodology_0" "report_methodology -file opt_report_methodology_0.rpt -pb opt_report_methodology_0.pb -rpx opt_report_methodology_0.rpx"
-  create_report "impl_1_opt_report_timing_summary_0" "report_timing_summary -max_paths 10 -file opt_report_timing_summary_0.rpt -pb opt_report_timing_summary_0.pb -rpx opt_report_timing_summary_0.rpx"
-  close_msg_db -file opt_design.pb
-} RESULT]
-if {$rc} {
-  step_failed opt_design
-  return -code error $RESULT
-} else {
-  end_step opt_design
-  unset ACTIVE_STEP 
-}
-
 start_step place_design
 set ACTIVE_STEP place_design
 set rc [catch {
@@ -108,9 +99,10 @@ set rc [catch {
   if { [llength [get_debug_cores -quiet] ] > 0 }  { 
     implement_debug_core 
   } 
-  place_design -directive Explore
+  place_design 
   write_checkpoint -force Stimulator_placed.dcp
   create_report "impl_1_place_report_io_0" "report_io -file place_report_io_0.rpt"
+  create_report "impl_1_place_report_utilization_0" "report_utilization -file place_report_utilization_0.rpt -pb place_report_utilization_0.pb"
   create_report "impl_1_place_report_incremental_reuse_0" "report_incremental_reuse -file place_report_incremental_reuse_0.rpt"
   create_report "impl_1_place_report_timing_summary_0" "report_timing_summary -max_paths 10 -file place_report_timing_summary_0.rpt -pb place_report_timing_summary_0.pb -rpx place_report_timing_summary_0.rpx"
   close_msg_db -file place_design.pb
@@ -123,39 +115,17 @@ if {$rc} {
   unset ACTIVE_STEP 
 }
 
-start_step phys_opt_design
-set ACTIVE_STEP phys_opt_design
-set rc [catch {
-  create_msg_db phys_opt_design.pb
-  phys_opt_design -directive Explore
-  write_checkpoint -force Stimulator_physopt.dcp
-  create_report "impl_1_phys_opt_report_timing_summary_0" "report_timing_summary -max_paths 10 -file phys_opt_report_timing_summary_0.rpt -pb phys_opt_report_timing_summary_0.pb -rpx phys_opt_report_timing_summary_0.rpx"
-  create_report "impl_1_phys_opt_report_design_analysis_0" "report_design_analysis -congestion -timing -logic_level_distribution -max_paths 100 -file phys_opt_report_design_analysis_0.rpt"
-  close_msg_db -file phys_opt_design.pb
-} RESULT]
-if {$rc} {
-  step_failed phys_opt_design
-  return -code error $RESULT
-} else {
-  end_step phys_opt_design
-  unset ACTIVE_STEP 
-}
-
-  set_msg_config -source 4 -id {Route 35-39} -severity "critical warning" -new_severity warning
 start_step route_design
 set ACTIVE_STEP route_design
 set rc [catch {
   create_msg_db route_design.pb
-  route_design -directive Explore -tns_cleanup
+  route_design 
   write_checkpoint -force Stimulator_routed.dcp
-  create_report "impl_1_route_report_utilization_0" "report_utilization -file route_report_utilization_0.rpt -pb route_report_utilization_0.pb"
   create_report "impl_1_route_report_clock_utilization_0" "report_clock_utilization -file route_report_clock_utilization_0.rpt"
   create_report "impl_1_route_report_drc_0" "report_drc -file route_report_drc_0.rpt -pb route_report_drc_0.pb -rpx route_report_drc_0.rpx"
   create_report "impl_1_route_report_power_0" "report_power -file route_report_power_0.rpt -pb route_report_power_summary_0.pb -rpx route_report_power_0.rpx"
   create_report "impl_1_route_report_route_status_0" "report_route_status -file route_report_route_status_0.rpt -pb route_report_route_status_0.pb"
   create_report "impl_1_route_report_timing_summary_0" "report_timing_summary -max_paths 10 -warn_on_violation -file route_report_timing_summary_0.rpt -pb route_report_timing_summary_0.pb -rpx route_report_timing_summary_0.rpx"
-  create_report "impl_1_route_report_design_analysis_0" "report_design_analysis -congestion -timing -logic_level_distribution -max_paths 100 -file route_report_design_analysis_0.rpt"
-  create_report "impl_1_route_report_qor_suggestions_0" "report_qor_suggestions -max_paths 100 -file route_report_qor_suggestions_0.rpt"
   create_report "impl_1_route_report_incremental_reuse_0" "report_incremental_reuse -file route_report_incremental_reuse_0.rpt"
   create_report "impl_1_route_report_bus_skew_0" "report_bus_skew -warn_on_violation -file route_report_bus_skew_0.rpt -pb route_report_bus_skew_0.pb -rpx route_report_bus_skew_0.rpx"
   close_msg_db -file route_design.pb
@@ -166,28 +136,6 @@ if {$rc} {
   return -code error $RESULT
 } else {
   end_step route_design
-  unset ACTIVE_STEP 
-}
-
-start_step post_route_phys_opt_design
-set ACTIVE_STEP post_route_phys_opt_design
-set rc [catch {
-  set tool_flow [get_property TOOL_FLOW [current_project]]
-  if {$tool_flow eq {SDx}} {send_msg_id {101-1} {status} {Starting optional post-route physical design optimization.} }
-  create_msg_db post_route_phys_opt_design.pb
-  phys_opt_design -directive Explore
-  write_checkpoint -force Stimulator_postroute_physopt.dcp
-  create_report "impl_1_post_route_phys_opt_report_timing_summary_0" "report_timing_summary -max_paths 10 -warn_on_violation -file post_route_phys_opt_report_timing_summary_0.rpt -pb post_route_phys_opt_report_timing_summary_0.pb -rpx post_route_phys_opt_report_timing_summary_0.rpx"
-  create_report "impl_1_post_route_phys_opt_report_bus_skew_0" "report_bus_skew -warn_on_violation -file post_route_phys_opt_report_bus_skew_0.rpt -pb post_route_phys_opt_report_bus_skew_0.pb -rpx post_route_phys_opt_report_bus_skew_0.rpx"
-  close_msg_db -file post_route_phys_opt_design.pb
-  set tool_flow [get_property TOOL_FLOW [current_project]]
-  if {$tool_flow eq {SDx}} {send_msg_id {101-1} {status} {Finished optional post-route physical design optimization.} }
-} RESULT]
-if {$rc} {
-  step_failed post_route_phys_opt_design
-  return -code error $RESULT
-} else {
-  end_step post_route_phys_opt_design
   unset ACTIVE_STEP 
 }
 

@@ -1,9 +1,12 @@
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.sim/sim_2/synth/func/xsim/ChannelTB_func_synth.vhd" into library xil_defaultlib
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.sim/sim_2/synth/func/xsim/StimulatorTB_func_synth.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'ChannelConfigReg'
+INFO: [VRFC 10-3107] analyzing entity 'ChannelConfigReg_0'
 INFO: [VRFC 10-3107] analyzing entity 'Memory'
-INFO: [VRFC 10-3107] analyzing entity 'Memory_0'
+INFO: [VRFC 10-3107] analyzing entity 'Memory_2'
+INFO: [VRFC 10-3107] analyzing entity 'Memory_3'
+INFO: [VRFC 10-3107] analyzing entity 'Memory_4'
 INFO: [VRFC 10-3107] analyzing entity 'SPI_Master'
+INFO: [VRFC 10-3107] analyzing entity '\SPI_Master__1\'
 INFO: [VRFC 10-3107] analyzing entity 'Channel'
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.srcs/sim_2/new/MemoryTB.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'MemoryTB'
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.srcs/sim_2/new/ChannelTB.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'ChannelTB'
+INFO: [VRFC 10-3107] analyzing entity 'Channel_1'
+INFO: [VRFC 10-3107] analyzing entity 'Stimulator'

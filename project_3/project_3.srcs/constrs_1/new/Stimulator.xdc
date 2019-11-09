@@ -218,6 +218,12 @@ set_property -dict {PACKAGE_PIN E6 IOSTANDARD LVCMOS33} [get_ports {MOSI[1]}]
 #set_property -dict { PACKAGE_PIN A15   IOSTANDARD LVCMOS33     } [get_ports { isns0v95_p }]; #IO_L8P_T1_AD10P_15 Sch=ad_p[10]
 
 
+
+
+connect_debug_port u_ila_0/probe0 [get_nets [list {ChannelArray[0].ChannelX/Interface/tx_reg2[0]} {ChannelArray[0].ChannelX/Interface/tx_reg2[1]} {ChannelArray[0].ChannelX/Interface/tx_reg2[2]} {ChannelArray[0].ChannelX/Interface/tx_reg2[3]} {ChannelArray[0].ChannelX/Interface/tx_reg2[4]} {ChannelArray[0].ChannelX/Interface/tx_reg2[5]} {ChannelArray[0].ChannelX/Interface/tx_reg2[6]} {ChannelArray[0].ChannelX/Interface/tx_reg2[7]} {ChannelArray[0].ChannelX/Interface/tx_reg2[8]} {ChannelArray[0].ChannelX/Interface/tx_reg2[9]} {ChannelArray[0].ChannelX/Interface/tx_reg2[10]} {ChannelArray[0].ChannelX/Interface/tx_reg2[11]} {ChannelArray[0].ChannelX/Interface/tx_reg2[12]} {ChannelArray[0].ChannelX/Interface/tx_reg2[13]} {ChannelArray[0].ChannelX/Interface/tx_reg2[14]} {ChannelArray[0].ChannelX/Interface/tx_reg2[15]}]]
+connect_debug_port u_ila_0/probe2 [get_nets [list {ChannelArray[1].ChannelX/Interface/tx_reg2[0]} {ChannelArray[1].ChannelX/Interface/tx_reg2[1]} {ChannelArray[1].ChannelX/Interface/tx_reg2[2]} {ChannelArray[1].ChannelX/Interface/tx_reg2[3]} {ChannelArray[1].ChannelX/Interface/tx_reg2[4]} {ChannelArray[1].ChannelX/Interface/tx_reg2[5]} {ChannelArray[1].ChannelX/Interface/tx_reg2[6]} {ChannelArray[1].ChannelX/Interface/tx_reg2[7]} {ChannelArray[1].ChannelX/Interface/tx_reg2[8]} {ChannelArray[1].ChannelX/Interface/tx_reg2[9]} {ChannelArray[1].ChannelX/Interface/tx_reg2[10]} {ChannelArray[1].ChannelX/Interface/tx_reg2[11]} {ChannelArray[1].ChannelX/Interface/tx_reg2[12]} {ChannelArray[1].ChannelX/Interface/tx_reg2[13]} {ChannelArray[1].ChannelX/Interface/tx_reg2[14]} {ChannelArray[1].ChannelX/Interface/tx_reg2[15]}]]
+
+
 create_debug_core u_ila_0 ila
 set_property ALL_PROBE_SAME_MU true [get_debug_cores u_ila_0]
 set_property ALL_PROBE_SAME_MU_CNT 1 [get_debug_cores u_ila_0]
@@ -230,80 +236,16 @@ set_property C_TRIGOUT_EN false [get_debug_cores u_ila_0]
 set_property port_width 1 [get_debug_ports u_ila_0/clk]
 connect_debug_port u_ila_0/clk [get_nets [list CLK_IBUF_BUFG]]
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe0]
-set_property port_width 1 [get_debug_ports u_ila_0/probe0]
-connect_debug_port u_ila_0/probe0 [get_nets [list {ChannelArray[0].ChannelREG/WaveAddr_IBUF[0]}]]
+set_property port_width 8 [get_debug_ports u_ila_0/probe0]
+connect_debug_port u_ila_0/probe0 [get_nets [list {ChannelArray[0].ChannelREG/Q[0]} {ChannelArray[0].ChannelREG/Q[1]} {ChannelArray[0].ChannelREG/Q[2]} {ChannelArray[0].ChannelREG/Q[3]} {ChannelArray[0].ChannelREG/Q[4]} {ChannelArray[0].ChannelREG/Q[5]} {ChannelArray[0].ChannelREG/Q[6]} {ChannelArray[0].ChannelREG/Q[7]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe1]
-set_property port_width 1 [get_debug_ports u_ila_0/probe1]
-connect_debug_port u_ila_0/probe1 [get_nets [list {ChannelArray[0].ChannelREG/RESET_IBUF}]]
+set_property port_width 8 [get_debug_ports u_ila_0/probe1]
+connect_debug_port u_ila_0/probe1 [get_nets [list {ChannelArray[0].ChannelREG/OUT_InterPeriods_reg[7]_0[0]} {ChannelArray[0].ChannelREG/OUT_InterPeriods_reg[7]_0[1]} {ChannelArray[0].ChannelREG/OUT_InterPeriods_reg[7]_0[2]} {ChannelArray[0].ChannelREG/OUT_InterPeriods_reg[7]_0[3]} {ChannelArray[0].ChannelREG/OUT_InterPeriods_reg[7]_0[4]} {ChannelArray[0].ChannelREG/OUT_InterPeriods_reg[7]_0[5]} {ChannelArray[0].ChannelREG/OUT_InterPeriods_reg[7]_0[6]} {ChannelArray[0].ChannelREG/OUT_InterPeriods_reg[7]_0[7]}]]
 create_debug_port u_ila_0 probe
 set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe2]
-set_property port_width 1 [get_debug_ports u_ila_0/probe2]
-connect_debug_port u_ila_0/probe2 [get_nets [list {ChannelArray[0].ChannelX/MemArray[0].MemoryX/WRCNT_loc[7]_i_3_n_0}]]
-create_debug_port u_ila_0 probe
-set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe3]
-set_property port_width 1 [get_debug_ports u_ila_0/probe3]
-connect_debug_port u_ila_0/probe3 [get_nets [list {ChannelArray[0].ChannelX/MemArray[0].MemoryX/WRCNT_loc_reg_n_0_[0]}]]
-create_debug_port u_ila_0 probe
-set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe4]
-set_property port_width 1 [get_debug_ports u_ila_0/probe4]
-connect_debug_port u_ila_0/probe4 [get_nets [list {ChannelArray[0].ChannelX/MemArray[0].MemoryX/WRCNT_loc_reg_n_0_[1]}]]
-create_debug_port u_ila_0 probe
-set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe5]
-set_property port_width 1 [get_debug_ports u_ila_0/probe5]
-connect_debug_port u_ila_0/probe5 [get_nets [list {ChannelArray[0].ChannelX/MemArray[0].MemoryX/WRCNT_loc_reg_n_0_[2]}]]
-create_debug_port u_ila_0 probe
-set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe6]
-set_property port_width 1 [get_debug_ports u_ila_0/probe6]
-connect_debug_port u_ila_0/probe6 [get_nets [list {ChannelArray[0].ChannelX/MemArray[0].MemoryX/WRCNT_loc_reg_n_0_[3]}]]
-create_debug_port u_ila_0 probe
-set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe7]
-set_property port_width 1 [get_debug_ports u_ila_0/probe7]
-connect_debug_port u_ila_0/probe7 [get_nets [list {ChannelArray[0].ChannelX/MemArray[0].MemoryX/WRCNT_loc_reg_n_0_[4]}]]
-create_debug_port u_ila_0 probe
-set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe8]
-set_property port_width 1 [get_debug_ports u_ila_0/probe8]
-connect_debug_port u_ila_0/probe8 [get_nets [list {ChannelArray[0].ChannelX/MemArray[0].MemoryX/WRCNT_loc_reg_n_0_[5]}]]
-create_debug_port u_ila_0 probe
-set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe9]
-set_property port_width 1 [get_debug_ports u_ila_0/probe9]
-connect_debug_port u_ila_0/probe9 [get_nets [list {ChannelArray[0].ChannelX/MemArray[0].MemoryX/WRCNT_loc_reg_n_0_[6]}]]
-create_debug_port u_ila_0 probe
-set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe10]
-set_property port_width 1 [get_debug_ports u_ila_0/probe10]
-connect_debug_port u_ila_0/probe10 [get_nets [list {ChannelArray[0].ChannelX/MemArray[0].MemoryX/WRCNT_loc_reg_n_0_[7]}]]
-create_debug_port u_ila_0 probe
-set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe11]
-set_property port_width 1 [get_debug_ports u_ila_0/probe11]
-connect_debug_port u_ila_0/probe11 [get_nets [list {ChannelArray[0].ChannelX/MemArray[1].MemoryX/WRCNT_loc_reg_n_0_[0]}]]
-create_debug_port u_ila_0 probe
-set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe12]
-set_property port_width 1 [get_debug_ports u_ila_0/probe12]
-connect_debug_port u_ila_0/probe12 [get_nets [list {ChannelArray[0].ChannelX/MemArray[1].MemoryX/WRCNT_loc_reg_n_0_[1]}]]
-create_debug_port u_ila_0 probe
-set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe13]
-set_property port_width 1 [get_debug_ports u_ila_0/probe13]
-connect_debug_port u_ila_0/probe13 [get_nets [list {ChannelArray[0].ChannelX/MemArray[1].MemoryX/WRCNT_loc_reg_n_0_[2]}]]
-create_debug_port u_ila_0 probe
-set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe14]
-set_property port_width 1 [get_debug_ports u_ila_0/probe14]
-connect_debug_port u_ila_0/probe14 [get_nets [list {ChannelArray[0].ChannelX/MemArray[1].MemoryX/WRCNT_loc_reg_n_0_[3]}]]
-create_debug_port u_ila_0 probe
-set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe15]
-set_property port_width 1 [get_debug_ports u_ila_0/probe15]
-connect_debug_port u_ila_0/probe15 [get_nets [list {ChannelArray[0].ChannelX/MemArray[1].MemoryX/WRCNT_loc_reg_n_0_[4]}]]
-create_debug_port u_ila_0 probe
-set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe16]
-set_property port_width 1 [get_debug_ports u_ila_0/probe16]
-connect_debug_port u_ila_0/probe16 [get_nets [list {ChannelArray[0].ChannelX/MemArray[1].MemoryX/WRCNT_loc_reg_n_0_[5]}]]
-create_debug_port u_ila_0 probe
-set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe17]
-set_property port_width 1 [get_debug_ports u_ila_0/probe17]
-connect_debug_port u_ila_0/probe17 [get_nets [list {ChannelArray[0].ChannelX/MemArray[1].MemoryX/WRCNT_loc_reg_n_0_[6]}]]
-create_debug_port u_ila_0 probe
-set_property PROBE_TYPE DATA_AND_TRIGGER [get_debug_ports u_ila_0/probe18]
-set_property port_width 1 [get_debug_ports u_ila_0/probe18]
-connect_debug_port u_ila_0/probe18 [get_nets [list {ChannelArray[0].ChannelX/MemArray[1].MemoryX/WRCNT_loc_reg_n_0_[7]}]]
+set_property port_width 8 [get_debug_ports u_ila_0/probe2]
+connect_debug_port u_ila_0/probe2 [get_nets [list {ChannelArray[1].ChannelREG/Q[0]} {ChannelArray[1].ChannelREG/Q[1]} {ChannelArray[1].ChannelREG/Q[2]} {ChannelArray[1].ChannelREG/Q[3]} {ChannelArray[1].ChannelREG/Q[4]} {ChannelArray[1].ChannelREG/Q[5]} {ChannelArray[1].ChannelREG/Q[6]} {ChannelArray[1].ChannelREG/Q[7]}]]
 set_property C_CLK_INPUT_FREQ_HZ 300000000 [get_debug_cores dbg_hub]
 set_property C_ENABLE_CLK_DIVIDER false [get_debug_cores dbg_hub]
 set_property C_USER_SCAN_CHAIN 1 [get_debug_cores dbg_hub]

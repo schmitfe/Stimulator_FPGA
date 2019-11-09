@@ -1,4 +1,2 @@
 INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.srcs/sources_1/new/DataSource.vhd" into library xil_defaultlib
 INFO: [VRFC 10-3107] analyzing entity 'Channel'
-INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.srcs/sources_1/new/Stimulator.vhd" into library xil_defaultlib
-INFO: [VRFC 10-3107] analyzing entity 'Stimulator'

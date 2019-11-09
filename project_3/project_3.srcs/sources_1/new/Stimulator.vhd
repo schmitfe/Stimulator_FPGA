@@ -25,7 +25,7 @@ use ieee.numeric_std.all;
        
 entity Stimulator is
 Generic (
-           Adresswidth  : natural := 8;  -- Adresswidth of Memories in CHannels
+           Adresswidth  : natural := 10;  -- Adresswidth of Memories in CHannels
            Wordwidth  : natural := 8;   -- Wordwidth og Memories
            TransmitterWordwith: natural:=16;    --Wordwidth of Interface in each channel
            MultiplierWordwith: natural:=4;      --Wordwidth of Gain for each channel
@@ -134,6 +134,15 @@ probe1 : IN STD_LOGIC_VECTOR(7 DOWNTO 0)
 );
 end component;
 
+component Clock_Divider is
+PORT (
+clk : IN STD_LOGIC;
+reset: IN STD_LOGIC;
+clock_out: OUT std_logic
+);
+end component;
+
+
 
 ---------------------------Signals-------------------------------------------
 
@@ -146,6 +155,10 @@ signal locTrig: std_logic_vector(NChannels - 1 downto 0):= (others=> '0');
 
 signal ChanAddressReg: integer range 0 to NChannels-1; 
 
+--signal ClockDiv: std_logic;
+--attribute MARK_DEBUG : string;
+--attribute MARK_DEBUG of ClockDiv : signal is "TRUE";
+
 ------------------------Arrays----------------------------------------------------
 	type WaveAdressArray is array (NChannels - 1 downto 0) of integer range 0 to 2*NWave-1;
 	signal WaveAdressA : WaveAdressArray; -- Eingabe
@@ -157,6 +170,10 @@ signal ChanAddressReg: integer range 0 to NChannels-1;
 	type AmplitudeArray is array (NChannels - 1 downto 0) of std_logic_vector(MultiplierWordwith-1 downto 0);
 	signal AmplitudeA: AmplitudeArray;
 begin
+
+--CloclDivider: Clock_Divider
+ --       port map (clk=>CLK, reset=>'0', clock_out=>ClockDiv);
+
 
 ChannelArray : for I in 0 to NChannels-1 generate
 

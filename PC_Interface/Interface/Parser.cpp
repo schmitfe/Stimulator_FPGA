@@ -31,7 +31,7 @@ void Listener::key(String key) {
       digitalWrite(*PinsWaveadress, LOW);
       digitalWrite(PinStoreChan, LOW);
       curTime=micros();
-      while(micros()-curTime <2);
+      while(micros()-curTime <20);
       digitalWrite(PinStoreChan, HIGH);
     }
   }else if(key=="WF2"){
@@ -40,7 +40,7 @@ void Listener::key(String key) {
       digitalWrite(*PinsWaveadress, HIGH);
       digitalWrite(PinStoreChan, LOW);
       curTime=micros();
-      while(micros()-curTime <2);
+      while(micros()-curTime <20);
       digitalWrite(PinStoreChan, HIGH);
     }
   } else {
@@ -87,11 +87,16 @@ void WriteDout(String value)
 {
   unsigned long curTime;
   PIOD->PIO_SODR= value.toInt();
-  PIOD->PIO_CODR=~value.toInt()&0x000F;
+  PIOD->PIO_CODR=~value.toInt()&0x00FF;
   digitalWrite(PinWrite, LOW);
+  PIOD->PIO_SODR= value.toInt();          //two times to ensure data
+  PIOD->PIO_CODR=~value.toInt()&0x00FF;
+  digitalWrite(PinWrite, LOW);
+  
   curTime=micros();
-  while(micros()-curTime <2);
+  while(micros()-curTime <50);
   digitalWrite(PinWrite, HIGH);
   curTime=micros();
-  while(micros()-curTime <2); 
+  digitalWrite(PinWrite, HIGH);
+  while(micros()-curTime <50); 
 }

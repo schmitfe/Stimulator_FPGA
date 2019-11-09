@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="StimulatorTB_func_synth.wdb" id="1">
+         <top_modules>
+            <top_module name="StimulatorTB" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="1000000000000fs"></ZoomEndTime>
+      <Cursor1Time time="1000000000000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="278"></NameColumnWidth>
+      <ValueColumnWidth column_width="162"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="30" />
+   <wvobject fp_name="/StimulatorTB/WaveAddr" type="array">
+      <obj_property name="ElementShortName">WaveAddr[0:0]</obj_property>
+      <obj_property name="ObjectShortName">WaveAddr[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/StimulatorTB/ChanAddr" type="array">
+      <obj_property name="ElementShortName">ChanAddr[0:0]</obj_property>
+      <obj_property name="ObjectShortName">ChanAddr[0:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/StimulatorTB/CLK" type="logic">
+      <obj_property name="ElementShortName">CLK</obj_property>
+      <obj_property name="ObjectShortName">CLK</obj_property>
+   </wvobject>
+   <wvobject fp_name="/StimulatorTB/RESET" type="logic">
+      <obj_property name="ElementShortName">RESET</obj_property>
+      <obj_property name="ObjectShortName">RESET</obj_property>
+   </wvobject>
+   <wvobject fp_name="/StimulatorTB/RESET_CH" type="logic">
+      <obj_property name="ElementShortName">RESET_CH</obj_property>
+      <obj_property name="ObjectShortName">RESET_CH</obj_property>
+   </wvobject>
+   <wvobject fp_name="/StimulatorTB/Write" type="logic">
+      <obj_property name="ElementShortName">Write</obj_property>
+      <obj_property name="ObjectShortName">Write</obj_property>
+   </wvobject>
+   <wvobject fp_name="/StimulatorTB/EnWrite" type="logic">
+      <obj_property name="ElementShortName">EnWrite</obj_property>
+      <obj_property name="ObjectShortName">EnWrite</obj_property>
+   </wvobject>
+   <wvobject fp_name="/StimulatorTB/WriteConfig" type="logic">
+      <obj_property name="ElementShortName">WriteConfig</obj_property>
+      <obj_property name="ObjectShortName">WriteConfig</obj_property>
+   </wvobject>
+   <wvobject fp_name="/StimulatorTB/trig_all" type="logic">
+      <obj_property name="ElementShortName">trig_all</obj_property>
+      <obj_property name="ObjectShortName">trig_all</obj_property>
+   </wvobject>
+   <wvobject fp_name="/StimulatorTB/trig_CH" type="array">
+      <obj_property name="ElementShortName">trig_CH[1:0]</obj_property>
+      <obj_property name="ObjectShortName">trig_CH[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/StimulatorTB/Din" type="array">
+      <obj_property name="ElementShortName">Din[7:0]</obj_property>
+      <obj_property name="ObjectShortName">Din[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/StimulatorTB/MOSI" type="array">
+      <obj_property name="ElementShortName">MOSI[1:0]</obj_property>
+      <obj_property name="ObjectShortName">MOSI[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/StimulatorTB/SCLK" type="array">
+      <obj_property name="ElementShortName">SCLK[1:0]</obj_property>
+      <obj_property name="ObjectShortName">SCLK[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/StimulatorTB/SS" type="array">
+      <obj_property name="ElementShortName">SS[1:0]</obj_property>
+      <obj_property name="ObjectShortName">SS[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/StimulatorTB/InterInterval" type="array">
+      <obj_property name="ElementShortName">InterInterval[7:0]</obj_property>
+      <obj_property name="ObjectShortName">InterInterval[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/StimulatorTB/InterPeriods" type="array">
+      <obj_property name="ElementShortName">InterPeriods[7:0]</obj_property>
+      <obj_property name="ObjectShortName">InterPeriods[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/StimulatorTB/Amplitude" type="array">
+      <obj_property name="ElementShortName">Amplitude[3:0]</obj_property>
+      <obj_property name="ObjectShortName">Amplitude[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/StimulatorTB/Adresswidth" type="other">
+      <obj_property name="ElementShortName">Adresswidth</obj_property>
+      <obj_property name="ObjectShortName">Adresswidth</obj_property>
+   </wvobject>
+   <wvobject fp_name="/StimulatorTB/Wordwidth" type="other">
+      <obj_property name="ElementShortName">Wordwidth</obj_property>
+      <obj_property name="ObjectShortName">Wordwidth</obj_property>
+   </wvobject>
+   <wvobject fp_name="/StimulatorTB/TransmitterWordwith" type="other">
+      <obj_property name="ElementShortName">TransmitterWordwith</obj_property>
+      <obj_property name="ObjectShortName">TransmitterWordwith</obj_property>
+   </wvobject>
+   <wvobject fp_name="/StimulatorTB/MultiplierWordwith" type="other">
+      <obj_property name="ElementShortName">MultiplierWordwith</obj_property>
+      <obj_property name="ObjectShortName">MultiplierWordwith</obj_property>
+   </wvobject>
+   <wvobject fp_name="/StimulatorTB/Clock" type="other">
+      <obj_property name="ElementShortName">Clock</obj_property>
+      <obj_property name="ObjectShortName">Clock</obj_property>
+   </wvobject>
+   <wvobject fp_name="/StimulatorTB/SPI_Clock" type="other">
+      <obj_property name="ElementShortName">SPI_Clock</obj_property>
+      <obj_property name="ObjectShortName">SPI_Clock</obj_property>
+   </wvobject>
+   <wvobject fp_name="/StimulatorTB/NWave" type="other">
+      <obj_property name="ElementShortName">NWave</obj_property>
+      <obj_property name="ObjectShortName">NWave</obj_property>
+   </wvobject>
+   <wvobject fp_name="/StimulatorTB/MaxDelay" type="other">
+      <obj_property name="ElementShortName">MaxDelay</obj_property>
+      <obj_property name="ObjectShortName">MaxDelay</obj_property>
+   </wvobject>
+   <wvobject fp_name="/StimulatorTB/NeurtralDW" type="array">
+      <obj_property name="ElementShortName">NeurtralDW[15:0]</obj_property>
+      <obj_property name="ObjectShortName">NeurtralDW[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/StimulatorTB/NChannels" type="other">
+      <obj_property name="ElementShortName">NChannels</obj_property>
+      <obj_property name="ObjectShortName">NChannels</obj_property>
+   </wvobject>
+   <wvobject fp_name="/StimulatorTB/T" type="other">
+      <obj_property name="ElementShortName">T</obj_property>
+      <obj_property name="ObjectShortName">T</obj_property>
+   </wvobject>
+   <wvobject fp_name="/StimulatorTB/UUT/\ChannelArray[0].ChannelX\/Interface/tx_reg2" type="array">
+      <obj_property name="ElementShortName">tx_reg2[15:0]</obj_property>
+      <obj_property name="ObjectShortName">tx_reg2[15:0]</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
+      <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+      <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+      <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+      <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+      <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+      <obj_property name="AnalogHorizLine">0.000000</obj_property>
+   </wvobject>
+   <wvobject fp_name="/StimulatorTB/UUT/\ChannelArray[1].ChannelX\/Interface/tx_reg2" type="array">
+      <obj_property name="ElementShortName">tx_reg2[15:0]</obj_property>
+      <obj_property name="ObjectShortName">tx_reg2[15:0]</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
+      <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+      <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+      <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+      <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+      <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+      <obj_property name="AnalogHorizLine">0.000000</obj_property>
+   </wvobject>
+</wave_config>

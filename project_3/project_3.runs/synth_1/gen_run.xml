@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="synth_1" LaunchPart="xc7a35ticsg324-1L" LaunchTime="1568539776">
+<GenRun Id="synth_1" LaunchPart="xc7a35ticsg324-1L" LaunchTime="1572792528">
   <File Type="PA-TCL" Name="Stimulator.tcl"/>
+  <File Type="RDS-PROPCONSTRS" Name="Stimulator_drc_synth.rpt"/>
   <File Type="REPORTS-TCL" Name="Stimulator_reports.tcl"/>
   <File Type="RDS-RDS" Name="Stimulator.vds"/>
   <File Type="RDS-UTIL" Name="Stimulator_utilization_synth.rpt"/>
   <File Type="RDS-UTIL-PB" Name="Stimulator_utilization_synth.pb"/>
   <File Type="RDS-DCP" Name="Stimulator.dcp"/>
+  <File Type="VDS-TIMINGSUMMARY" Name="Stimulator_timing_summary_synth.rpt"/>
+  <File Type="VDS-TIMING-PB" Name="Stimulator_timing_summary_synth.pb"/>
   <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1">
     <Filter Type="Srcs"/>
     <File Path="$PSRCDIR/sim_2/imports/new/ChannelConfigReg.vhd">

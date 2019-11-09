@@ -2,6 +2,7 @@
 2018.3
 Dec  7 2018
 00:33:28
-C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.sim/sim_2/synth/func/xsim/ChannelTB_func_synth.vhd,1564402705,vhdl,,,,channel;memory;memory_0;spi_master,,,,,,,,
+C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.sim/sim_2/synth/func/xsim/StimulatorTB_func_synth.vhd,1572018633,vhdl,,,,\SPI_Master__1\;channel;channel_1;channelconfigreg;channelconfigreg_0;memory;memory_2;memory_3;memory_4;spi_master;stimulator,,,,,,,,
 C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.srcs/sim_2/new/ChannelTB.vhd,1564395354,vhdl,,,,channeltb,,,,,,,,
 C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.srcs/sim_2/new/MemoryTB.vhd,1554477338,vhdl,,,,memorytb,,,,,,,,
+C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.srcs/sim_2/new/StimulatorTB.vhd,1571570321,vhdl,,,,stimulatortb,,,,,,,,
