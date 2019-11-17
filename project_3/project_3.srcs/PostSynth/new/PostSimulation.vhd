@@ -27,7 +27,7 @@ component  Stimulator is
     CLK : in STD_LOGIC;
     RESET : in STD_LOGIC;
     RESET_CH : in STD_LOGIC;
-    Write : in STD_LOGIC;
+    Write : in std_logic_vector (2 downto 0);
     EnWrite : in STD_LOGIC;
     WriteConfig : in STD_LOGIC;
     trig_all : in STD_LOGIC;
@@ -49,7 +49,7 @@ signal   ChanAddr:  STD_LOGIC_VECTOR ( 0 to 0 ):="0";
 signal   CLK :  std_logic:='0'; -- Systemtakt
 signal   RESET :  std_logic:='0'; -- asynchroner Reset (alles auf Null)
 signal   RESET_CH:  std_logic:='0';
-signal   Write:   std_logic:='0';
+signal   Write:   std_logic_vector (2 downto 0):=(others=>'0');
 signal   EnWrite:  std_logic:='0';
    
 signal   WriteConfig: std_logic:='0';
@@ -94,7 +94,7 @@ begin
    
 
    WaveAddr<="0";
-   Write<='0';
+   Write<=(others=>'0');
    RESET <= '1', '0' after 2000*T;
    wait for 2005*T;
    EnWrite<='1';
@@ -105,24 +105,25 @@ begin
    --Memory 0 0-7
         wait for 3*T;
         Din <= "10000000";
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;
-        Write<='1';
+        Write<=(others=>'1');
         wait for 3*T;
         Din <= "10000010";
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;
-        Write<='1';
+        Write<=(others=>'1');
         wait for 3*T;
         Din <= "10000100";
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;
-        Write<='1';
+        Write<=(others=>'1');
+        
         wait for 3*T;
         Din <= "10001000";
         wait for 3*T;
         WriteConfig<='0';
-        Write<='0';
+        Write<=(others=>'0');
    
    
    
@@ -137,53 +138,53 @@ begin
    
         wait for 3*T;
         Din <= "00000000";
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;
-        Write<='1';
+        Write<=(others=>'1');
         wait for 3*T;
         Din <= "00000010";
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;
-        Write<='1';
+        Write<=(others=>'1');
         wait for 3*T;
         Din <= "00000100";
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;
-        Write<='1';
+        Write<=(others=>'1');
         wait for 3*T;
         Din <= "00001000";
         wait for 3*T;
         WriteConfig<='0';
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;
-        Write<='1';
+        Write<=(others=>'1');
         wait for 3*T;
         Din <= "00010000";
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;
-        Write<='1';
+        Write<=(others=>'1');
         wait for 3*T;
         Din <= "00100000";
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;
-        Write<='1';
+        Write<=(others=>'1');
         wait for 3*T;
         Din <= "01000000";
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;
-        Write<='1';
+        Write<=(others=>'1');
         wait for 3*T;
         Din <= "11111101";
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;
-        Write<='1';
+        Write<=(others=>'1');
         wait for 3*T;
         Din <= "00000001";
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;
-        Write<='1';
+        Write<=(others=>'1');
         wait for 3*T;      
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;
         WaveAddr<="1";
         wait for T;
@@ -193,44 +194,44 @@ begin
    --Memory 3 8-15
 
         Din <= "11111110";  
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;
-        Write<='1';
+        Write<=(others=>'1');
         wait for 3*T;
         Din <= "11111000";   
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;
-        Write<='1';
+        Write<=(others=>'1');
         wait for 3*T;
         Din <= "11011001";    
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;
-        Write<='1';
+        Write<=(others=>'1');
         wait for 3*T;
         Din <= "10111010";
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;
-        Write<='1';
+        Write<=(others=>'1');
         wait for 3*T;
         Din <="10011011"; 
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;
-        Write<='1';
+        Write<=(others=>'1');
         wait for 3*T;
         Din <= "01111100";
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;
-        Write<='1';
+        Write<=(others=>'1');
         wait for 3*T;
         Din <=  "01011101";
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;
-        Write<='1';
+        Write<=(others=>'1');
         wait for 3*T;
         Din <=  "00001110";
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;  
-        Write<='1';
+        Write<=(others=>'1');
         wait for 3*T;      
         EnWrite<='0';
         wait for 5*T;
@@ -246,7 +247,7 @@ begin
    
 
    WaveAddr<="0";
-   Write<='0';
+   Write<=(others=>'0');
    wait for 5*T;
    EnWrite<='1';
    wait for 5*T;
@@ -256,32 +257,32 @@ begin
    --Memory 0 0-7
         wait for 3*T;
         Din <= "00000000";
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;
-        Write<='1';
+        Write<=(others=>'1');
         wait for 3*T;
         Din <= "00000010";
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;
-        Write<='1';
+        Write<=(others=>'1');
         wait for 3*T;
         Din <= "01000000";
         WriteConfig<='0';
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;
-        Write<='1';
+        Write<=(others=>'1');
         wait for 3*T;
         Din <= "11111101";
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;
-        Write<='1';
+        Write<=(others=>'1');
         wait for 3*T;
         Din <= "00000001";
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;
-        Write<='1';
+        Write<=(others=>'1');
         wait for 3*T;      
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;
         
         WaveAddr<="1";
@@ -293,19 +294,19 @@ begin
    --Memory 3 8-15
 
         Din <= "01111100";
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;
-        Write<='1';
+        Write<=(others=>'1');
         wait for 3*T;
         Din <=  "01011101";
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;
-        Write<='1';
+        Write<=(others=>'1');
         wait for 3*T;
         Din <=  "00001110";
-        Write<='0';
+        Write<=(others=>'0');
         wait for 3*T;  
-        Write<='1';
+        Write<=(others=>'1');
         wait for 3*T;      
         EnWrite<='0';
         wait for 5*T;
@@ -399,7 +400,7 @@ begin
 --    process
 --    begin
 --        EnWrite<='0';
---        Write<='0';
+--        Write<=(others=>'0');
         
         
         
@@ -410,54 +411,54 @@ begin
        
 --        wait for 3*T;
 --        Din <= "0000";
---        Write<='0';
+--        Write<=(others=>'0');
 --        wait for 3*T;
---        Write<='1';
+--        Write<=(others=>'1');
 --        wait for 3*T;
 --        Din <= "0001";
---        Write<='0';
+--        Write<=(others=>'0');
 --        wait for 3*T;
---        Write<='1';
+--        Write<=(others=>'1');
 --        wait for 3*T;
 --        Din <= "0010";
---        Write<='0';
+--        Write<=(others=>'0');
 --        wait for 3*T;
---        Write<='1';
+--        Write<=(others=>'1');
 --        wait for 3*T;
 --        Din <= "0011";
---        Write<='0';
+--        Write<=(others=>'0');
 --        wait for 3*T;
---        Write<='1';
+--        Write<=(others=>'1');
 --        wait for 3*T;
 --        Din <= "0100";
---        Write<='0';
+--        Write<=(others=>'0');
 --        wait for 3*T;
---        Write<='1';
+--        Write<=(others=>'1');
 --        wait for 3*T;
 --        Din <= "0101";
---        Write<='0';
+--        Write<=(others=>'0');
 --        wait for 3*T;
---        Write<='1';
+--        Write<=(others=>'1');
 --        wait for 3*T;
 --        Din <= "0110";
---        Write<='0';
+--        Write<=(others=>'0');
 --        wait for 3*T;
---        Write<='1';
+--        Write<=(others=>'1');
 --        wait for 3*T;
 --        Din <= "0111";
---        Write<='0';
+--        Write<=(others=>'0');
 --        wait for 3*T;
---        Write<='1';
+--        Write<=(others=>'1');
 --        wait for 3*T;
 --        Din <= "1000";
---        Write<='0';
+--        Write<=(others=>'0');
 --        wait for 3*T;
---        Write<='1';
+--        Write<=(others=>'1');
 --        wait for 3*T;
 --        Din <= "1001";
---        Write<='0';
+--        Write<=(others=>'0');
 --        wait for 3*T;
---        Write<='1';
+--        Write<=(others=>'1');
         
 --        wait for 5*T;
 --        EnWrite<='0';

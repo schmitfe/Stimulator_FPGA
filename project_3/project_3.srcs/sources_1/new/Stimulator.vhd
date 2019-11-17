@@ -20,6 +20,8 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use ieee.numeric_std.all;
+USE ieee.math_real.log2;
+USE ieee.math_real.ceil;
 
 
        
@@ -40,11 +42,15 @@ Generic (
 port(
     
    WaveAddr: in integer range 0 to (2*NWave)-1;  
+   
    ChanAddr: in integer range 0 to NChannels-1;  
+   ChanAddr2: in integer range 0 to NChannels-1; 
+   ChanAddr3: in integer range 0 to NChannels-1;
+    
    CLK : in std_logic; -- Systemtakt
    RESET : in std_logic; -- asynchroner Reset (alles auf Null)
    RESET_CH: in std_logic;
-   Write:  in std_logic;
+   Write:  in std_logic_vector(2 downto 0);
    EnWrite: in std_logic;
    
    WriteConfig: in std_logic;
@@ -134,13 +140,7 @@ probe1 : IN STD_LOGIC_VECTOR(7 DOWNTO 0)
 );
 end component;
 
-component Clock_Divider is
-PORT (
-clk : IN STD_LOGIC;
-reset: IN STD_LOGIC;
-clock_out: OUT std_logic
-);
-end component;
+
 
 
 
@@ -157,7 +157,7 @@ signal ChanAddressReg: integer range 0 to NChannels-1;
 
 --signal ClockDiv: std_logic;
 --attribute MARK_DEBUG : string;
---attribute MARK_DEBUG of ClockDiv : signal is "TRUE";
+--attribute MARK_DEBUG of locWrite : signal is "TRUE";
 
 ------------------------Arrays----------------------------------------------------
 	type WaveAdressArray is array (NChannels - 1 downto 0) of integer range 0 to 2*NWave-1;
@@ -169,10 +169,9 @@ signal ChanAddressReg: integer range 0 to NChannels-1;
 	
 	type AmplitudeArray is array (NChannels - 1 downto 0) of std_logic_vector(MultiplierWordwith-1 downto 0);
 	signal AmplitudeA: AmplitudeArray;
+	
+	signal DecodeWrite: std_logic;
 begin
-
---CloclDivider: Clock_Divider
- --       port map (clk=>CLK, reset=>'0', clock_out=>ClockDiv);
 
 
 ChannelArray : for I in 0 to NChannels-1 generate
@@ -196,17 +195,24 @@ ChannelArray : for I in 0 to NChannels-1 generate
 AdressMux : process (CLK)
 	begin
 		if CLK = '1' and CLK'EVENT then
-			ChanAddressReg <= ChanAddr after 5 ns;
+		      if    ChanAddr=ChanAddr2 or ChanAddr=ChanAddr3 then
+			        ChanAddressReg <= ChanAddr after 5 ns;
+			  elsif ChanAddr2=ChanAddr3 then
+			        ChanAddressReg <= ChanAddr2 after 5 ns;
+			  else
+			        ChanAddressReg <=ChanAddressReg after 5 ns;
+			  end if;
+			        
 		end if;
 	end process AdressMux;
 	
-	DEMUX : process (ChanAddressReg,WriteConfig , Write, EnWrite, RESET, RESET_CH)
+	DEMUX : process (ChanAddressReg,WriteConfig , DecodeWrite, EnWrite, RESET, RESET_CH)
 	begin
 		 locWriteConf<=(others => '0') after 5 ns;
 		 locWriteConf(ChanAddressReg)<=WriteConfig after 5ns;
 		 
 		 locWrite<=(others => '0') after 5 ns;
-		 locWrite(ChanAddressReg)<=Write after 5ns;
+		 locWrite(ChanAddressReg)<=DecodeWrite after 5ns;
 		 
 		 locEnWrite<=(others => '0') after 5 ns;
 		 locEnWrite(ChanAddressReg)<=EnWrite after 5ns;
@@ -215,6 +221,12 @@ AdressMux : process (CLK)
 		 locRESET(ChanAddressReg)<= RESET_CH after 5ns;
 
 	end process DEMUX;
+	
+	
+	DecWrite: process(Write)
+	begin
+	   DecodeWrite<=(Write(0)and Write(1)) or (Write(1)and Write(2)) or (Write(2)and Write(0));
+	end process DecWrite;
 	
 	
 

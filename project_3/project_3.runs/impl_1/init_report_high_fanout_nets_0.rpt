@@ -1,7 +1,7 @@
 Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 ------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2018.3 (win64) Build 2405991 Thu Dec  6 23:38:27 MST 2018
-| Date         : Sun Nov  3 15:49:36 2019
+| Date         : Sat Nov 16 15:41:40 2019
 | Host         : DESKTOP-A11CNTB running 64-bit major release  (build 9200)
 | Command      : report_high_fanout_nets -file init_report_high_fanout_nets_0.rpt
 | Design       : Stimulator
@@ -13,19 +13,19 @@ High Fan-out Nets Information
 1. Summary
 ----------
 
-+-----------------------------------+--------+-------------+
-| Net Name                          | Fanout | Driver Type |
-+-----------------------------------+--------+-------------+
-| CLK_IBUF_BUFG                     |    279 | BUFG        |
-| RESET_IBUF                        |     44 | IBUF        |
-| ChannelArray[0].ChannelX/State[2] |     40 | FDRE        |
-| ChannelArray[1].ChannelX/State[2] |     40 | FDRE        |
-| ChannelArray[0].ChannelX/State[1] |     36 | FDRE        |
-| ChannelArray[0].ChannelX/State[3] |     36 | FDRE        |
-| ChannelArray[1].ChannelX/State[1] |     36 | FDRE        |
-| ChannelArray[1].ChannelX/State[3] |     36 | FDRE        |
-| ChannelArray[0].ChannelX/State[0] |     30 | FDRE        |
-| ChannelArray[1].ChannelX/State[0] |     30 | FDRE        |
-+-----------------------------------+--------+-------------+
++---------------------------------------------------------+--------+-------------+
+| Net Name                                                | Fanout | Driver Type |
++---------------------------------------------------------+--------+-------------+
+| CLK_IBUF_BUFG                                           |    283 | BUFG        |
+| RESET_IBUF                                              |     44 | IBUF        |
+| ChannelArray[0].ChannelX/MemArray[0].MemoryX_i_1_n_0    |     32 | LUT3        |
+| ChannelArray[1].ChannelX/MemArray[0].MemoryX_i_1__0_n_0 |     32 | LUT3        |
+| ChannelArray[0].ChannelX/State[0]                       |     31 | FDRE        |
+| ChannelArray[1].ChannelX/State[0]                       |     31 | FDRE        |
+| ChannelArray[0].ChannelX/State[2]                       |     29 | FDRE        |
+| ChannelArray[1].ChannelX/State[2]                       |     29 | FDRE        |
+| ChannelArray[0].ChannelX/State[1]                       |     26 | FDRE        |
+| ChannelArray[1].ChannelX/State[1]                       |     26 | FDRE        |
++---------------------------------------------------------+--------+-------------+
 
 

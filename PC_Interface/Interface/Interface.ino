@@ -72,10 +72,16 @@ const unsigned int PinsInterInterval[] = {10, 9, 8, 7, 6, 5, 4, 3}; //{3, 4, 5, 
 const unsigned int PinsAmplitude[] = {21, 20, 19, 18};
 
 const unsigned int PinWrite = 63;
+const unsigned int PinWrite2 = 36;
+const unsigned int PinWrite3 = 37;
+
+
 const unsigned int PinWriteEn = 62;
 const unsigned int PinsWaveadress[] = {64};
 const unsigned int PinStoreChan = {65};
 const unsigned int PinsChanAdress[] = {66};
+const unsigned int PinsChanAdress2[] = {38};
+const unsigned int PinsChanAdress3[] = {39};
 
 const unsigned int PinsDout[] = {25, 26, 27, 28, 14, 15, 29, 11};  // Has to be on same port of SAM, Arduino ports are not ordered!
 
@@ -133,6 +139,10 @@ void setup() {
   for ( ii = 0; ii < sizeof(PinsChanAdress) / sizeof(PinsChanAdress[0]); ii = ii + 1 ) {
     pinMode(PinsChanAdress[ii], OUTPUT);
     digitalWrite(PinsChanAdress[ii], LOW);
+    pinMode(PinsChanAdress2[ii], OUTPUT);
+    digitalWrite(PinsChanAdress2[ii], LOW);
+    pinMode(PinsChanAdress3[ii], OUTPUT);
+    digitalWrite(PinsChanAdress3[ii], LOW);
   }
 
   for ( ii = 0; ii < sizeof(PinsDout) / sizeof(PinsDout[0]); ii = ii + 1 ) {
@@ -149,6 +159,14 @@ void setup() {
   
   pinMode(PinWrite, OUTPUT);
   digitalWrite(PinWrite, LOW);
+
+  pinMode(PinWrite2, OUTPUT);
+  digitalWrite(PinWrite, LOW);
+
+  pinMode(PinWrite3, OUTPUT);
+  digitalWrite(PinWrite, LOW);
+
+  
 
   pinMode(PinWriteEn, OUTPUT);
   digitalWrite(PinWriteEn, LOW);
@@ -239,7 +257,7 @@ void loop() {
     String input = Serial.readStringUntil('\n');
 
     if (input.length() > 0) {
-      Serial.print("# ");
+    //  Serial.print("# ");
 
       cli.parse(input);
     }
@@ -250,9 +268,9 @@ void loop() {
 
     int argNum = c.countArgs();
 
-    Serial.print("> ");
-    Serial.print(c.getName());
-    Serial.print(' ');
+ /*   Serial.print("> ");
+ //   Serial.print(c.getName());
+ //   Serial.print(' ');
 
     for (int i = 0; i < argNum; ++i) {
       Argument arg = c.getArgument(i);
@@ -262,7 +280,7 @@ void loop() {
     }
 
     Serial.println();
-
+*/
     if (c == cmdLs) {
       listFolder();
     } else if (c == cmdRm) {
@@ -372,7 +390,7 @@ void loadWaveform(Argument pathStr, Argument id)
   String Description = "";
   //reset(id);
   JsonStreamingParser parser;
-  Listener listener(&WriteWFs, &Description);   //bad way of introducing additional parameters
+  Listener listener(&WriteWFs, &Description, PinWrite, PinWrite2, PinWrite3, PinStoreChan, PinsWaveadress, 2);   //bad way of introducing additional parameters
   parser.setListener(&listener);
   File myFile;
   if (!sd.chdir("/")) {
@@ -388,7 +406,7 @@ void loadWaveform(Argument pathStr, Argument id)
 
   unsigned long curTime;
   curTime = micros();
-  while (micros() - curTime < 30);
+  while (micros() - curTime < 500);
 
   while (myFile.available()) {
     parser.parse(myFile.read());
@@ -404,7 +422,7 @@ void description(Argument pathStr)
   bool WriteWFs = false;
   String Description = "";
   JsonStreamingParser parser;
-  Listener listener(&WriteWFs, &Description);   //bad way of introducing additional parameters
+  Listener listener(&WriteWFs, &Description,PinWrite, PinWrite2, PinWrite3, PinStoreChan, PinsWaveadress, 2);   //bad way of introducing additional parameters
   parser.setListener(&listener);
   File myFile;
   if (!sd.chdir("/")) {
@@ -491,8 +509,12 @@ void Channeladress(int id)
   int adress=0;
   if (id == 0) {
     digitalWrite(*PinsChanAdress, LOW);
+    digitalWrite(*PinsChanAdress2, LOW);
+    digitalWrite(*PinsChanAdress3, LOW);
   } else {
    writePinArray(id-1, PinsChanAdress, sizeof(PinsChanAdress) / sizeof(PinsChanAdress[0]));
+   writePinArray(id-1, PinsChanAdress2, sizeof(PinsChanAdress2) / sizeof(PinsChanAdress2[0]));
+   writePinArray(id-1, PinsChanAdress3, sizeof(PinsChanAdress3) / sizeof(PinsChanAdress3[0]));
   }
 }
 
@@ -535,19 +557,6 @@ void SaveFile (Argument str)
 }
 
 
-/*extern void WriteDout(Argument value)
-{
-  unsigned long curTime;
-  PIOD->PIO_SODR= value.getValue().toInt();
-  PIOD->PIO_CODR=~value.getValue().toInt()&0x000F;
-  digitalWrite(PinWrite, LOW);
-  curTime=micros();
-  while(micros()-curTime <2);
-  digitalWrite(PinWrite, HIGH);
-  curTime=micros();
-  while(micros()-curTime <1); 
-}
-*/
 
 void WriteDoutDebug(Argument value)
 {

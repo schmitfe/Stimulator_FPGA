@@ -1,4 +1,4 @@
-function [] = encodeWave(filename,Description,WF1, WF2, wordwidth)
+function [] = encodeWave(filename,description,WF1, WF2, wordwidth, invert)
 %encodeWave Stores JSON encoding of Waveforms WF1 and WF2 in a file.
 %   filename:       String (max 8 letter, use "")
 %   Description:    String
@@ -16,9 +16,13 @@ title('WF2')
 maxValue=2^(wordwidth)-1;
 minValue=0;
 s=struct;
-s.description=Description;
+s.description=description;
 s.wordwidth=wordwidth;
-
+%Correct for invert
+if invert==1
+    WF1=-WF1;
+    WF2=-WF2;
+end
 if abs(WF1(end)) > 1e4*eps      %%to ensure 0 at interphase/period interval
    WF1=[WF1 0]; 
 end

@@ -50,6 +50,10 @@ architecture Behavioral of Memory is
 	signal Write_Z1 : std_logic;
 	signal Read_Z1 : std_logic;
 	signal loadReg0 : std_logic := '0';
+	
+	attribute MARK_DEBUG : string;
+    attribute MARK_DEBUG of WRCNT_loc : signal is "TRUE";
+    
 begin
 	process begin
 	wait until rising_edge(CLK);

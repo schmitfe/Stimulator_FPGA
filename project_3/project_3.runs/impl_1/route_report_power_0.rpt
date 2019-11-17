@@ -1,7 +1,7 @@
 Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2018.3 (win64) Build 2405991 Thu Dec  6 23:38:27 MST 2018
-| Date             : Sun Nov  3 15:56:36 2019
+| Date             : Sat Nov 16 15:48:34 2019
 | Host             : DESKTOP-A11CNTB running 64-bit major release  (build 9200)
 | Command          : report_power -file route_report_power_0.rpt -pb route_report_power_summary_0.pb -rpx route_report_power_0.rpx
 | Design           : Stimulator
@@ -30,10 +30,10 @@ Table of Contents
 ----------
 
 +--------------------------+--------------+
-| Total On-Chip Power (W)  | 0.080        |
+| Total On-Chip Power (W)  | 0.083        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
-| Dynamic (W)              | 0.018        |
+| Dynamic (W)              | 0.021        |
 | Device Static (W)        | 0.062        |
 | Effective TJA (C/W)      | 4.8          |
 | Max Ambient (C)          | 99.6         |
@@ -52,21 +52,21 @@ Table of Contents
 +--------------------------+-----------+----------+-----------+-----------------+
 | On-Chip                  | Power (W) | Used     | Available | Utilization (%) |
 +--------------------------+-----------+----------+-----------+-----------------+
-| Clocks                   |     0.008 |        4 |       --- |             --- |
-| Slice Logic              |     0.002 |     4370 |       --- |             --- |
-|   LUT as Logic           |     0.001 |     1415 |     20800 |            6.80 |
-|   Register               |    <0.001 |     2249 |     41600 |            5.41 |
-|   CARRY4                 |    <0.001 |       49 |      8150 |            0.60 |
-|   LUT as Shift Register  |    <0.001 |       82 |      9600 |            0.85 |
+| Clocks                   |     0.009 |        4 |       --- |             --- |
+| Slice Logic              |     0.002 |     5182 |       --- |             --- |
+|   LUT as Logic           |     0.002 |     1650 |     20800 |            7.93 |
+|   Register               |    <0.001 |     2615 |     41600 |            6.29 |
+|   LUT as Shift Register  |    <0.001 |      144 |      9600 |            1.50 |
+|   CARRY4                 |    <0.001 |       66 |      8150 |            0.81 |
+|   F7/F8 Muxes            |    <0.001 |        8 |     32600 |            0.02 |
 |   LUT as Distributed RAM |    <0.001 |       24 |      9600 |            0.25 |
-|   F7/F8 Muxes            |    <0.001 |        5 |     32600 |            0.02 |
-|   Others                 |     0.000 |      241 |       --- |             --- |
-| Signals                  |     0.002 |     3186 |       --- |             --- |
-| Block RAM                |     0.002 |        3 |        50 |            6.00 |
+|   Others                 |     0.000 |      313 |       --- |             --- |
+| Signals                  |     0.003 |     3690 |       --- |             --- |
+| Block RAM                |     0.002 |      3.5 |        50 |            7.00 |
 | DSPs                     |     0.001 |        2 |        90 |            2.22 |
-| I/O                      |     0.004 |       42 |       210 |           20.00 |
+| I/O                      |     0.003 |       49 |       210 |           23.33 |
 | Static Power             |     0.062 |          |           |                 |
-| Total                    |     0.080 |          |           |                 |
+| Total                    |     0.083 |          |           |                 |
 +--------------------------+-----------+----------+-----------+-----------------+
 
 
@@ -76,7 +76,7 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) |
 +-----------+-------------+-----------+-------------+------------+
-| Vccint    |       0.950 |     0.022 |       0.016 |      0.006 |
+| Vccint    |       0.950 |     0.024 |       0.018 |      0.006 |
 | Vccaux    |       1.800 |     0.011 |       0.000 |      0.011 |
 | Vcco33    |       3.300 |     0.002 |       0.001 |      0.001 |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |
@@ -146,15 +146,15 @@ Table of Contents
 +----------------------------+-----------+
 | Name                       | Power (W) |
 +----------------------------+-----------+
-| Stimulator                 |     0.018 |
-|   ChannelArray[0].ChannelX |     0.002 |
-|   ChannelArray[1].ChannelX |     0.002 |
+| Stimulator                 |     0.021 |
+|   ChannelArray[0].ChannelX |     0.003 |
+|   ChannelArray[1].ChannelX |     0.003 |
 |   dbg_hub                  |     0.003 |
 |     inst                   |     0.003 |
 |       BSCANID.u_xsdbm_id   |     0.003 |
-|   u_ila_0                  |     0.007 |
-|     inst                   |     0.007 |
-|       ila_core_inst        |     0.007 |
+|   u_ila_0                  |     0.009 |
+|     inst                   |     0.009 |
+|       ila_core_inst        |     0.009 |
 +----------------------------+-----------+
 
 

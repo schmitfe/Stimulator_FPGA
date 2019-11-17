@@ -248,9 +248,9 @@ begin
 				end if;
 -------------------Transmit---------------------------------------								
 			when TWAIT_WF1 => FolState <= TWAIT_WF1 after 5 ns;
-			--	if trig = '1' and trigZ1 = '0' then
+				if trig = '1' and trigZ1 = '0' then
 					FolState <= TStartTX_WF1 after 5 ns;
-			--	end if;
+				end if;
 				if EnWrite = '1' then
 					FolState <= WriteInit after 5 ns;
 				end if;

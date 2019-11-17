@@ -53,10 +53,10 @@ architecture Behavioral of SPI_Master is
   signal bitcounter    : integer range 0 to Laenge; -- wenn bitcounter = Laenge --> alle Bits uebertragen
   signal tx_reg        : std_logic_vector(Laenge-1 downto 0) := (others=>'0');
   
-  attribute MARK_DEBUG : string;
+--  attribute MARK_DEBUG : string;
  
-  --signal tx_reg2        : std_logic_vector(Laenge-1 downto 0) := (others=>'0');
-  --attribute MARK_DEBUG of tx_reg2 : signal is "TRUE";
+--  signal tx_reg2        : std_logic_vector(Laenge-1 downto 0) := (others=>'0');
+--  attribute MARK_DEBUG of tx_reg2 : signal is "TRUE";
 
 begin
   ------ Verwaltung --------
@@ -104,7 +104,7 @@ begin
      wait until rising_edge(CLK);
      if (spitxstate=spi_stx) then   -- Zurücksetzen, wenn SS inaktiv
         tx_reg <= TX_Data;
-   --     tx_reg2 <= TX_Data;
+  --      tx_reg2 <= TX_Data;
      end if;
      if (spiclk='0' and  spiclklast='1') then -- SPI-Modus 0
         tx_reg <= tx_reg(tx_reg'left-1 downto 0) & tx_reg(0);
