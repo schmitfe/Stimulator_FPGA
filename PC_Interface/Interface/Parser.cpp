@@ -5,19 +5,19 @@
 void WriteDout(String value);
 
 
-Listener::Listener(bool *pointerWriteFlag, String *DescriptionPnt, unsigned int PinWriteC, unsigned int PinWrite2C, unsigned int PinWrite3C, unsigned int PinStoreChanC, const unsigned int *PinsWaveadressC, unsigned int DelayC) {
+Listener::Listener(bool *pointerWriteFlag, String *DescriptionPnt, unsigned int PWriteC, unsigned int PWrite2C, unsigned int PWrite3C, unsigned int PWriteConfigC, const unsigned int *PWaveAddrC, unsigned int DelayC) {
     WriteWF=pointerWriteFlag;
     Description=DescriptionPnt;
     WFPassed=false;
     WriteDescription=false;
     
-    PinWrite = PinWriteC;
-    PinWrite2 = PinWrite2C;
-    PinWrite3 = PinWrite3C;
-    PinStoreChan = PinStoreChanC;
+    PWrite = PWriteC;
+    PWrite2 = PWrite2C;
+    PWrite3 = PWrite3C;
+    PWriteConfig = PWriteConfigC;
     N=0;
     Delay=DelayC;
-    PinsWaveadress=PinsWaveadressC;
+    PWaveAddr=PWaveAddrC;
     
 }
 
@@ -36,20 +36,20 @@ void Listener::key(String key) {
   if(key=="WF1"){
     WFPassed=true;
     if(*WriteWF==true){
-      digitalWrite(*PinsWaveadress, LOW);
-      digitalWrite(PinStoreChan, LOW);
+      digitalWrite(*PWaveAddr, LOW);
+      digitalWrite(PWriteConfig, LOW);
       curTime=micros();
       while(micros()-curTime <Delay);
-      digitalWrite(PinStoreChan, HIGH);
+      digitalWrite(PWriteConfig, HIGH);
     }
   }else if(key=="WF2"){
     WFPassed=true;
     if(*WriteWF==true){
-      digitalWrite(*PinsWaveadress, HIGH);
-      digitalWrite(PinStoreChan, LOW);
+      digitalWrite(*PWaveAddr, HIGH);
+      digitalWrite(PWriteConfig, LOW);
       curTime=micros();
       while(micros()-curTime <Delay);
-      digitalWrite(PinStoreChan, HIGH);
+      digitalWrite(PWriteConfig, HIGH);
     }
   } else {
     WFPassed=false;
@@ -97,23 +97,23 @@ void Listener::WriteDout(String value)
   unsigned long curTime;
   PIOD->PIO_SODR= value.toInt();
   PIOD->PIO_CODR=~value.toInt()&0x00FF;
-  digitalWrite(PinWrite, LOW);
-  digitalWrite(PinWrite2, LOW);
-  digitalWrite(PinWrite3, LOW);
+  digitalWrite(PWrite, LOW);
+  digitalWrite(PWrite2, LOW);
+  digitalWrite(PWrite3, LOW);
   PIOD->PIO_SODR= value.toInt();          //two times to ensure data
   PIOD->PIO_CODR=~value.toInt()&0x00FF;
-  digitalWrite(PinWrite, LOW);
-  digitalWrite(PinWrite2, LOW);
-  digitalWrite(PinWrite3, LOW);
+  digitalWrite(PWrite, LOW);
+  digitalWrite(PWrite2, LOW);
+  digitalWrite(PWrite3, LOW);
   
   curTime=micros();
   while(micros()-curTime <Delay);        //to do: initalize waitting time in constructor
-  digitalWrite(PinWrite, HIGH);
-  digitalWrite(PinWrite2, HIGH);
-  digitalWrite(PinWrite3, HIGH);
+  digitalWrite(PWrite, HIGH);
+  digitalWrite(PWrite2, HIGH);
+  digitalWrite(PWrite3, HIGH);
   curTime=micros();
-  digitalWrite(PinWrite, HIGH);
-  digitalWrite(PinWrite2, HIGH);
-  digitalWrite(PinWrite3, HIGH);
+  digitalWrite(PWrite, HIGH);
+  digitalWrite(PWrite2, HIGH);
+  digitalWrite(PWrite3, HIGH);
   while(micros()-curTime <Delay); 
 }

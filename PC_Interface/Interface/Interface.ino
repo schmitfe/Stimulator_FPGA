@@ -38,7 +38,7 @@ Command cmdRm;
 Command cmdStore;
 Command cmdReset;
 Command cmdWF;
-Command cmdTrig;
+Command cmdPtrig;
 Command cmdHelp;
 Command cmdDesc;
 Command cmdAmpli;
@@ -61,29 +61,29 @@ SdFile file;
 
 
 //----------Pins---------------//
-const unsigned int trig[] = {49, 51, 53};    //trig all, ch0 -x
+const unsigned int Ptrig[] = {49, 51, 53};    //Ptrig all, ch0 -x
 
-const unsigned int PinRESET = 68;
-const unsigned int PinRESET_CH = 69;
+const unsigned int P_RESET = 68;
+const unsigned int P_RESET_CH = 69;
 
 const unsigned int PinsInterPeriod[] = {61, 60, 59, 58, 57, 56, 55, 54};//{54, 55, 56, 57, 58, 59, 60, 61};
 const unsigned int PinsInterInterval[] = {10, 9, 8, 7, 6, 5, 4, 3}; //{3, 4, 5, 6, 7,8,9,10};
 
 const unsigned int PinsAmplitude[] = {21, 20, 19, 18};
 
-const unsigned int PinWrite = 63;
-const unsigned int PinWrite2 = 36;
-const unsigned int PinWrite3 = 37;
+const unsigned int PWrite = 63;
+const unsigned int PWrite2 = 36;
+const unsigned int PWrite3 = 37;
 
 
-const unsigned int PinWriteEn = 62;
-const unsigned int PinsWaveadress[] = {64};
-const unsigned int PinStoreChan = {65};
-const unsigned int PinsChanAdress[] = {66};
-const unsigned int PinsChanAdress2[] = {38};
-const unsigned int PinsChanAdress3[] = {39};
+const unsigned int P_EnWrite = 62;
+const unsigned int PWaveAddr[] = {64};
+const unsigned int PWriteConfig = {65};
+const unsigned int PChanAdress[] = {66};
+const unsigned int PChanAdress2[] = {38};
+const unsigned int PChanAdress3[] = {39};
 
-const unsigned int PinsDout[] = {25, 26, 27, 28, 14, 15, 29, 11};  // Has to be on same port of SAM, Arduino ports are not ordered!
+const unsigned int PDout[] = {25, 26, 27, 28, 14, 15, 29, 11};  // Has to be on same port of SAM, Arduino ports are not ordered!
 
 const unsigned int chipSelect = 52;    //SD-Card
 
@@ -110,9 +110,9 @@ SChannelSet *ChannelSet = NULL;
 void setup() {
   int ii;
 
-  for ( ii = 0; ii < sizeof(trig) / sizeof(trig[0]); ii = ii + 1 ) {
-    pinMode(trig[ii], OUTPUT);
-    digitalWrite(trig[ii], LOW);
+  for ( ii = 0; ii < sizeof(Ptrig) / sizeof(Ptrig[0]); ii = ii + 1 ) {
+    pinMode(Ptrig[ii], OUTPUT);
+    digitalWrite(Ptrig[ii], LOW);
   }
 
 
@@ -126,9 +126,9 @@ void setup() {
     digitalWrite(PinsInterInterval[ii], LOW);
   }
 
-  for ( ii = 0; ii < sizeof(PinsWaveadress) / sizeof(PinsWaveadress[0]); ii = ii + 1 ) {
-    pinMode(PinsWaveadress[ii], OUTPUT);
-    digitalWrite(PinsWaveadress[ii], LOW);
+  for ( ii = 0; ii < sizeof(PWaveAddr) / sizeof(PWaveAddr[0]); ii = ii + 1 ) {
+    pinMode(PWaveAddr[ii], OUTPUT);
+    digitalWrite(PWaveAddr[ii], LOW);
   }
 
   for ( ii = 0; ii < sizeof(PinsAmplitude) / sizeof(PinsAmplitude[0]); ii = ii + 1 ) {
@@ -136,43 +136,43 @@ void setup() {
     digitalWrite(PinsAmplitude[ii], LOW);
   }
 
-  for ( ii = 0; ii < sizeof(PinsChanAdress) / sizeof(PinsChanAdress[0]); ii = ii + 1 ) {
-    pinMode(PinsChanAdress[ii], OUTPUT);
-    digitalWrite(PinsChanAdress[ii], LOW);
-    pinMode(PinsChanAdress2[ii], OUTPUT);
-    digitalWrite(PinsChanAdress2[ii], LOW);
-    pinMode(PinsChanAdress3[ii], OUTPUT);
-    digitalWrite(PinsChanAdress3[ii], LOW);
+  for ( ii = 0; ii < sizeof(PChanAdress) / sizeof(PChanAdress[0]); ii = ii + 1 ) {
+    pinMode(PChanAdress[ii], OUTPUT);
+    digitalWrite(PChanAdress[ii], LOW);
+    pinMode(PChanAdress2[ii], OUTPUT);
+    digitalWrite(PChanAdress2[ii], LOW);
+    pinMode(PChanAdress3[ii], OUTPUT);
+    digitalWrite(PChanAdress3[ii], LOW);
   }
 
-  for ( ii = 0; ii < sizeof(PinsDout) / sizeof(PinsDout[0]); ii = ii + 1 ) {
-    pinMode(PinsDout[ii], OUTPUT);
-    digitalWrite(PinsDout[ii], LOW);
+  for ( ii = 0; ii < sizeof(PDout) / sizeof(PDout[0]); ii = ii + 1 ) {
+    pinMode(PDout[ii], OUTPUT);
+    digitalWrite(PDout[ii], LOW);
   }
 
-  pinMode(PinRESET, OUTPUT);
-  digitalWrite(PinRESET, LOW);
+  pinMode(P_RESET, OUTPUT);
+  digitalWrite(P_RESET, LOW);
 
-  pinMode(PinRESET_CH, OUTPUT);
-  digitalWrite(PinRESET_CH, LOW);
-
-  
-  pinMode(PinWrite, OUTPUT);
-  digitalWrite(PinWrite, LOW);
-
-  pinMode(PinWrite2, OUTPUT);
-  digitalWrite(PinWrite, LOW);
-
-  pinMode(PinWrite3, OUTPUT);
-  digitalWrite(PinWrite, LOW);
+  pinMode(P_RESET_CH, OUTPUT);
+  digitalWrite(P_RESET_CH, LOW);
 
   
+  pinMode(PWrite, OUTPUT);
+  digitalWrite(PWrite, LOW);
 
-  pinMode(PinWriteEn, OUTPUT);
-  digitalWrite(PinWriteEn, LOW);
+  pinMode(PWrite2, OUTPUT);
+  digitalWrite(PWrite, LOW);
 
-  pinMode(PinStoreChan, OUTPUT);
-  digitalWrite(PinStoreChan, LOW);
+  pinMode(PWrite3, OUTPUT);
+  digitalWrite(PWrite, LOW);
+
+  
+
+  pinMode(P_EnWrite, OUTPUT);
+  digitalWrite(P_EnWrite, LOW);
+
+  pinMode(PWriteConfig, OUTPUT);
+  digitalWrite(PWriteConfig, LOW);
 
 
   Serial.begin(115200);
@@ -221,8 +221,8 @@ void setup() {
   cmdWF.addPosArg("file");
   cmdWF.addPosArg("ID");
 
-  cmdTrig = cli.addCmd("trig");
-  cmdTrig.addPosArg("ID");
+  cmdPtrig = cli.addCmd("Ptrig");
+  cmdPtrig.addPosArg("ID");
 
   cmdDesc = cli.addCmd("descrip");
   cmdDesc.addPosArg("file");
@@ -304,9 +304,9 @@ void loop() {
       reset(c.getArgument(0));
     } else if (c == cmdWF) {
       loadWaveform(c.getArgument(0), c.getArgument(1));
-    } else if (c == cmdTrig) {
+    } else if (c == cmdPtrig) {
       Argument str = c.getArgument(0);
-      trigger(str.getValue().toInt());
+      Ptrigger(str.getValue().toInt());
 
     } else if (c == cmdHelp) {
       Serial.println("Help:");
@@ -335,15 +335,15 @@ void loop() {
 void storeChannel(Argument id)
 {
       unsigned long curTime;
-      digitalWrite(PinStoreChan, LOW);
+      digitalWrite(PWriteConfig, LOW);
       curTime=micros();
       Channeladress(id.getValue().toInt());
       writePinArray(ChannelSet[id.getValue().toInt()].amplitude, PinsAmplitude, sizeof(PinsAmplitude) / sizeof(PinsAmplitude[0]));
       writePinArray(ChannelSet[id.getValue().toInt()].iperiod, PinsInterPeriod, sizeof(PinsInterPeriod) / sizeof(PinsInterPeriod[0]));
       writePinArray(ChannelSet[id.getValue().toInt()].iinterval, PinsInterInterval, sizeof(PinsInterInterval) / sizeof(PinsInterInterval[0]));
-      writePinArray( ChannelSet[id.getValue().toInt()].waveadress, PinsWaveadress, sizeof(PinsWaveadress) / sizeof(PinsWaveadress[0]));
+      writePinArray( ChannelSet[id.getValue().toInt()].waveadress, PWaveAddr, sizeof(PWaveAddr) / sizeof(PWaveAddr[0]));
       while(micros()-curTime <2);
-      digitalWrite(PinStoreChan, HIGH);
+      digitalWrite(PWriteConfig, HIGH);
 }
 
 void writePinArray(int value, const unsigned int *Pins, int NPins)
@@ -390,7 +390,7 @@ void loadWaveform(Argument pathStr, Argument id)
   String Description = "";
   //reset(id);
   JsonStreamingParser parser;
-  Listener listener(&WriteWFs, &Description, PinWrite, PinWrite2, PinWrite3, PinStoreChan, PinsWaveadress, 2);   //bad way of introducing additional parameters
+  Listener listener(&WriteWFs, &Description, PWrite, PWrite2, PWrite3, PWriteConfig, PWaveAddr, 2);   //bad way of introducing additional parameters
   parser.setListener(&listener);
   File myFile;
   if (!sd.chdir("/")) {
@@ -402,7 +402,7 @@ void loadWaveform(Argument pathStr, Argument id)
   pathStr.getValue().toCharArray(path, 12);
   myFile = sd.open(path, FILE_READ);
   Channeladress(id.getValue().toInt());
-  digitalWrite(PinWriteEn, HIGH);
+  digitalWrite(P_EnWrite, HIGH);
 
   unsigned long curTime;
   curTime = micros();
@@ -412,7 +412,7 @@ void loadWaveform(Argument pathStr, Argument id)
     parser.parse(myFile.read());
   }
   myFile.close();
-  digitalWrite(PinWriteEn, LOW);
+  digitalWrite(P_EnWrite, LOW);
   Channeladress(0);
   WriteWFs = false;
 }
@@ -422,7 +422,7 @@ void description(Argument pathStr)
   bool WriteWFs = false;
   String Description = "";
   JsonStreamingParser parser;
-  Listener listener(&WriteWFs, &Description,PinWrite, PinWrite2, PinWrite3, PinStoreChan, PinsWaveadress, 2);   //bad way of introducing additional parameters
+  Listener listener(&WriteWFs, &Description,PWrite, PWrite2, PWrite3, PWriteConfig, PWaveAddr, 2);   //bad way of introducing additional parameters
   parser.setListener(&listener);
   File myFile;
   if (!sd.chdir("/")) {
@@ -459,13 +459,13 @@ void listFolder()
 
 
 
-void trigger(int id)
+void Ptrigger(int id)
 {
   unsigned long curTime;
-  digitalWrite(trig[id], HIGH);
+  digitalWrite(Ptrig[id], HIGH);
   curTime = micros();
   while (micros() - curTime < 20);
-  digitalWrite(trig[id], LOW);
+  digitalWrite(Ptrig[id], LOW);
 }
 
 void reset(Argument id)
@@ -474,10 +474,10 @@ void reset(Argument id)
 
   unsigned long curTime;
   if (id.getValue().toInt() == 0) {
-    digitalWrite(PinRESET, HIGH);
+    digitalWrite(P_RESET, HIGH);
     curTime = micros();
     while (micros() - curTime < 2);
-    digitalWrite(PinRESET, LOW);
+    digitalWrite(P_RESET, LOW);
 
     for ( ii = 1; ii < Channels + 1 ; ii = ii + 1 ) {
       ChannelSet[ii].amplitude = ChannelSet[0].amplitude;
@@ -487,7 +487,7 @@ void reset(Argument id)
     }
 
   } else {
-    digitalWrite(PinRESET_CH, HIGH);
+    digitalWrite(P_RESET_CH, HIGH);
     curTime = micros();
     ChannelSet[id.getValue().toInt()].amplitude = ChannelSet[0].amplitude;
     ChannelSet[id.getValue().toInt()].iinterval = ChannelSet[0].iinterval;
@@ -497,7 +497,7 @@ void reset(Argument id)
     while (micros() - curTime < 2);
     storeChannel(id);
 
-    digitalWrite(PinRESET_CH, LOW);
+    digitalWrite(P_RESET_CH, LOW);
     storeChannel(id);
 
   }
@@ -508,13 +508,13 @@ void Channeladress(int id)
 
   int adress=0;
   if (id == 0) {
-    digitalWrite(*PinsChanAdress, LOW);
-    digitalWrite(*PinsChanAdress2, LOW);
-    digitalWrite(*PinsChanAdress3, LOW);
+    digitalWrite(*PChanAdress, LOW);
+    digitalWrite(*PChanAdress2, LOW);
+    digitalWrite(*PChanAdress3, LOW);
   } else {
-   writePinArray(id-1, PinsChanAdress, sizeof(PinsChanAdress) / sizeof(PinsChanAdress[0]));
-   writePinArray(id-1, PinsChanAdress2, sizeof(PinsChanAdress2) / sizeof(PinsChanAdress2[0]));
-   writePinArray(id-1, PinsChanAdress3, sizeof(PinsChanAdress3) / sizeof(PinsChanAdress3[0]));
+   writePinArray(id-1, PChanAdress, sizeof(PChanAdress) / sizeof(PChanAdress[0]));
+   writePinArray(id-1, PChanAdress2, sizeof(PChanAdress2) / sizeof(PChanAdress2[0]));
+   writePinArray(id-1, PChanAdress3, sizeof(PChanAdress3) / sizeof(PChanAdress3[0]));
   }
 }
 
@@ -563,10 +563,10 @@ void WriteDoutDebug(Argument value)
   unsigned long curTime;
   PIOD->PIO_SODR= value.getValue().toInt();
   PIOD->PIO_CODR=~value.getValue().toInt()&0x00FF;
-  digitalWrite(PinWrite, LOW);
+  digitalWrite(PWrite, LOW);
   curTime=micros();
   while(micros()-curTime <20);
-  digitalWrite(PinWrite, HIGH);
+  digitalWrite(PWrite, HIGH);
   curTime=micros();
   while(micros()-curTime <20); 
 }

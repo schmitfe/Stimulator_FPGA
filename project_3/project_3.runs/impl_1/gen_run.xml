@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="impl_1" LaunchPart="xc7a35ticsg324-1L" LaunchTime="1573915265">
-  <File Type="OPT-HWDEF" Name="Stimulator.hwdef"/>
-  <File Type="ROUTE-BUS-SKEW" Name="route_report_bus_skew_0.rpt"/>
-  <File Type="PA-DCP" Name="Stimulator.dcp"/>
+<GenRun Id="impl_1" LaunchPart="xc7a35ticsg324-1L" LaunchTime="1574008644">
   <File Type="BITSTR-BMM" Name="Stimulator_bd.bmm"/>
   <File Type="OPT-METHODOLOGY-DRC" Name="Stimulator_methodology_drc_opted.rpt"/>
   <File Type="INIT-TIMING" Name="init_report_timing_summary_0.rpt"/>
@@ -13,6 +10,7 @@
   <File Type="ROUTE-PWR-SUM" Name="route_report_power_summary_0.pb"/>
   <File Type="REPORTS-TCL" Name="Stimulator_reports.tcl"/>
   <File Type="OPT-DRC" Name="Stimulator_drc_opted.rpt"/>
+  <File Type="OPT-HWDEF" Name="Stimulator.hwdef"/>
   <File Type="PWROPT-DCP" Name="Stimulator_pwropt.dcp"/>
   <File Type="PWROPT-DRC" Name="Stimulator_drc_pwropted.rpt"/>
   <File Type="PWROPT-TIMING" Name="Stimulator_timing_summary_pwropted.rpt"/>
@@ -24,6 +22,7 @@
   <File Type="PLACE-CTRL" Name="Stimulator_control_sets_placed.rpt"/>
   <File Type="PLACE-SIMILARITY" Name="place_report_incremental_reuse_0.rpt"/>
   <File Type="PLACE-PRE-SIMILARITY" Name="Stimulator_incremental_reuse_pre_placed.rpt"/>
+  <File Type="BG-BGN" Name="Stimulator.bgn"/>
   <File Type="PLACE-TIMING" Name="place_report_timing_summary_0.rpt"/>
   <File Type="POSTPLACE-PWROPT-DCP" Name="Stimulator_postplace_pwropt.dcp"/>
   <File Type="BG-BIN" Name="Stimulator.bin"/>
@@ -53,6 +52,7 @@
   <File Type="ROUTE-TIMING-RPX" Name="route_report_timing_summary_0.rpx"/>
   <File Type="ROUTE-SIMILARITY" Name="route_report_incremental_reuse_0.rpt"/>
   <File Type="ROUTE-CLK" Name="route_report_clock_utilization_0.rpt"/>
+  <File Type="ROUTE-BUS-SKEW" Name="route_report_bus_skew_0.rpt"/>
   <File Type="ROUTE-BUS-SKEW-PB" Name="route_report_bus_skew_0.pb"/>
   <File Type="ROUTE-BUS-SKEW-RPX" Name="route_report_bus_skew_0.rpx"/>
   <File Type="POSTROUTE-PHYSOPT-DCP" Name="Stimulator_postroute_physopt.dcp"/>
@@ -66,7 +66,6 @@
   <File Type="POSTROUTE-PHYSOPT-BUS-SKEW-RPX" Name="Stimulator_bus_skew_postroute_physopted.rpx"/>
   <File Type="BITSTR-RBT" Name="Stimulator.rbt"/>
   <File Type="BITSTR-NKY" Name="Stimulator.nky"/>
-  <File Type="BG-BGN" Name="Stimulator.bgn"/>
   <File Type="BG-DRC" Name="Stimulator.drc"/>
   <File Type="RDI-RDI" Name="Stimulator.vdi"/>
   <File Type="WBT-USG" Name="usage_statistics_webtalk.html"/>

@@ -10,12 +10,12 @@ class Listener: public JsonListener {
     bool WFPassed;
     bool WriteDescription;
 
-    unsigned int PinWrite; 
-    unsigned int PinWrite2;
-    unsigned int PinWrite3; 
-    unsigned int PinStoreChan;
+    unsigned int PWrite; 
+    unsigned int PWrite2;
+    unsigned int PWrite3; 
+    unsigned int PWriteConfig;
     unsigned int N;
-    const unsigned int *PinsWaveadress;
+    const unsigned int *PWaveAddr;
 
     unsigned int Delay;
 
@@ -40,5 +40,5 @@ class Listener: public JsonListener {
 
     virtual void WriteDout(String value);
     
-    Listener(bool *pointerWriteFlag, String *DescriptionPnt, unsigned int PinWriteC, unsigned int PinWrite2C, unsigned int PinWrite3C, unsigned int PinStoreChanC, const unsigned int *PinsWaveadressC, unsigned int DelayC);
+    Listener(bool *pointerWriteFlag, String *DescriptionPnt, unsigned int PWriteC, unsigned int PWrite2C, unsigned int PWrite3C, unsigned int PWriteConfigC, const unsigned int *PWaveAddrC, unsigned int DelayC);
 };

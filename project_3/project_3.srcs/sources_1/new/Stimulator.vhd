@@ -67,8 +67,7 @@ port(
    
    InterInterval: in integer range 0 to MaxDelay-1;
    InterPeriods: in integer range 0 to MaxDelay-1;
-   Amplitude: in std_logic_vector(MultiplierWordwith-1 downto 0)
-    
+   Amplitude: in std_logic_vector(MultiplierWordwith-1 downto 0) 
        );
        
        

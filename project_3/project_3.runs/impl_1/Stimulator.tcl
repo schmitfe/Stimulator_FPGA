@@ -61,83 +61,14 @@ proc step_failed { step } {
 }
 
 
-start_step init_design
-set ACTIVE_STEP init_design
-set rc [catch {
-  create_msg_db init_design.pb
-  set_param tcl.collectionResultDisplayLimit 0
-  set_param xicom.use_bs_reader 1
-  reset_param project.defaultXPMLibraries 
-  open_checkpoint C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.runs/impl_1/Stimulator.dcp
-  set_property webtalk.parent_dir C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.cache/wt [current_project]
-  set_property parent.project_path C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.xpr [current_project]
-  set_property ip_output_repo C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.cache/ip [current_project]
-  set_property ip_cache_permissions {read write} [current_project]
-  create_report "impl_1_init_report_timing_summary_0" "report_timing_summary -max_paths 10 -file init_report_timing_summary_0.rpt -pb init_report_timing_summary_0.pb -rpx init_report_timing_summary_0.rpx"
-  create_report "impl_1_init_report_utilization_0" "report_utilization -file init_report_utilization_0.rpt -pb init_report_utilization_0.pb"
-  create_report "impl_1_init_report_high_fanout_nets_0" "report_high_fanout_nets -file init_report_high_fanout_nets_0.rpt"
-  create_report "impl_1_init_report_control_sets_0" "report_control_sets -file init_report_control_sets_0.rpt"
-  close_msg_db -file init_design.pb
-} RESULT]
-if {$rc} {
-  step_failed init_design
-  return -code error $RESULT
-} else {
-  end_step init_design
-  unset ACTIVE_STEP 
-}
-
-start_step place_design
-set ACTIVE_STEP place_design
-set rc [catch {
-  create_msg_db place_design.pb
-  if { [llength [get_debug_cores -quiet] ] > 0 }  { 
-    implement_debug_core 
-  } 
-  place_design 
-  write_checkpoint -force Stimulator_placed.dcp
-  create_report "impl_1_place_report_io_0" "report_io -file place_report_io_0.rpt"
-  create_report "impl_1_place_report_utilization_0" "report_utilization -file place_report_utilization_0.rpt -pb place_report_utilization_0.pb"
-  create_report "impl_1_place_report_incremental_reuse_0" "report_incremental_reuse -file place_report_incremental_reuse_0.rpt"
-  create_report "impl_1_place_report_timing_summary_0" "report_timing_summary -max_paths 10 -file place_report_timing_summary_0.rpt -pb place_report_timing_summary_0.pb -rpx place_report_timing_summary_0.rpx"
-  close_msg_db -file place_design.pb
-} RESULT]
-if {$rc} {
-  step_failed place_design
-  return -code error $RESULT
-} else {
-  end_step place_design
-  unset ACTIVE_STEP 
-}
-
-start_step route_design
-set ACTIVE_STEP route_design
-set rc [catch {
-  create_msg_db route_design.pb
-  route_design 
-  write_checkpoint -force Stimulator_routed.dcp
-  create_report "impl_1_route_report_clock_utilization_0" "report_clock_utilization -file route_report_clock_utilization_0.rpt"
-  create_report "impl_1_route_report_drc_0" "report_drc -file route_report_drc_0.rpt -pb route_report_drc_0.pb -rpx route_report_drc_0.rpx"
-  create_report "impl_1_route_report_power_0" "report_power -file route_report_power_0.rpt -pb route_report_power_summary_0.pb -rpx route_report_power_0.rpx"
-  create_report "impl_1_route_report_route_status_0" "report_route_status -file route_report_route_status_0.rpt -pb route_report_route_status_0.pb"
-  create_report "impl_1_route_report_timing_summary_0" "report_timing_summary -max_paths 10 -warn_on_violation -file route_report_timing_summary_0.rpt -pb route_report_timing_summary_0.pb -rpx route_report_timing_summary_0.rpx"
-  create_report "impl_1_route_report_incremental_reuse_0" "report_incremental_reuse -file route_report_incremental_reuse_0.rpt"
-  create_report "impl_1_route_report_bus_skew_0" "report_bus_skew -warn_on_violation -file route_report_bus_skew_0.rpt -pb route_report_bus_skew_0.pb -rpx route_report_bus_skew_0.rpx"
-  close_msg_db -file route_design.pb
-} RESULT]
-if {$rc} {
-  write_checkpoint -force Stimulator_routed_error.dcp
-  step_failed route_design
-  return -code error $RESULT
-} else {
-  end_step route_design
-  unset ACTIVE_STEP 
-}
-
 start_step write_bitstream
 set ACTIVE_STEP write_bitstream
 set rc [catch {
   create_msg_db write_bitstream.pb
+  set_param tcl.collectionResultDisplayLimit 0
+  set_param xicom.use_bs_reader 1
+  open_checkpoint Stimulator_routed.dcp
+  set_property webtalk.parent_dir C:/Users/felix/Desktop/VHDL/Stimulator_FPGA/project_3/project_3.cache/wt [current_project]
   catch { write_mem_info -force Stimulator.mmi }
   write_bitstream -force Stimulator.bit 
   catch {write_debug_probes -quiet -force Stimulator}

@@ -24,6 +24,8 @@ component  Stimulator is
   port (
     WaveAddr : in STD_LOGIC_VECTOR ( 0 to 0 );
     ChanAddr : in STD_LOGIC_VECTOR ( 0 to 0 );
+    ChanAddr2: in STD_LOGIC_VECTOR ( 0 to 0 );
+    ChanAddr3: in STD_LOGIC_VECTOR ( 0 to 0 );
     CLK : in STD_LOGIC;
     RESET : in STD_LOGIC;
     RESET_CH : in STD_LOGIC;
@@ -45,7 +47,9 @@ end component;
     
      
 signal   WaveAddr:  STD_LOGIC_VECTOR ( 0 to 0 ):="0";  
-signal   ChanAddr:  STD_LOGIC_VECTOR ( 0 to 0 ):="0";  
+signal   ChanAddr:  STD_LOGIC_VECTOR ( 0 to 0 ):="0"; 
+signal   ChanAddr2:  STD_LOGIC_VECTOR ( 0 to 0 ):="0";
+signal   ChanAddr3:  STD_LOGIC_VECTOR ( 0 to 0 ):="0"; 
 signal   CLK :  std_logic:='0'; -- Systemtakt
 signal   RESET :  std_logic:='0'; -- asynchroner Reset (alles auf Null)
 signal   RESET_CH:  std_logic:='0';
@@ -73,7 +77,7 @@ constant T : time := 10 ns;
 begin
 
         UUT: Stimulator
-        port map (WaveAddr=>WaveAddr, ChanAddr=>ChanAddr, CLK=>CLK, RESET=>RESET, RESET_CH=>RESET_CH, Write=>Write, EnWrite=>EnWrite, WriteConfig=>WriteConfig,  trig_all=>trig_all, trig_CH=>trig_CH, Din=>Din, MOSI=>MOSI, SCLK=>SCLK, SS=>SS, InterInterval=>InterInterval, InterPeriods=>InterPeriods, Amplitude=>Amplitude);
+        port map (WaveAddr=>WaveAddr, ChanAddr=>ChanAddr, ChanAddr2=>ChanAddr2, ChanAddr3=>ChanAddr3,  CLK=>CLK, RESET=>RESET, RESET_CH=>RESET_CH, Write=>Write, EnWrite=>EnWrite, WriteConfig=>WriteConfig,  trig_all=>trig_all, trig_CH=>trig_CH, Din=>Din, MOSI=>MOSI, SCLK=>SCLK, SS=>SS, InterInterval=>InterInterval, InterPeriods=>InterPeriods, Amplitude=>Amplitude);
 
     -- continuous clock
     process 
@@ -88,6 +92,8 @@ begin
    process
    begin
    ChanAddr<="0";
+   ChanAddr2<="0";
+   ChanAddr3<="0";
    InterInterval<=std_logic_vector(to_unsigned(20, 8));
    InterPeriods<=std_logic_vector(to_unsigned(40, 8));
    Amplitude<="1111";
@@ -241,6 +247,8 @@ begin
         trig_all<='1';
         
    ChanAddr<="1";
+   ChanAddr2<="1";
+   ChanAddr3<="1";
    InterInterval<=std_logic_vector(to_unsigned(1, 8));
    InterPeriods<=std_logic_vector(to_unsigned(4, 8));
    Amplitude<="1000";
