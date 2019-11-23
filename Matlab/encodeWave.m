@@ -23,12 +23,8 @@ if invert==1
     WF1=-WF1;
     WF2=-WF2;
 end
-if abs(WF1(end)) > 1e4*eps      %%to ensure 0 at interphase/period interval
-   WF1=[WF1 0]; 
-end
 
-
-if abs(WF2(end)) > 1e4*eps
+if abs(WF2(end)) > 1e4*eps          %ensures neutral output after 2. wavelet
    WF2=[WF2 0]; 
 end
 s.length=[length(WF1),length(WF2)];
