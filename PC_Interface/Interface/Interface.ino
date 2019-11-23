@@ -5,8 +5,7 @@
 */
 
 /*
-   This is an example with all types of arguments and commands, error check and help command.
-   No callbacks are used here, you can check the callback example for that.
+  Adapted by Felix Schmitt to create Interface for Stimulator.
 
    PLEASE NOTE: 115200 is the baud rate and Newline is enabled in the serial monitor
 */
@@ -26,7 +25,9 @@
 #include "Parser.h"
 
 
-#define Channels 2
+#define Channels 2    
+//Defines number of Channels, not tested with more channels possible errors at the write functin 
+//for channel adress, trig and 
 
 
 // Create CLI Object
@@ -92,10 +93,6 @@ const unsigned int chipSelect = 52;    //SD-Card
 //---------------buffers---------------------//
 char bufferJson[40];
 
-
-
-//-------Configurations of channels----------//
-
 //-------struct to store data of channels----//
 typedef struct {
   int amplitude;
@@ -108,6 +105,8 @@ SChannelSet *ChannelSet = NULL;
 
 
 void setup() {
+
+//--------setup of pins---------------//
   int ii;
 
   for ( ii = 0; ii < sizeof(Ptrig) / sizeof(Ptrig[0]); ii = ii + 1 ) {
@@ -174,7 +173,7 @@ void setup() {
   pinMode(PWriteConfig, OUTPUT);
   digitalWrite(PWriteConfig, LOW);
 
-
+//--------setup of interface---------------//
   Serial.begin(115200);
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
@@ -189,7 +188,7 @@ void setup() {
   if (!sd.begin(chipSelect, SD_SCK_MHZ(50))) {
     sd.initErrorHalt();
   }
-
+//--------setup of channel settings---------------//
   ChannelSet = (SChannelSet*) malloc(sizeof * ChannelSet * (Channels + 1));
 
   //Channel zero contains defaultvalues
@@ -205,7 +204,7 @@ void setup() {
     ChannelSet[ii].waveadress = ChannelSet[0].waveadress;
   }
 
-
+//--------creation of commands---------------//
   cmdLs = cli.addCmd("ls");
 
   cmdRm = cli.addCmd("rm");
@@ -245,7 +244,7 @@ void setup() {
 
   cmdHelp = cli.addCommand("help");
 
-  cmdDoutDebug=cli.addCmd("ddeb");
+  cmdDoutDebug=cli.addCmd("ddeb");    //debuggig command
   cmdDoutDebug.addPosArg("value");
 
   Serial.println("CLI: type help for commandlist");
@@ -253,6 +252,7 @@ void setup() {
 }
 
 void loop() {
+  //--------CLI loop---------------//
   if (Serial.available()) {
     String input = Serial.readStringUntil('\n');
 
@@ -281,6 +281,7 @@ void loop() {
 
     Serial.println();
 */
+//--------if input available find corresponding command---------------//
     if (c == cmdLs) {
       listFolder();
     } else if (c == cmdRm) {
@@ -306,7 +307,7 @@ void loop() {
       loadWaveform(c.getArgument(0), c.getArgument(1));
     } else if (c == cmdPtrig) {
       Argument str = c.getArgument(0);
-      Ptrigger(str.getValue().toInt());
+      trigger(str.getValue().toInt());
 
     } else if (c == cmdHelp) {
       Serial.println("Help:");
@@ -331,6 +332,8 @@ void loop() {
     }
   }
 }
+
+//--------functions to call in loop---------------//
 
 void storeChannel(Argument id)
 {
@@ -459,7 +462,7 @@ void listFolder()
 
 
 
-void Ptrigger(int id)
+void trigger(int id)
 {
   unsigned long curTime;
   digitalWrite(Ptrig[id], HIGH);
@@ -557,7 +560,7 @@ void SaveFile (Argument str)
 }
 
 
-
+//Debug function to find right order of pins
 void WriteDoutDebug(Argument value)
 {
   unsigned long curTime;
