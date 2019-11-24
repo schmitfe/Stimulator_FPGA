@@ -49,7 +49,7 @@ generic (
 end ChannelConfigReg;
 
 architecture Behavioral of ChannelConfigReg is
-signal WriteConfZ1      : std_logic;
+signal WriteConfZ1      : std_logic;    --register to implement rising edge detection
 
 
 
