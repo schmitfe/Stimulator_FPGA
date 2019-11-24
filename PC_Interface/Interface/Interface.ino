@@ -39,7 +39,7 @@ Command cmdRm;
 Command cmdStore;
 Command cmdReset;
 Command cmdWF;
-Command cmdPtrig;
+Command cmdtrig;
 Command cmdHelp;
 Command cmdDesc;
 Command cmdAmpli;
@@ -220,8 +220,8 @@ void setup() {
   cmdWF.addPosArg("file");
   cmdWF.addPosArg("ID");
 
-  cmdPtrig = cli.addCmd("Ptrig");
-  cmdPtrig.addPosArg("ID");
+  cmdtrig = cli.addCmd("trig");
+  cmdtrig.addPosArg("ID");
 
   cmdDesc = cli.addCmd("descrip");
   cmdDesc.addPosArg("file");
@@ -305,7 +305,7 @@ void loop() {
       reset(c.getArgument(0));
     } else if (c == cmdWF) {
       loadWaveform(c.getArgument(0), c.getArgument(1));
-    } else if (c == cmdPtrig) {
+    } else if (c == cmdtrig) {
       Argument str = c.getArgument(0);
       trigger(str.getValue().toInt());
 

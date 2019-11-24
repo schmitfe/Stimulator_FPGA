@@ -9,9 +9,11 @@ function [] = encodeWave(filename,description,WF1, WF2, wordwidth, invert)
 figure();
 subplot(2,2,1);
 plot(WF1);
+ylim([-1.05, 1.05])
 title('WF1')
 subplot(2,2,2)
 plot(WF2);
+ylim([-1.05, 1.05])
 title('WF2')
 maxValue=2^(wordwidth)-1;
 minValue=0;
@@ -40,9 +42,11 @@ s.WF2=WF2;
 
 subplot(2,2,3);
 plot(WF1);
+ylim([-0.1*2^wordwidth, 1.1*2^wordwidth])
 xlabel('k')
 subplot(2,2,4)
 plot(WF2);
+ylim([-0.1*2^wordwidth, 1.1*2^wordwidth])
 xlabel('k');
 
 text = jsonencode(s);
