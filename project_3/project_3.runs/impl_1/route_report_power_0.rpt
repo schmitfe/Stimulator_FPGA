@@ -1,7 +1,7 @@
 Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2018.3 (win64) Build 2405991 Thu Dec  6 23:38:27 MST 2018
-| Date             : Sun Nov 24 15:26:12 2019
+| Date             : Sat Dec 14 14:29:02 2019
 | Host             : DESKTOP-A11CNTB running 64-bit major release  (build 9200)
 | Command          : report_power -file route_report_power_0.rpt -pb route_report_power_summary_0.pb -rpx route_report_power_0.rpx
 | Design           : Stimulator
@@ -54,12 +54,12 @@ Table of Contents
 +----------------+-----------+----------+-----------+-----------------+
 | Clocks         |     0.002 |        3 |       --- |             --- |
 | Slice Logic    |    <0.001 |      745 |       --- |             --- |
-|   LUT as Logic |    <0.001 |      336 |     20800 |            1.62 |
+|   LUT as Logic |    <0.001 |      337 |     20800 |            1.62 |
 |   Register     |    <0.001 |      269 |     41600 |            0.65 |
 |   CARRY4       |    <0.001 |       20 |      8150 |            0.25 |
 |   F7/F8 Muxes  |    <0.001 |        4 |     32600 |            0.01 |
 |   Others       |     0.000 |       22 |       --- |             --- |
-| Signals        |     0.001 |      545 |       --- |             --- |
+| Signals        |     0.001 |      544 |       --- |             --- |
 | Block RAM      |    <0.001 |        2 |        50 |            4.00 |
 | DSPs           |     0.001 |        2 |        90 |            2.22 |
 | I/O            |     0.003 |       49 |       210 |           23.33 |

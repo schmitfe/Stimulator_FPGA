@@ -1,7 +1,7 @@
 Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2018.3 (win64) Build 2405991 Thu Dec  6 23:38:27 MST 2018
-| Date         : Sun Nov 24 15:25:20 2019
+| Date         : Sat Dec 14 14:28:13 2019
 | Host         : DESKTOP-A11CNTB running 64-bit major release  (build 9200)
 | Command      : report_utilization -file place_report_utilization_0.rpt -pb place_report_utilization_0.pb
 | Design       : Stimulator
@@ -31,8 +31,8 @@ Table of Contents
 +-------------------------+------+-------+-----------+-------+
 |        Site Type        | Used | Fixed | Available | Util% |
 +-------------------------+------+-------+-----------+-------+
-| Slice LUTs              |  336 |     0 |     20800 |  1.62 |
-|   LUT as Logic          |  336 |     0 |     20800 |  1.62 |
+| Slice LUTs              |  337 |     0 |     20800 |  1.62 |
+|   LUT as Logic          |  337 |     0 |     20800 |  1.62 |
 |   LUT as Memory         |    0 |     0 |      9600 |  0.00 |
 | Slice Registers         |  269 |     0 |     41600 |  0.65 |
 |   Register as Flip Flop |  269 |     0 |     41600 |  0.65 |
@@ -67,21 +67,21 @@ Table of Contents
 +--------------------------------------------+------+-------+-----------+-------+
 |                  Site Type                 | Used | Fixed | Available | Util% |
 +--------------------------------------------+------+-------+-----------+-------+
-| Slice                                      |  117 |     0 |      8150 |  1.44 |
-|   SLICEL                                   |   70 |     0 |           |       |
-|   SLICEM                                   |   47 |     0 |           |       |
-| LUT as Logic                               |  336 |     0 |     20800 |  1.62 |
+| Slice                                      |  116 |     0 |      8150 |  1.42 |
+|   SLICEL                                   |   66 |     0 |           |       |
+|   SLICEM                                   |   50 |     0 |           |       |
+| LUT as Logic                               |  337 |     0 |     20800 |  1.62 |
 |   using O5 output only                     |    0 |       |           |       |
-|   using O6 output only                     |  242 |       |           |       |
-|   using O5 and O6                          |   94 |       |           |       |
+|   using O6 output only                     |  244 |       |           |       |
+|   using O5 and O6                          |   93 |       |           |       |
 | LUT as Memory                              |    0 |     0 |      9600 |  0.00 |
 |   LUT as Distributed RAM                   |    0 |     0 |           |       |
 |   LUT as Shift Register                    |    0 |     0 |           |       |
 | Slice Registers                            |  269 |     0 |     41600 |  0.65 |
 |   Register driven from within the Slice    |  188 |       |           |       |
 |   Register driven from outside the Slice   |   81 |       |           |       |
-|     LUT in front of the register is unused |   42 |       |           |       |
-|     LUT in front of the register is used   |   39 |       |           |       |
+|     LUT in front of the register is unused |   40 |       |           |       |
+|     LUT in front of the register is used   |   41 |       |           |       |
 | Unique Control Sets                        |   23 |       |      8150 |  0.28 |
 +--------------------------------------------+------+-------+-----------+-------+
 * Note: Available Control Sets calculated as Slice Registers / 8, Review the Control Sets Report for more information regarding control sets.
@@ -119,8 +119,8 @@ Table of Contents
 |          Site Type          | Used | Fixed | Available | Util% |
 +-----------------------------+------+-------+-----------+-------+
 | Bonded IOB                  |   49 |    49 |       210 | 23.33 |
-|   IOB Master Pads           |   23 |       |           |       |
-|   IOB Slave Pads            |   24 |       |           |       |
+|   IOB Master Pads           |   26 |       |           |       |
+|   IOB Slave Pads            |   22 |       |           |       |
 | Bonded IPADs                |    0 |     0 |         2 |  0.00 |
 | PHY_CONTROL                 |    0 |     0 |         5 |  0.00 |
 | PHASER_REF                  |    0 |     0 |         5 |  0.00 |

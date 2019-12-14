@@ -1,7 +1,7 @@
 Copyright 1986-2018 Xilinx, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2018.3 (win64) Build 2405991 Thu Dec  6 23:38:27 MST 2018
-| Date         : Sun Nov 24 15:26:11 2019
+| Date         : Sat Dec 14 14:29:01 2019
 | Host         : DESKTOP-A11CNTB running 64-bit major release  (build 9200)
 | Command      : report_drc -file route_report_drc_0.rpt -pb route_report_drc_0.pb -rpx route_report_drc_0.rpx
 | Design       : Stimulator
@@ -60,7 +60,7 @@ Related violations: <none>
 
 RTSTAT-10#1 Warning
 No routable loads  
-36 net(s) have no routable loads. The problem bus(es) and/or net(s) are ChannelArray[1].ChannelX/FolState1_inferred__2/i__carry_n_1, ChannelArray[0].ChannelX/FolState1_inferred__2/i__carry_n_1, ChannelArray[1].ChannelX/FolState1_inferred__2/i__carry_n_2, ChannelArray[0].ChannelX/FolState1_inferred__2/i__carry_n_2, ChannelArray[1].ChannelX/FolState1_inferred__2/i__carry_n_3, ChannelArray[0].ChannelX/FolState1_inferred__2/i__carry_n_3, ChannelArray[1].ChannelX/FolState2_carry_n_1, ChannelArray[0].ChannelX/FolState2_carry_n_1, ChannelArray[1].ChannelX/FolState2_carry_n_2, ChannelArray[0].ChannelX/FolState2_carry_n_2, ChannelArray[1].ChannelX/FolState2_carry_n_3, ChannelArray[0].ChannelX/FolState2_carry_n_3, ChannelArray[0].ChannelX/MemArray[0].MemoryX/_inferred__2/i__carry_n_1, ChannelArray[1].ChannelX/MemArray[0].MemoryX/_inferred__2/i__carry_n_1, ChannelArray[1].ChannelX/MemArray[0].MemoryX/_inferred__2/i__carry_n_2 (the first 15 of 36 listed).
+36 net(s) have no routable loads. The problem bus(es) and/or net(s) are ChannelArray[1].ChannelX/FolState1_inferred__2/i__carry_n_1, ChannelArray[0].ChannelX/FolState1_inferred__2/i__carry_n_1, ChannelArray[1].ChannelX/FolState1_inferred__2/i__carry_n_2, ChannelArray[0].ChannelX/FolState1_inferred__2/i__carry_n_2, ChannelArray[1].ChannelX/FolState1_inferred__2/i__carry_n_3, ChannelArray[0].ChannelX/FolState1_inferred__2/i__carry_n_3, ChannelArray[1].ChannelX/FolState2_carry_n_1, ChannelArray[0].ChannelX/FolState2_carry_n_1, ChannelArray[0].ChannelX/FolState2_carry_n_2, ChannelArray[1].ChannelX/FolState2_carry_n_2, ChannelArray[1].ChannelX/FolState2_carry_n_3, ChannelArray[0].ChannelX/FolState2_carry_n_3, ChannelArray[1].ChannelX/MemArray[0].MemoryX/_inferred__2/i__carry_n_1, ChannelArray[0].ChannelX/MemArray[0].MemoryX/_inferred__2/i__carry_n_1, ChannelArray[1].ChannelX/MemArray[0].MemoryX/_inferred__2/i__carry_n_2 (the first 15 of 36 listed).
 Related violations: <none>
 
 
